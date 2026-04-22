@@ -1,5 +1,5 @@
 from abc import ABC
-from common import DatoInvalido, Duplicado, Validator
+from .common import DatoInvalido, Duplicado, Validator
 from functools import reduce
 
 
@@ -10,13 +10,12 @@ class Persona(ABC):
         self.set_email(email)
 
     def __str__(self):
-        f"{self.nombre} ({self._dni})"
+        return f"{self.nombre} ({self._dni})"
 
     def get_dni(self):
         return self._dni
 
     def set_dni(self, dni: str):
-        texto = texto.strip().upper()
         if not dni:
             raise DatoInvalido("El dni no puede estar vacío.")
         Validator.validar_dni(dni)
@@ -44,7 +43,7 @@ class Asignatura:
         self.set_nota(nota)
 
     def __str__(self):
-        f"{self.nombre}: {self._nota}"
+        return f"{self.nombre}: {self._nota}"
 
     def get_nombre(self):
         return self.nombre
@@ -93,7 +92,7 @@ class Alumno(Persona):
 
 class Profesor(Persona):
     def __init__(self, dni, nombre, email, especialidad: str, salario: float = 0):
-        super().__init__(dni, nombre, email)()
+        super().__init__(dni, nombre, email)
         self.set_especialidad(especialidad)
         self.set_salario(salario)
 
@@ -107,6 +106,12 @@ class Profesor(Persona):
         if not especialidad:
             raise ValueError("La especialidad no puede estar vacía.")
         self.especialidad = especialidad.strip().capitalize()
+
+    def get_salario(self):
+        return self.salario
+
+    def set_salario(self, salario):
+        self.salario = salario
 
     def calificar(self, alumno: Alumno, nombre_asignatura, nota):
         asignatura = alumno.get_asignaturas()[nombre_asignatura]

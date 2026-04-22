@@ -1,26 +1,33 @@
 class DatoInvalido(Exception):
+    """Se lanza cuando los datos introducidos no corresponde con formato requerido."""
+
     pass
 
 
 class Duplicado(Exception):
+    """Se lanza cuando se inserta dato repetido donde no es admisible."""
+
     pass
 
 
 class Validator:
     @staticmethod
     def validar_dni(texto: str):
+        texto = texto.strip().upper()
         if len(texto) != 9:
             raise DatoInvalido(
-                "Longitud del dni erronea. Deben ser 8 numeros y una letra"
+                f"DNI {texto!r} invalido - Longitud erronea. Deben ser 8 numeros y una letra"
             )
         numero = texto[:8]
         letra = texto[8]
         if not numero.isdigit():
             raise DatoInvalido(
-                "Los 8 primeros caracteres deben ser numeros entre 0 y 9"
+                f"DNI {texto!r} invalido - Los 8 primeros caracteres deben ser numeros entre 0 y 9"
             )
         if not letra.isalpha():
-            raise DatoInvalido("El ultimo caracter debe ser una letra")
+            raise DatoInvalido(
+                f"DNI {texto!r} invalido - El ultimo caracter debe ser una letra"
+            )
 
     @staticmethod
     def formatear_nombre(texto: str):
