@@ -16,17 +16,17 @@ class Validator:
         texto = texto.strip().upper()
         if len(texto) != 9:
             raise DatoInvalido(
-                f"DNI {texto!r} invalido - Longitud erronea. Deben ser 8 numeros y una letra"
+                f"DNI {texto!r} invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario"
             )
         numero = texto[:8]
         letra = texto[8]
         if not numero.isdigit():
             raise DatoInvalido(
-                f"DNI {texto!r} invalido - Los 8 primeros caracteres deben ser numeros entre 0 y 9"
+                f"DNI {texto!r} invalido - Los 8 primeros caracteres deben ser numeros entre 0 y 9 -> se omite usuario"
             )
         if not letra.isalpha():
             raise DatoInvalido(
-                f"DNI {texto!r} invalido - El ultimo caracter debe ser una letra"
+                f"DNI {texto!r} invalido - El ultimo caracter debe ser una letra -> se omite usuario"
             )
 
     @staticmethod

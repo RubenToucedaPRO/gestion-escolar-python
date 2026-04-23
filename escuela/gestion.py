@@ -1,9 +1,13 @@
-from .common import Duplicado
+from .common import Duplicado, DatoInvalido
+from .modelos import Alumno, Profesor, Asignatura
 
 
 class CentroEducativo:
     def __init__(self):
         self._usuarios = []
+
+    def get_usuarios(self):
+        return self._usuarios
 
     def agregar_usuario(self, persona):
         dni_nuevo = persona.get_dni()
@@ -19,7 +23,44 @@ class CentroEducativo:
             print(usuario)
 
     def obtener_numero_usuarios(self):
-        numero_usuarios = 0
-        if self._usuarios and len(self._usuarios) > 0:
-            numero_usuarios = len(self._usuarios) + 1
-        return numero_usuarios
+        return len(self._usuarios)
+
+    def obtener_alumno(self, dni_alumno):
+        encontrado = False
+
+        for usuario in self.obtener_alumnos():
+            if usuario.get_dni() == dni_alumno:
+                return usuario
+
+        if not encontrado:
+            raise DatoInvalido(
+                f"Alumno con dni: {dni_alumno}-> No existe el alumno en el centro"
+            )
+
+    def obtener_profesor(self, asigantura: Asignatura):
+        encontrado = False
+
+        for usuario in self.obtener_profesores():
+            if usuario.get_especialidad() == asigantura.get_nombre():
+                return usuario
+
+        if not encontrado:
+            raise DatoInvalido(
+                f"No existe el profesor de {asigantura.get_nombre()!r}en el centro"
+            )
+
+    def obtener_alumnos(self):
+        lista_alumnos = [
+            usuario for usuario in self._usuarios if isinstance(usuario, Alumno)
+        ]
+        if not lista_alumnos:
+            raise DatoInvalido("No existen alumnos en el centro")
+        return lista_alumnos
+
+    def obtener_profesores(self):
+        lista_profesores = [
+            usuario for usuario in self._usuarios if isinstance(usuario, Profesor)
+        ]
+        if not lista_profesores:
+            raise DatoInvalido("No existen alumnos en el centro")
+        return lista_profesores

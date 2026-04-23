@@ -1,5 +1,6 @@
 from .common import DatoInvalido, Duplicado, Validator
-from .modelos import Persona, Asignatura, Alumno, Profesor, CentroEducativo
+from .modelos import Persona, Asignatura, Alumno, Profesor
+from .gestion import CentroEducativo
 
 __all__ = [
     "DatoInvalido",

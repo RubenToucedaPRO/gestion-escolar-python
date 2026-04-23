@@ -55,7 +55,7 @@ class Asignatura:
         self.nombre = nombre
 
     def get_nota(self):
-        return self.nota
+        return self._nota
 
     def set_nota(self, nota: float):
         if not isinstance(nota, float) and nota < 0 or nota > 10:
@@ -69,15 +69,20 @@ class Alumno(Persona):
         self._asignaturas = []
 
     def __str__(self):
-        return f"[ALUMNO] {super().__str__()}"
+        return f"[ALUMNO] {self.get_nombre()}"
 
-    def get_asignatura(self):
+    def get_asignaturas(self):
         return self._asignaturas
 
     def matricular(self, asignatura: Asignatura):
-        if self._asignaturas[asignatura.get_nombre()]:
+        existe_asignatura = [
+            True
+            for asignatura_alumno in self._asignaturas
+            if asignatura.get_nombre() == asignatura_alumno.get_nombre()
+        ]
+        if self._asignaturas and any(existe_asignatura):
             raise Duplicado(
-                f"Error, Ya está matriculado en {asignatura.get_nombre()!r}"
+                f"Alumon con DNI: {self.get_dni()}-> Ya está matriculado en {asignatura.get_nombre()!r}"
             )
         self._asignaturas.append(asignatura)
 
@@ -104,7 +109,9 @@ class Profesor(Persona):
 
     def set_especialidad(self, especialidad):
         if not especialidad:
-            raise ValueError("La especialidad no puede estar vacía.")
+            raise ValueError(
+                f"Profesor {self.get_nombre()}-> La especialidad no puede estar vacía."
+            )
         self.especialidad = especialidad.strip().capitalize()
 
     def get_salario(self):
@@ -114,10 +121,14 @@ class Profesor(Persona):
         self.salario = salario
 
     def calificar(self, alumno: Alumno, nombre_asignatura, nota):
-        asignatura = alumno.get_asignaturas()[nombre_asignatura]
-        if asignatura:
-            asignatura.set_nota(nota)
-        else:
+        nombre_asignatura = nombre_asignatura.strip().capitalize()
+        lista_asignaturas = alumno.get_asignaturas()
+        encontrada = False
+        for asignatura in lista_asignaturas:
+            if asignatura.get_nombre() == nombre_asignatura:
+                encontrada = True
+                asignatura.set_nota(nota)
+        if not encontrada:
             raise DatoInvalido(
-                f"El alumno {alumno.get_nombre} no tiene la asignatura {nombre_asignatura}"
+                f"El alumno {alumno.get_nombre()} no tiene la asignatura {nombre_asignatura}"
             )
