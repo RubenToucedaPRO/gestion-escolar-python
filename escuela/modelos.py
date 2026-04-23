@@ -121,15 +121,3 @@ class Profesor(Persona):
             raise DatoInvalido(
                 f"El alumno {alumno.get_nombre} no tiene la asignatura {nombre_asignatura}"
             )
-
-
-class CentroEducativo:
-    def __init__(self):
-        self._usuarios = []
-
-    def agregar_usuario(self, persona):
-        self._usuarios.append(persona)
-
-    def listar_usuarios(self):
-        for usuario in self._usuarios:
-            print(usuario)
