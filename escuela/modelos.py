@@ -87,7 +87,7 @@ class Alumno(Persona):
         self._asignaturas.append(asignatura)
 
     def nota_media(self):
-        if len(self._asignaturas):
+        if not self._asignaturas:
             return 0
         suma = reduce(
             lambda suma, asignatura: suma + asignatura._nota, self._asignaturas, 0

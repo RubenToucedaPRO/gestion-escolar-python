@@ -46,7 +46,7 @@ class CentroEducativo:
 
         if not encontrado:
             raise DatoInvalido(
-                f"No existe el profesor de {asigantura.get_nombre()!r}en el centro"
+                f"No existe el profesor de {asigantura.get_nombre()!r}en el centro para realizar la calificacion"
             )
 
     def obtener_alumnos(self):
@@ -64,3 +64,18 @@ class CentroEducativo:
         if not lista_profesores:
             raise DatoInvalido("No existen alumnos en el centro")
         return lista_profesores
+
+    def media_global_centro(self):
+        lista_alumnos = self.obtener_alumnos()
+        medias_alumnos = [alumno.nota_media() for alumno in lista_alumnos]
+        return sum(medias_alumnos) / len(medias_alumnos)
+
+    def obtener_estadisticas(self):
+        lista_profesores = self.obtener_profesores()
+        lista_alumnos = self.obtener_alumnos()
+        estadisticas = {}
+        estadisticas["Total Profesores"] = len(lista_profesores)
+        estadisticas["Total Alumnos"] = len(lista_alumnos)
+        estadisticas["Total usuarios"] = len(self.get_usuarios())
+        estadisticas["Nota media global del centro"] = self.media_global_centro()
+        return estadisticas
