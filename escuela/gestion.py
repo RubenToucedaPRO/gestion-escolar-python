@@ -19,4 +19,7 @@ class CentroEducativo:
             print(usuario)
 
     def obtener_numero_usuarios(self):
-        return len(self._usuarios)
+        numero_usuarios = 0
+        if self._usuarios and len(self._usuarios) > 0:
+            numero_usuarios = len(self._usuarios) + 1
+        return numero_usuarios
