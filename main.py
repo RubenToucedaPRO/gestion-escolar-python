@@ -1,14 +1,11 @@
 from escuela import (
     DatoInvalido,
     Duplicado,
-    Validator,
-    Persona,
     Asignatura,
     Alumno,
     Profesor,
     CentroEducativo,
 )
-import random
 
 
 def main():
@@ -106,29 +103,28 @@ def cargar_datos(centro_educativo: CentroEducativo):
 
 def matricular_alumnos(centro_educativo: CentroEducativo):
     # lista de dnis alumnos, asignaturas y notas
-    # hay dni inexistente en centro, asignaturas sin profesor y
-    # alumno para matricular dos veces en la misma asignatura
+    # de esta forma pruebo los posibles errores
     lista_datos = [
         {
             "dni": "12345678P",
             "asignatura": "python",
             "nota": 9.5,
         },  # alumno inexistente en centro
-        {"dni": "12345679E", "asignatura": "python", "nota": 9.5},
-        {"dni": "12345679A", "asignatura": "python", "nota": 4.0},
+        {"dni": "12345679E", "asignatura": "python", "nota": 9.5},  # usuario valido
+        {"dni": "12345679A", "asignatura": "python", "nota": 4.0},  # usuario valido
         {
             "dni": "12345679E",
             "asignatura": "Bases de datos",
             "nota": 9.5,
-        },
-        {"dni": "99999999E", "asignatura": "python", "nota": 19.5},
+        },  # usuario valido
+        {"dni": "99999999E", "asignatura": "python", "nota": 19.5},  # nota invalido
         {
             "dni": "99999999E",
             "asignatura": "python",
             "nota": 9.5,
         },  # ya matriculado en esta asignatura
         {
-            "dni": "19999999E",
+            "dni": "99999999E",
             "asignatura": "religion",
             "nota": 9.5,
         },  # no existe profesor de religion

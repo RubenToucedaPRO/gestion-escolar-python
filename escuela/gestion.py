@@ -62,13 +62,13 @@ class CentroEducativo:
             usuario for usuario in self._usuarios if isinstance(usuario, Profesor)
         ]
         if not lista_profesores:
-            raise DatoInvalido("No existen alumnos en el centro")
+            raise DatoInvalido("No existen porfesores en el centro")
         return lista_profesores
 
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()
         medias_alumnos = [alumno.nota_media() for alumno in lista_alumnos]
-        return sum(medias_alumnos) / len(medias_alumnos)
+        return round(sum(medias_alumnos) / len(medias_alumnos), 2)
 
     def obtener_estadisticas(self):
         lista_profesores = self.obtener_profesores()

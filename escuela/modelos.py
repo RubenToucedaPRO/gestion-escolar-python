@@ -38,7 +38,7 @@ class Persona(ABC):
 
 
 class Asignatura:
-    def __init__(self, nombre: str, nota: float = 0):
+    def __init__(self, nombre: str, nota: float = 0.0):
         self.set_nombre(nombre)
         self.set_nota(nota)
 
@@ -58,7 +58,7 @@ class Asignatura:
         return self._nota
 
     def set_nota(self, nota: float):
-        if not isinstance(nota, float) and nota < 0 or nota > 10:
+        if not isinstance(nota, float) or (nota < 0.0 or nota > 10.0):
             raise DatoInvalido("La nota debe de ser un numero decimal entre 0 y 10")
         self._nota = nota
 
@@ -92,7 +92,7 @@ class Alumno(Persona):
         suma = reduce(
             lambda suma, asignatura: suma + asignatura._nota, self._asignaturas, 0
         )
-        return suma / len(self._asignaturas)
+        return round(suma / len(self._asignaturas),2)
 
 
 class Profesor(Persona):
