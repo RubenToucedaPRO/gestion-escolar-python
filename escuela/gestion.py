@@ -1,3 +1,6 @@
+from .common import Duplicado
+
+
 class CentroEducativo:
     def __init__(self):
         self._usuarios = []
