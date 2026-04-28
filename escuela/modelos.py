@@ -36,6 +36,9 @@ class Persona(ABC):
     def set_email(self, email: str):
         self.email = email.lower()
 
+    def to_dict(self):
+        return {"dni": self._dni, "nombre": self.nombre, "email": self.email}
+
 
 class Asignatura:
     def __init__(self, nombre: str, nota: float = 0.0):
@@ -92,7 +95,7 @@ class Alumno(Persona):
         suma = reduce(
             lambda suma, asignatura: suma + asignatura._nota, self._asignaturas, 0
         )
-        return round(suma / len(self._asignaturas),2)
+        return round(suma / len(self._asignaturas), 2)
 
 
 class Profesor(Persona):
@@ -118,7 +121,11 @@ class Profesor(Persona):
         return self.salario
 
     def set_salario(self, salario):
-        self.salario = salario
+        try:
+            valor_float = float(salario)
+            self.salario = valor_float
+        except ValueError:
+            raise DatoInvalido(f"'{salario}' no es un número decimal válido")
 
     def calificar(self, alumno: Alumno, nombre_asignatura, nota):
         nombre_asignatura = nombre_asignatura.strip().capitalize()
@@ -132,3 +139,12 @@ class Profesor(Persona):
             raise DatoInvalido(
                 f"El alumno {alumno.get_nombre()} no tiene la asignatura {nombre_asignatura}"
             )
+
+    def to_dict(self):
+        return {
+            "dni": self._dni,
+            "nombre": self.nombre,
+            "email": self.email,
+            "especialidad": self.especialidad,
+            "salario": self.salario,
+        }
