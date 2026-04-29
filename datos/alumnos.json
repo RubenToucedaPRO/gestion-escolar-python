@@ -32,5 +32,26 @@
         "nota": 0.0
       }
     ]
+  },
+  {
+    "dni": "55555555A",
+    "nombre": "Alba",
+    "email": "alba@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Mates",
+        "nota": 0.0
+      },
+      {
+        "nombre": "Religion",
+        "nota": 0.0
+      }
+    ]
+  },
+  {
+    "dni": "67676767A",
+    "nombre": "Asd",
+    "email": "as",
+    "asignaturas": []
   }
 ]

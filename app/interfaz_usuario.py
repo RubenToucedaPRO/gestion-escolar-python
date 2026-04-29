@@ -66,7 +66,8 @@ class InterfazConsola:
                 usuario = self.sistema.obtener_usuario(dni_usuario)
                 self.actualizar_datos_usuario(usuario)
             case "6":
-                print("")
+                dni_usuario = self.pedir_dni()
+                self.sistema.eliminar_usuario(dni_usuario)
             case "7":
                 dni_usuario = self.pedir_dni()
                 usuario = self.sistema.obtener_alumno(dni_usuario)
@@ -142,4 +143,4 @@ class InterfazConsola:
             dato = input("Escriba salario nuevo o pulse enter para saltar: ")
             if dato:
                 persona.set_salario(dato)
-        self.sistema.guardar_en_memoria(persona)
+        self.sistema.guardar_en_memoria_usuarios(persona)

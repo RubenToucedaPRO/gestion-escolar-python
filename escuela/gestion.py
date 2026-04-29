@@ -34,26 +34,27 @@ class CentroEducativo:
                 datos.append(profesor)
         return datos
 
-    def guardar_en_memoria(self, objeto: object):
+    def guardar_en_memoria_usuarios(self, persona: Persona):
         """Según el tipo de objeto recibido realiza la salvaguarda en el fichero json
         del tipo correspondiente"""
-        if isinstance(objeto, Alumno):
+        if isinstance(persona, Alumno):
             lista = self.obtener_alumnos()
             lista_dict = self.lista_to_dict(lista)
             self.archivo_alumnos.guardar_en_json(lista_dict)
-        if isinstance(objeto, Profesor):
+        if isinstance(persona, Profesor):
             lista = self.obtener_profesores()
             lista_dict = self.lista_to_dict(lista)
             self.archivo_profesores.guardar_en_json(lista_dict)
-        if isinstance(objeto, Asignatura):
-            lista = self.obtener_asignaturas()
-            self.archivo_asignaturas.guardar_en_json(lista)
+
+    def guardar_en_memoria_asignaturas(self):
+        lista = self.obtener_asignaturas()
+        self.archivo_asignaturas.guardar_en_json(lista)
 
     def lista_to_dict(self, lista):
-        lisat_dict = []
+        lista_dict = []
         for objeto in lista:
-            lisat_dict.append(objeto.to_dict())
-        return lisat_dict
+            lista_dict.append(objeto.to_dict())
+        return lista_dict
 
     def crear_usuario(self, persona):
         dni_nuevo = persona.get_dni()
@@ -63,7 +64,7 @@ class CentroEducativo:
                     f"{dni_nuevo!r} ya existe en el sistema -> se omite usuario"
                 )
         self._usuarios.append(persona)
-        self.guardar_en_memoria(persona)
+        self.guardar_en_memoria_usuarios(persona)
 
     def listar_usuarios(self):
         if not self._usuarios:
@@ -139,6 +140,15 @@ class CentroEducativo:
         # devolver una lista
         return list(set(lista_asignaturas))
 
+    def eliminar_usuario(self, dni_usuario: str):
+        usuario = self.obtener_usuario(dni_usuario)
+        self.get_usuarios().remove(usuario)
+        self.guardar_en_memoria_usuarios(usuario)
+        # En caso de ser un alumno dado que tiene asignaturas se actualiza el fihero de
+        # asignaturas por si se elimina alguna
+        if isinstance(usuario, Alumno):
+            self.guardar_en_memoria_asignaturas()
+
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()
         medias_alumnos = [alumno.nota_media() for alumno in lista_alumnos]
@@ -159,5 +169,5 @@ class CentroEducativo:
         usuario.matricular(asignatura)
         # guardamos en memoria tanto los alumnos como las asignaturas para que queden
         # actualizados
-        self.guardar_en_memoria(usuario)
-        self.guardar_en_memoria(asignatura)
+        self.guardar_en_memoria_usuarios(usuario)
+        self.guardar_en_memoria_asignaturas()

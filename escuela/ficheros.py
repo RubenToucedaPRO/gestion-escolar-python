@@ -15,6 +15,12 @@ class GestorFicheros:
         """
         self._ruta = ruta
 
+    def get_ruta(self):
+        return self._ruta
+
+    def get_fichero(self):
+        return self.get_ruta().split("/")[-1]
+
     def leer_json(self) -> list:
         """
         Lectura de ficheros JSON (no formatea)
@@ -42,4 +48,4 @@ class GestorFicheros:
         with open(ruta, "w", encoding="utf-8") as f:
             json.dump(lista, f, ensure_ascii=False, indent=2)
 
-        print(f"✅ Dato añadido correctamente.")
+        print(f"✅ JSON {self.get_fichero()!r} actualizado correctamente.")
