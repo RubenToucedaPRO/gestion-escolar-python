@@ -1,5 +1,5 @@
 from .common import Duplicado, DatoInvalido
-from .modelos import Alumno, Profesor, Asignatura
+from .modelos import Alumno, Profesor, Persona, Asignatura
 
 
 class CentroEducativo:
@@ -25,6 +25,18 @@ class CentroEducativo:
     def obtener_numero_usuarios(self):
         return len(self._usuarios)
 
+    def obtener_usuario(self, dni_usuario) -> Persona:
+        encontrado = False
+
+        for usuario in self.get_usuarios():
+            if usuario.get_dni() == dni_usuario:
+                return usuario
+
+        if not encontrado:
+            raise DatoInvalido(
+                f"Usuario con dni: {dni_usuario}-> No existe el usuario en el centro"
+            )
+
     def obtener_alumno(self, dni_alumno):
         encontrado = False
 
@@ -37,16 +49,16 @@ class CentroEducativo:
                 f"Alumno con dni: {dni_alumno}-> No existe el alumno en el centro"
             )
 
-    def obtener_profesor(self, asigantura: Asignatura):
+    def obtener_profesor_asignatura(self, asignatura: Asignatura):
         encontrado = False
 
         for usuario in self.obtener_profesores():
-            if usuario.get_especialidad() == asigantura.get_nombre():
+            if usuario.get_especialidad() == asignatura.get_nombre():
                 return usuario
 
         if not encontrado:
             raise DatoInvalido(
-                f"No existe el profesor de {asigantura.get_nombre()!r}en el centro para realizar la calificacion"
+                f"No existe el profesor de {asignatura.get_nombre()!r}en el centro para realizar la calificacion"
             )
 
     def obtener_alumnos(self):
