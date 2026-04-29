@@ -18,7 +18,7 @@ class Persona(ABC):
     def set_dni(self, dni: str):
         if not dni:
             raise DatoInvalido("El dni no puede estar vacío.")
-        dni=Validator.validar_dni(dni)
+        dni = Validator.validar_dni(dni)
         self._dni = dni
 
     def get_nombre(self):
@@ -65,6 +65,17 @@ class Asignatura:
             raise DatoInvalido("La nota debe de ser un numero decimal entre 0 y 10")
         self._nota = nota
 
+    def to_dict(self):
+        return {
+            "nombre": self.nombre,
+        }
+
+    def to_dict_alumno(self):
+        return {
+            "nombre": self.nombre,
+            "nota": self._nota,
+        }
+
 
 class Alumno(Persona):
     def __init__(self, dni: str, nombre: str, email: str):
@@ -76,6 +87,12 @@ class Alumno(Persona):
 
     def get_asignaturas(self):
         return self._asignaturas
+
+    def set_asignaturas(self, asignaturas: list):
+        for asignatura in asignaturas:
+            self._asignaturas.append(
+                Asignatura(asignatura["nombre"], asignatura["nota"])
+            )
 
     def matricular(self, asignatura: Asignatura):
         existe_asignatura = [
@@ -96,6 +113,15 @@ class Alumno(Persona):
             lambda suma, asignatura: suma + asignatura._nota, self._asignaturas, 0
         )
         return round(suma / len(self._asignaturas), 2)
+
+    def to_dict(self):
+        asignaturas = [asignatura.to_dict_alumno() for asignatura in self._asignaturas]
+        return {
+            "dni": self._dni,
+            "nombre": self.nombre,
+            "email": self.email,
+            "asignaturas": asignaturas,
+        }
 
 
 class Profesor(Persona):

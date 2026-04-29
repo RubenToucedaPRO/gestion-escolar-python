@@ -1,0 +1,14 @@
+[
+  {
+    "dni": "12312312A",
+    "nombre": "As",
+    "email": "as",
+    "asignaturas": []
+  },
+  {
+    "dni": "12312312X",
+    "nombre": "Javier",
+    "email": "javier@email.com",
+    "asignaturas": []
+  }
+]

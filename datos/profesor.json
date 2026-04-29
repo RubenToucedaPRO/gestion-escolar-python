@@ -1,0 +1,16 @@
+[
+  {
+    "dni": "44444444P",
+    "nombre": "Asd",
+    "email": "as",
+    "especialidad": "As",
+    "salario": 3.0
+  },
+  {
+    "dni": "12312312P",
+    "nombre": "As",
+    "email": "asd",
+    "especialidad": "As",
+    "salario": 3.0
+  }
+]

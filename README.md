@@ -43,3 +43,6 @@ gestion_escolar-python/
 - **Ejecucion**: existen dos formas de ejecutar la aplicacion:
     * Opcion 1: Ejecutar el fichero main.py en VsCode
     * Opcion 2: Ejecutar desde la terminal en el directorio raiz del proyecto 'python main.py'
+
+## Enlaces de interes
+https://www.geeksforgeeks.org/python/read-json-file-using-python/

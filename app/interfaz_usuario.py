@@ -18,6 +18,7 @@ class InterfazConsola:
         salir = False
         while not salir:
             try:
+                input("Pulse tecla para mostrar menu\n")
                 self.mostrar_menu()
                 seleccion = input("Ingrese numero de opción menu a seleccionar: ")
                 salir = self.seleccionar_opcion(seleccion)
@@ -34,7 +35,7 @@ class InterfazConsola:
         print("2. Alta de Alumno.")
         print("3. Alta de Profesor.")
         print("4. Buscar: Localizar a un usuario por su DNI.")
-        print("5. Modificar un usuario existente..")
+        print("5. Modificar un usuario existente.")
         print(
             "6. Eliminar: Dar de baja a un usuario o eliminar una asignatura de un alumno."
         )
@@ -45,6 +46,7 @@ class InterfazConsola:
         print("9. Guardar y Salir: Volcará los cambios a los ficheros JSON.")
 
     def seleccionar_opcion(self, seleccion: str):
+        print("*" * 40)
         match seleccion:
             case "1":
                 self.sistema.listar_usuarios()
@@ -71,6 +73,7 @@ class InterfazConsola:
                 return True
             case _:
                 print("Selección errónea")
+        print("*" * 40)
         return False
 
     def pedir_datos_alumno(self) -> Alumno:

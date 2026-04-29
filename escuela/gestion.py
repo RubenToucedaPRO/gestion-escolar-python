@@ -1,13 +1,43 @@
 from .common import Duplicado, DatoInvalido
 from .modelos import Alumno, Profesor, Persona, Asignatura
+from .ficheros import GestorFicheros
 
 
 class CentroEducativo:
     def __init__(self):
-        self._usuarios = []
+        self._gestor_fichero_alumnos = GestorFicheros("datos/alumnos.json")
+        self._gestor_fichero_profesor = GestorFicheros("datos/profesor.json")
+        self._usuarios = self.set_usuarios(
+            self._gestor_fichero_alumnos.leer_json()
+            + self._gestor_fichero_profesor.leer_json()
+        )
 
     def get_usuarios(self):
         return self._usuarios
+
+    def set_usuarios(self, lista: list):
+        datos = []
+        for dato in lista:
+            if not dato.get("salario"):
+                alumno = Alumno(dato["dni"], dato["nombre"], dato["email"])
+                alumno.set_asignaturas(dato["asignaturas"])
+                datos.append(alumno)
+            else:
+                profesor = Profesor(
+                    dato["dni"],
+                    dato["nombre"],
+                    dato["email"],
+                    dato["especialidad"],
+                    dato["salario"],
+                )
+                datos.append(profesor)
+        return datos
+
+    def guardar_en_memoria_usuario(self, persona: Persona):
+        if isinstance(persona, Alumno):
+            self._gestor_fichero_alumnos.guardar_en_json(persona.to_dict())
+        if isinstance(persona, Profesor):
+            self._gestor_fichero_profesor.guardar_en_json(persona.to_dict())
 
     def agregar_usuario(self, persona):
         dni_nuevo = persona.get_dni()
@@ -17,8 +47,11 @@ class CentroEducativo:
                     f"{dni_nuevo!r} ya existe en el sistema -> se omite usuario"
                 )
         self._usuarios.append(persona)
+        self.guardar_en_memoria_usuario(persona)
 
     def listar_usuarios(self):
+        if not self._usuarios:
+            print("Sin usuarios registrados en el centro")
         for usuario in self._usuarios:
             print(usuario)
 
