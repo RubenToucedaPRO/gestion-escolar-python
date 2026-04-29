@@ -6,10 +6,11 @@ from .ficheros import GestorFicheros
 class CentroEducativo:
     def __init__(self):
         self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
-        self.archivo_profesores = GestorFicheros("datos/profesor.json")
+        self.archivo_profesores = GestorFicheros("datos/profesores.json")
+        self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
+
         self._usuarios = self.set_usuarios(
-            self.archivo_alumnos.leer_json()
-            + self.archivo_profesores.leer_json()
+            self.archivo_alumnos.leer_json() + self.archivo_profesores.leer_json()
         )
 
     def get_usuarios(self):
@@ -33,24 +34,28 @@ class CentroEducativo:
                 datos.append(profesor)
         return datos
 
-    def guardar_en_memoria_usuario(self, persona: Persona):
-        if isinstance(persona, Alumno):
+    def guardar_en_memoria(self, objeto: object):
+        """Según el tipo de objeto recibido realiza la salvaguarda en el fichero json
+        del tipo correspondiente"""
+        if isinstance(objeto, Alumno):
             lista = self.obtener_alumnos()
             lista_dict = self.lista_to_dict(lista)
             self.archivo_alumnos.guardar_en_json(lista_dict)
-        if isinstance(persona, Profesor):
+        if isinstance(objeto, Profesor):
             lista = self.obtener_profesores()
             lista_dict = self.lista_to_dict(lista)
             self.archivo_profesores.guardar_en_json(lista_dict)
-
+        if isinstance(objeto, Asignatura):
+            lista = self.obtener_asignaturas()
+            self.archivo_asignaturas.guardar_en_json(lista)
 
     def lista_to_dict(self, lista):
         lisat_dict = []
-        for usuario in lista:
-            lisat_dict.append(usuario.to_dict())
+        for objeto in lista:
+            lisat_dict.append(objeto.to_dict())
         return lisat_dict
 
-    def agregar_usuario(self, persona):
+    def crear_usuario(self, persona):
         dni_nuevo = persona.get_dni()
         for usuario in self._usuarios:
             if dni_nuevo == usuario.get_dni():
@@ -58,7 +63,7 @@ class CentroEducativo:
                     f"{dni_nuevo!r} ya existe en el sistema -> se omite usuario"
                 )
         self._usuarios.append(persona)
-        self.guardar_en_memoria_usuario(persona)
+        self.guardar_en_memoria(persona)
 
     def listar_usuarios(self):
         if not self._usuarios:
@@ -121,6 +126,19 @@ class CentroEducativo:
             raise DatoInvalido("No existen porfesores en el centro")
         return lista_profesores
 
+    def obtener_asignaturas(self):
+        """Obtenemos las asignaturas en funcion del las asignaturas en las que están
+        matriculados los alumnos para tener siempre el json de asignaturas actualizado"""
+        lista_asignaturas = []
+        lista_alumnos = self.obtener_alumnos()
+        for alumno in lista_alumnos:
+            if len(alumno.get_asignaturas()) > 0:
+                for asignatura in alumno.get_asignaturas():
+                    lista_asignaturas.append(asignatura.get_nombre())
+        # lo pasamos a conjunto para evitar asignaturas repetidas y volvemos a
+        # devolver una lista
+        return list(set(lista_asignaturas))
+
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()
         medias_alumnos = [alumno.nota_media() for alumno in lista_alumnos]
@@ -135,3 +153,11 @@ class CentroEducativo:
         estadisticas["Total usuarios"] = len(self.get_usuarios())
         estadisticas["Nota media global del centro"] = self.media_global_centro()
         return estadisticas
+
+    def matricular_usuario(self, usuario: Alumno, nombre_asignatura: str):
+        asignatura = Asignatura(nombre_asignatura)
+        usuario.matricular(asignatura)
+        # guardamos en memoria tanto los alumnos como las asignaturas para que queden
+        # actualizados
+        self.guardar_en_memoria(usuario)
+        self.guardar_en_memoria(asignatura)

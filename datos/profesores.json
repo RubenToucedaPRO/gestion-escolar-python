@@ -1,0 +1,23 @@
+[
+  {
+    "dni": "44444444P",
+    "nombre": "Jose",
+    "email": "jose@email.com",
+    "especialidad": "Servicios y procesos",
+    "salario": 2005.0
+  },
+  {
+    "dni": "12312312P",
+    "nombre": "Jose",
+    "email": "jsoe@email.com",
+    "especialidad": "Fol",
+    "salario": 1800.0
+  },
+  {
+    "dni": "54645678Q",
+    "nombre": "Javier",
+    "email": "javier@email.com",
+    "especialidad": "Analisis de datos",
+    "salario": 2005.0
+  }
+]

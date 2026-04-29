@@ -18,10 +18,7 @@ class GestorFicheros:
     def leer_json(self) -> list:
         """
         Lectura de ficheros JSON (no formatea)
-        :param ruta: objeto Path con la ruta del fichero
-        :type ruta: Path
         :return: Devuelve un objeto con el contenido del fichero
-        :rtype: str
         """
         ruta = Path(self._ruta)
 
@@ -37,8 +34,7 @@ class GestorFicheros:
     def guardar_en_json(self, lista: list) -> None:
         """
         Escritura de ficheros json
-        :param ruta: ruta al fichero
-        :param contenido: nuevo contenido que va a tener el fichero json"""
+        :param lista: nuevo contenido que va a tener el fichero json"""
 
         ruta = Path(self._ruta)
 

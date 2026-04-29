@@ -3,6 +3,7 @@ from escuela.modelos import (
     Alumno,
     Profesor,
     Persona,
+    Asignatura,
     Duplicado,
     DatoInvalido,
     Validator,
@@ -52,10 +53,10 @@ class InterfazConsola:
                 self.sistema.listar_usuarios()
             case "2":
                 alumno = self.pedir_datos_alumno()
-                self.sistema.agregar_usuario(alumno)
+                self.sistema.crear_usuario(alumno)
             case "3":
                 profesor = self.pedir_datos_profesor()
-                self.sistema.agregar_usuario(profesor)
+                self.sistema.crear_usuario(profesor)
             case "4":
                 dni_usuario = self.pedir_dni()
                 usuario = self.sistema.obtener_usuario(dni_usuario)
@@ -63,11 +64,16 @@ class InterfazConsola:
             case "5":
                 dni_usuario = self.pedir_dni()
                 usuario = self.sistema.obtener_usuario(dni_usuario)
-                self.modificar_datos_usuario(usuario)
+                self.actualizar_datos_usuario(usuario)
             case "6":
                 print("")
             case "7":
-                print("")
+                dni_usuario = self.pedir_dni()
+                usuario = self.sistema.obtener_alumno(dni_usuario)
+                nombre_asignatura = input(
+                    "Introduzca asignatura en la que matricular al alumno: "
+                )
+                self.sistema.matricular_usuario(usuario, nombre_asignatura)
             case "8":
                 print("")
             case "9":
@@ -108,14 +114,17 @@ class InterfazConsola:
     def mostrar_datos_usuario(self, persona: Persona):
         if isinstance(persona, Alumno):
             print(f"Los datos del dni {persona.get_dni()!r} corresponden al alumno:")
-            print("nombre:", persona.get_nombre())
-            print("asignaturas:", persona.get_asignaturas())
+            print("Nombre:", persona.get_nombre())
+            print("Asignaturas:")
+            for asignatura in persona.get_asignaturas():
+                print("\t-", asignatura.get_nombre(), " nota:", asignatura.get_nota())
         else:
             print(f"Los datos del dni {persona.get_dni()!r} corresponden al profesor:")
-            print("nombre:", persona.get_nombre())
-            print("especialidad:", persona.get_especialidad())
+            print("Nombre:", persona.get_nombre())
+            print("Especialidad:", persona.get_especialidad())
+            print("Salario:", persona.get_salario())
 
-    def modificar_datos_usuario(self, persona: Persona):
+    def actualizar_datos_usuario(self, persona: Persona):
         print("DNI actual:", persona.get_dni())
         dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
         if dato:
@@ -133,4 +142,4 @@ class InterfazConsola:
             dato = input("Escriba salario nuevo o pulse enter para saltar: ")
             if dato:
                 persona.set_salario(dato)
-        self.sistema.guardar_en_memoria_usuario(persona)
+        self.sistema.guardar_en_memoria(persona)

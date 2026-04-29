@@ -1,14 +1,36 @@
 [
   {
     "dni": "12312312A",
-    "nombre": "As",
-    "email": "as",
-    "asignaturas": []
+    "nombre": "Mar",
+    "email": "mar@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Bases de datos",
+        "nota": 0.0
+      },
+      {
+        "nombre": "Python",
+        "nota": 0.0
+      },
+      {
+        "nombre": "Android",
+        "nota": 0.0
+      }
+    ]
   },
   {
-    "dni": "12312312X",
-    "nombre": "Javier",
-    "email": "javier@email.com",
-    "asignaturas": []
+    "dni": "12312312C",
+    "nombre": "Juan",
+    "email": "juan@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Mates",
+        "nota": 0.0
+      },
+      {
+        "nombre": "Python",
+        "nota": 0.0
+      }
+    ]
   }
 ]
