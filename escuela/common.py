@@ -12,7 +12,7 @@ class Duplicado(Exception):
 
 class Validator:
     @staticmethod
-    def validar_dni(texto: str):
+    def validar_dni(texto: str)->str:
         texto = texto.strip().upper()
         if len(texto) != 9:
             raise DatoInvalido(
@@ -28,6 +28,7 @@ class Validator:
             raise DatoInvalido(
                 f"DNI {texto!r} invalido - El ultimo caracter debe ser una letra -> se omite usuario"
             )
+        return texto
 
     @staticmethod
     def formatear_nombre(texto: str):
