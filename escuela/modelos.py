@@ -18,7 +18,7 @@ class Persona(ABC):
     def set_dni(self, dni: str):
         if not dni:
             raise DatoInvalido("El dni no puede estar vacío.")
-        Validator.validar_dni(dni)
+        dni=Validator.validar_dni(dni)
         self._dni = dni
 
     def get_nombre(self):
