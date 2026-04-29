@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from .common import DatoInvalido, Duplicado, Validator
 from functools import reduce
 
@@ -9,6 +9,7 @@ class Persona(ABC):
         self.set_nombre(nombre)
         self.set_email(email)
 
+    @abstractmethod
     def __str__(self):
         return f"{self.nombre} ({self._dni})"
 
@@ -83,7 +84,7 @@ class Alumno(Persona):
         self._asignaturas = []
 
     def __str__(self):
-        return f"[ALUMNO] {self.get_nombre()}"
+        return f"[ALUMNO] {super().get_nombre()}"
 
     def get_asignaturas(self):
         return self._asignaturas
@@ -110,7 +111,7 @@ class Alumno(Persona):
         if not self._asignaturas:
             return 0
         suma = reduce(
-            lambda suma, asignatura: suma + asignatura._nota, self._asignaturas, 0
+            lambda suma, asignatura: suma + asignatura.get_nota(), self._asignaturas, 0
         )
         return round(suma / len(self._asignaturas), 2)
 
