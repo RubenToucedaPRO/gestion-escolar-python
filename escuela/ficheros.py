@@ -34,7 +34,7 @@ class GestorFicheros:
         lista = list(data)
         return lista
 
-    def guardar_en_json(self, dato: dict) -> None:
+    def guardar_en_json(self, lista: list) -> None:
         """
         Escritura de ficheros json
         :param ruta: ruta al fichero
@@ -42,22 +42,8 @@ class GestorFicheros:
 
         ruta = Path(self._ruta)
 
-        # Si el fichero no existe, creamos una lista vacía
-        if not ruta.exists():
-            datos = []
-        else:
-            # Leemos el JSON actual
-            with open(ruta, "r", encoding="utf-8") as f:
-                try:
-                    datos = json.load(f)
-                except json.JSONDecodeError:
-                    datos = []
-
-        # Añadimos el nuevo libro a la lista
-        datos.append(dato)
-
         # Guardamos de nuevo el fichero
         with open(ruta, "w", encoding="utf-8") as f:
-            json.dump(datos, f, ensure_ascii=False, indent=2)
+            json.dump(lista, f, ensure_ascii=False, indent=2)
 
         print(f"✅ Dato añadido correctamente.")

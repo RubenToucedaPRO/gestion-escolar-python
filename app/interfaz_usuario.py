@@ -61,7 +61,9 @@ class InterfazConsola:
                 usuario = self.sistema.obtener_usuario(dni_usuario)
                 self.mostrar_datos_usuario(usuario)
             case "5":
-                print("")
+                dni_usuario = self.pedir_dni()
+                usuario = self.sistema.obtener_usuario(dni_usuario)
+                self.modificar_datos_usuario(usuario)
             case "6":
                 print("")
             case "7":
@@ -112,3 +114,23 @@ class InterfazConsola:
             print(f"Los datos del dni {persona.get_dni()!r} corresponden al profesor:")
             print("nombre:", persona.get_nombre())
             print("especialidad:", persona.get_especialidad())
+
+    def modificar_datos_usuario(self, persona: Persona):
+        print("DNI actual:", persona.get_dni())
+        dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
+        if dato:
+            persona.set_dni(dato)
+        dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
+        if dato:
+            persona.set_nombre(dato)
+        dato = input("Escriba email nuevo o pulse enter para saltar: ")
+        if dato:
+            persona.set_email(dato)
+        if not isinstance(persona, Alumno):
+            dato = input("Escriba especialidad nuevo o pulse enter para saltar: ")
+            if dato:
+                persona.set_especialidad(dato)
+            dato = input("Escriba salario nuevo o pulse enter para saltar: ")
+            if dato:
+                persona.set_salario(dato)
+        self.sistema.guardar_en_memoria_usuario(persona)

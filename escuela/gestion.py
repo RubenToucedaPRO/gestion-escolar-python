@@ -5,11 +5,11 @@ from .ficheros import GestorFicheros
 
 class CentroEducativo:
     def __init__(self):
-        self._gestor_fichero_alumnos = GestorFicheros("datos/alumnos.json")
-        self._gestor_fichero_profesor = GestorFicheros("datos/profesor.json")
+        self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
+        self.archivo_profesores = GestorFicheros("datos/profesor.json")
         self._usuarios = self.set_usuarios(
-            self._gestor_fichero_alumnos.leer_json()
-            + self._gestor_fichero_profesor.leer_json()
+            self.archivo_alumnos.leer_json()
+            + self.archivo_profesores.leer_json()
         )
 
     def get_usuarios(self):
@@ -35,9 +35,20 @@ class CentroEducativo:
 
     def guardar_en_memoria_usuario(self, persona: Persona):
         if isinstance(persona, Alumno):
-            self._gestor_fichero_alumnos.guardar_en_json(persona.to_dict())
+            lista = self.obtener_alumnos()
+            lista_dict = self.lista_to_dict(lista)
+            self.archivo_alumnos.guardar_en_json(lista_dict)
         if isinstance(persona, Profesor):
-            self._gestor_fichero_profesor.guardar_en_json(persona.to_dict())
+            lista = self.obtener_profesores()
+            lista_dict = self.lista_to_dict(lista)
+            self.archivo_profesores.guardar_en_json(lista_dict)
+
+
+    def lista_to_dict(self, lista):
+        lisat_dict = []
+        for usuario in lista:
+            lisat_dict.append(usuario.to_dict())
+        return lisat_dict
 
     def agregar_usuario(self, persona):
         dni_nuevo = persona.get_dni()
