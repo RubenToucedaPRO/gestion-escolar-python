@@ -10,9 +10,15 @@ class Duplicado(Exception):
     pass
 
 
+class IntegridadDatos(Exception):
+    """Excepción lanzada cuando los datos en memoria no coinciden con el programa."""
+
+    pass
+
+
 class Validator:
     @staticmethod
-    def validar_dni(texto: str)->str:
+    def validar_dni(texto: str) -> str:
         texto = texto.strip().upper()
         if len(texto) != 9:
             raise DatoInvalido(

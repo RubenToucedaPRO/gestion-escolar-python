@@ -1,4 +1,4 @@
-from .common import Duplicado, DatoInvalido
+from .common import Duplicado, DatoInvalido, IntegridadDatos
 from .modelos import Alumno, Profesor, Persona, Asignatura
 from .ficheros import GestorFicheros
 
@@ -17,11 +17,13 @@ class CentroEducativo:
         return self._usuarios
 
     def set_usuarios(self, lista: list):
+        """Convertimos los dict de cada usuario del json al objeto correspondiente"""
         datos = []
         for dato in lista:
             # si no tiene salario es un alumno
             if not dato.get("salario"):
                 alumno = Alumno(dato["dni"], dato["nombre"], dato["email"])
+                # Instanciamos las asignaturas del alumno con los datos del json
                 alumno.set_asignaturas(dato["asignaturas"])
                 datos.append(alumno)
             else:
@@ -191,3 +193,47 @@ class CentroEducativo:
             self.guardar_en_memoria_usuarios(alumno)
         except DatoInvalido as e:
             print(f"ERROR: {e}")
+
+    def verificar_datos_en_memoria(self):
+        """Se comparan los datos de los json de alumnos y profesores dado que asignaturas
+        siempre se regulariza con las asignaturas/especialidades existentes en estos"""
+        profesores_json = self.archivo_profesores.leer_json()
+        lista_profesores_json = self.set_usuarios(profesores_json)
+        lista_alumnos_programa = self.obtener_profesores()
+        self.comparar_listas(lista_profesores_json, lista_alumnos_programa)
+
+        alumnos_json = self.archivo_alumnos.leer_json()
+        lista_alumnos_json = self.set_usuarios(alumnos_json)
+        lista_alumnos_programa = self.obtener_alumnos()
+        self.comparar_listas(lista_alumnos_json, lista_alumnos_programa)
+
+    def comparar_listas(self, lista_json: list, lista_programa: list):
+        """Compara usuario a usuario de la lista del json con la lista del programa
+        de alumnos o profesores"""
+        tipo = ""
+        for usuario_json in lista_json:
+            tipo = type(usuario_json).__name__.lower()
+            encontrado_en_programa = False
+            for usuario_programa in lista_programa:
+                if usuario_json.get_dni() == usuario_programa.get_dni():
+                    encontrado_en_programa = True
+                    # se convierten a diccionarios para poder comparalos con !=
+                    if usuario_json.to_dict() != usuario_programa.to_dict():
+                        raise IntegridadDatos(
+                            f"Los datos del {tipo} entre memoria y programa no coinciden,"
+                            "ejecute modificar con el dni "
+                            f"{usuario_json.get_dni()!r} en programa para "
+                            "regularizar en memoria"
+                        )
+
+            if not encontrado_en_programa:
+                raise IntegridadDatos(
+                    f"El {tipo} con dni {usuario_json.get_dni()!r} "
+                    "registrado en memoria no existe en programa "
+                    "borrar en memoria o regularizar programa"
+                )
+            if len(lista_json) != len(lista_programa):
+                raise IntegridadDatos(
+                    f"La lista de {tipo}s del programa no coincide "
+                    "con la lista en memoria "
+                )

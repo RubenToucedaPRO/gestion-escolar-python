@@ -2,12 +2,12 @@ from escuela.gestion import CentroEducativo
 from escuela.modelos import (
     Alumno,
     Profesor,
-    Persona,
     Asignatura,
     Duplicado,
     DatoInvalido,
     Validator,
 )
+from escuela.common import IntegridadDatos
 
 
 class InterfazConsola:
@@ -25,6 +25,11 @@ class InterfazConsola:
                 salir = self.seleccionar_opcion(seleccion)
             except (Duplicado, DatoInvalido) as e:
                 print(f"ERROR: {e}")
+            except IntegridadDatos as e:
+                print(f"ERROR: {e}")
+                forzar = input("Si desea forzar salida escriba SI: ").strip()
+                if forzar == "SI":
+                    salir = True
             except ValueError as e:
                 print(f"ERROR: {e}")
             except Exception as e:
@@ -32,6 +37,7 @@ class InterfazConsola:
 
     def mostrar_bienvenida(self):
         print("\n=== SISTEMA DE GESTIÓN ESCOLAR — INICIO ===​\n")
+        print("Bienvenido.")
 
     def mostrar_menu(self):
         print("1. Listar: Alumnos y Profesores.")
@@ -68,8 +74,7 @@ class InterfazConsola:
             case "8":
                 self.get_datos_calificar_alumno()
             case "9":
-                print("Cerrando aplicación!")
-                return True
+                return self.guardar_salir_aplicacion()
             case _:
                 print("Selección errónea")
         print("*" * 40)
@@ -202,6 +207,14 @@ class InterfazConsola:
         print(
             f"{alumno.get_nombre()}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()} realizada"
         )
+
+    def guardar_salir_aplicacion(self):
+        """
+        Guarda los datos en ficheros JSON
+        :return: True si la operacion fué realizada con exito
+        """
+        self.sistema.verificar_datos_en_memoria()
+        return True
 
     # Metodos auxiliares
 

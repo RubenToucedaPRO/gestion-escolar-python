@@ -14,13 +14,6 @@
     "salario": 2005.0
   },
   {
-    "dni": "54645678Q",
-    "nombre": "Javier",
-    "email": "javier@email.com",
-    "especialidad": "Bases de datos",
-    "salario": 2005.0
-  },
-  {
     "dni": "55555555P",
     "nombre": "Paco",
     "email": "paco@email.com",
@@ -32,10 +25,17 @@
     "nombre": "Pablo",
     "email": "pablo@gmail.com",
     "especialidad": "Diseño",
-    "salario": 3000.0
+    "salario": 3000.1
   },
   {
     "dni": "67676767Z",
+    "nombre": "Asd",
+    "email": "asd",
+    "especialidad": "F",
+    "salario": 2.0
+  },
+  {
+    "dni": "77676767Z",
     "nombre": "Asd",
     "email": "asd",
     "especialidad": "F",

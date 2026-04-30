@@ -90,6 +90,7 @@ class Alumno(Persona):
         return self._asignaturas
 
     def set_asignaturas(self, asignaturas: list):
+        """Se crean las instancias de las asignaturas en cada usuario"""
         for asignatura in asignaturas:
             self._asignaturas.append(
                 Asignatura(asignatura["nombre"], asignatura["nota"])
@@ -116,7 +117,9 @@ class Alumno(Persona):
         return round(suma / len(self._asignaturas), 2)
 
     def to_dict(self):
+        # Convertimos primero las asignaturas a lista de diccionarios
         asignaturas = [asignatura.to_dict_alumno() for asignatura in self._asignaturas]
+
         return {
             "dni": self._dni,
             "nombre": self.nombre,
