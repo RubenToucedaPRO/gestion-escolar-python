@@ -11,7 +11,7 @@ class GestorFicheros:
         """Inicialización para un fichero concreto.
         Mantenemos el objeto creado para tratar con un fichero determinado
         Args:
-        - ruta: ruta del fichero de estudiantes.json, profesores.json ...
+        - ruta: ruta del fichero de alumnos.json, profesores.json ...
         """
         self._ruta = ruta
 

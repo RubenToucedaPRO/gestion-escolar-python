@@ -213,7 +213,9 @@ class InterfazConsola:
         Guarda los datos en ficheros JSON
         :return: True si la operacion fué realizada con exito
         """
+        print("Inicio confirmacion simetría datos entre programa y memoria")
         self.sistema.verificar_datos_en_memoria()
+        print("Validacion datos en memoria exitosa")
         return True
 
     # Metodos auxiliares
