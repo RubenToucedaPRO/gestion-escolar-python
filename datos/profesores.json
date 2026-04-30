@@ -17,14 +17,14 @@
     "dni": "54645678Q",
     "nombre": "Javier",
     "email": "javier@email.com",
-    "especialidad": "Analisis de datos",
+    "especialidad": "Bases de datos",
     "salario": 2005.0
   },
   {
     "dni": "55555555P",
     "nombre": "Paco",
     "email": "paco@email.com",
-    "especialidad": "Mates",
+    "especialidad": "Dibujo",
     "salario": 3000.0
   }
 ]

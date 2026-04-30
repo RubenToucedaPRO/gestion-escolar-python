@@ -19,6 +19,7 @@ class CentroEducativo:
     def set_usuarios(self, lista: list):
         datos = []
         for dato in lista:
+            # si no tiene salario es un alumno
             if not dato.get("salario"):
                 alumno = Alumno(dato["dni"], dato["nombre"], dato["email"])
                 alumno.set_asignaturas(dato["asignaturas"])
@@ -129,7 +130,8 @@ class CentroEducativo:
 
     def obtener_asignaturas(self):
         """Obtenemos las asignaturas en funcion del las asignaturas en las que están
-        matriculados los alumnos para tener siempre el json de asignaturas actualizado"""
+        matriculados los alumnos para tener siempre el json de asignaturas
+        actualizado"""
         lista_asignaturas = []
         lista_alumnos = self.obtener_alumnos()
         for alumno in lista_alumnos:
@@ -171,3 +173,18 @@ class CentroEducativo:
         # actualizados
         self.guardar_en_memoria_usuarios(usuario)
         self.guardar_en_memoria_asignaturas()
+
+    def calificar_alumno(self, alumno: Alumno, asignatura: Asignatura):
+        """Se reciben los datos del alumno si ha sido matriculado y se procede
+        a calificarlo"""
+        try:
+            # Obtenemos el profesor de la asignatura para calificar al alumno
+            profesor = self.obtener_profesor_asignatura(asignatura)
+            # Calificar el alumno desde el profesor de la asignatura
+            profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
+            print(
+                f"{alumno.get_nombre()}: Calificado {asignatura.get_nombre()} con {asignatura.get_nota()}"
+            )
+            self.guardar_en_memoria_usuarios(alumno)
+        except DatoInvalido as e:
+            print(f"ERROR: {e}")

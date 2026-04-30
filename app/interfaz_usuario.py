@@ -29,7 +29,7 @@ class InterfazConsola:
                 print(f"Ocurrió un error inesperado ({type(e).__name__}): {e}")
 
     def mostrar_bienvenida(self):
-        print("=== SISTEMA DE GESTIÓN ESCOLAR — INICIO ===​\n")
+        print("\n=== SISTEMA DE GESTIÓN ESCOLAR — INICIO ===​\n")
 
     def mostrar_menu(self):
         print("1. Listar: Alumnos y Profesores.")
@@ -76,7 +76,7 @@ class InterfazConsola:
                 )
                 self.sistema.matricular_usuario(usuario, nombre_asignatura)
             case "8":
-                print("")
+                self.get_datos_calificar_alumno()
             case "9":
                 print("Cerrando aplicación!")
                 return True
@@ -144,3 +144,12 @@ class InterfazConsola:
             if dato:
                 persona.set_salario(dato)
         self.sistema.guardar_en_memoria_usuarios(persona)
+
+    def get_datos_calificar_alumno(self):
+        dni_alumno = self.pedir_dni()
+        alumno = self.sistema.obtener_alumno(dni_alumno)
+        self.mostrar_datos_usuario(alumno)
+        nombre_asignatura = input("Asignatura a calificar del alumno: ")
+        nota = float(input("Nota a asignar: "))
+        asignatura = Asignatura(nombre_asignatura, nota)
+        self.sistema.calificar_alumno(alumno, asignatura)
