@@ -26,5 +26,19 @@
     "email": "paco@email.com",
     "especialidad": "Dibujo",
     "salario": 3000.0
+  },
+  {
+    "dni": "99889911P",
+    "nombre": "Pablo",
+    "email": "pablo@gmail.com",
+    "especialidad": "Diseño",
+    "salario": 3000.0
+  },
+  {
+    "dni": "67676767Z",
+    "nombre": "Asd",
+    "email": "asd",
+    "especialidad": "F",
+    "salario": 2.0
   }
 ]

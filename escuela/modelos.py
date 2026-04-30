@@ -152,7 +152,7 @@ class Profesor(Persona):
             valor_float = float(salario)
             self.salario = valor_float
         except ValueError:
-            raise DatoInvalido(f"'{salario}' no es un número decimal válido")
+            raise DatoInvalido(f"Salario '{salario}' no es un número decimal válido")
 
     def calificar(self, alumno: Alumno, nombre_asignatura, nota):
         nombre_asignatura = nombre_asignatura.strip().capitalize()

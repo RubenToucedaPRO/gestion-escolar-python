@@ -25,6 +25,8 @@ class InterfazConsola:
                 salir = self.seleccionar_opcion(seleccion)
             except (Duplicado, DatoInvalido) as e:
                 print(f"ERROR: {e}")
+            except ValueError as e:
+                print(f"ERROR: {e}")
             except Exception as e:
                 print(f"Ocurrió un error inesperado ({type(e).__name__}): {e}")
 
@@ -50,31 +52,19 @@ class InterfazConsola:
         print("*" * 40)
         match seleccion:
             case "1":
-                self.sistema.listar_usuarios()
+                self.mostrar_usuarios()
             case "2":
-                alumno = self.pedir_datos_alumno()
-                self.sistema.crear_usuario(alumno)
+                self.dar_alta_alumno()
             case "3":
-                profesor = self.pedir_datos_profesor()
-                self.sistema.crear_usuario(profesor)
+                self.dar_alta_profesor()
             case "4":
-                dni_usuario = self.pedir_dni()
-                usuario = self.sistema.obtener_usuario(dni_usuario)
-                self.mostrar_datos_usuario(usuario)
+                self.mostrar_datos_usuario()
             case "5":
-                dni_usuario = self.pedir_dni()
-                usuario = self.sistema.obtener_usuario(dni_usuario)
-                self.actualizar_datos_usuario(usuario)
+                self.actualizar_datos_usuario()
             case "6":
-                dni_usuario = self.pedir_dni()
-                self.sistema.eliminar_usuario(dni_usuario)
+                self.eliminar_usuario()
             case "7":
-                dni_usuario = self.pedir_dni()
-                usuario = self.sistema.obtener_alumno(dni_usuario)
-                nombre_asignatura = input(
-                    "Introduzca asignatura en la que matricular al alumno: "
-                )
-                self.sistema.matricular_usuario(usuario, nombre_asignatura)
+                self.matricular_usuario()
             case "8":
                 self.get_datos_calificar_alumno()
             case "9":
@@ -85,71 +75,144 @@ class InterfazConsola:
         print("*" * 40)
         return False
 
-    def pedir_datos_alumno(self) -> Alumno:
-        """Solicita por teclado los datos para crear un alumno"""
-        dni = input("DNI: ")
+    def mostrar_usuarios(self):
+        print("ALumnos del centro:")
+        usuarios = self.sistema.get_usuarios()
+
+        if not usuarios:
+            print("Sin usuarios registrados en el centro")
+            return
+
+        for usuario in usuarios:
+            print(usuario)
+
+    def dar_alta_alumno(self) -> Alumno:
+        print("Inicio alta alumno->", end="")
+        dni = self.solicitar_dni_usuario()
+
+        self.sistema.verificar_dni_no_registrado(dni)
+
         nombre = input("Nombre: ")
         email = input("Email: ")
+        alumno = Alumno(dni, nombre, email)
 
-        return Alumno(dni=dni, nombre=nombre, email=email)
+        self.sistema.crear_usuario(alumno)
 
-    def pedir_datos_profesor(self) -> Profesor:
-        """Solicita por teclado los datos para crear un profesor"""
-        dni = input("DNI: ")
+        print(f"Alumno con dni {dni!r} dado de alta correctamente")
+
+    def dar_alta_profesor(self) -> Profesor:
+        print("Inicio alta profesor->", end="")
+        dni = self.solicitar_dni_usuario()
+        self.sistema.verificar_dni_no_registrado(dni)
         nombre = input("Nombre: ")
         email = input("Email: ")
         especialidad = input("Especialidad: ")
         salario = input("Salario: ")
-        return Profesor(
+
+        profesor = Profesor(
             dni=dni,
             nombre=nombre,
             email=email,
             especialidad=especialidad,
             salario=salario,
         )
+        self.sistema.crear_usuario(profesor)
 
-    def pedir_dni(self):
+        print(f"Profesor con dni {dni!r} dado de alta correctamente")
+
+    def mostrar_datos_usuario(self):
+        print("Inicio mostrar usuario->", end="")
+        dni_usuario = self.solicitar_dni_usuario()
+
+        usuario = self.sistema.obtener_usuario(dni_usuario)
+
+        # Comprobamos si es alumno o profesor para mostrar los datos del mismo
+        if isinstance(usuario, Alumno):
+            self.visualizar_datos_alumno(usuario)
+        else:
+            print(f"Los datos del dni {usuario.get_dni()!r} corresponden al profesor:")
+            print("Nombre:", usuario.get_nombre())
+            print("Especialidad:", usuario.get_especialidad())
+            print("Salario:", usuario.get_salario())
+
+    def actualizar_datos_usuario(self):
+        print("Inicio actualizar usuario->", end="")
+        dni_usuario = self.solicitar_dni_usuario()
+
+        usuario = self.sistema.obtener_usuario(dni_usuario)
+
+        print("DNI actual:", dni_usuario)
+        dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
+        if dato:
+            usuario.set_dni(dato)
+        dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
+        if dato:
+            usuario.set_nombre(dato)
+        dato = input("Escriba email nuevo o pulse enter para saltar: ")
+        if dato:
+            usuario.set_email(dato)
+
+        if not isinstance(usuario, Alumno):
+            dato = input("Escriba especialidad nuevo o pulse enter para saltar: ")
+            if dato:
+                usuario.set_especialidad(dato)
+            dato = input("Escriba salario nuevo o pulse enter para saltar: ")
+            if dato:
+                usuario.set_salario(dato)
+
+        self.sistema.guardar_en_memoria_usuarios(usuario)
+
+        print(f"Usuario con dni {dni_usuario!r} actualizado correctamente")
+
+    def eliminar_usuario(self):
+        print("Inicio eliminar usuario->", end="")
+        dni_usuario = self.solicitar_dni_usuario()
+
+        self.sistema.eliminar_usuario(dni_usuario)
+        print(f"Usuario con dni {dni_usuario!r} eliminado correctamente")
+
+    def matricular_usuario(self):
+        print("Inicio matricular alumno->", end="")
+        dni_usuario = self.solicitar_dni_usuario()
+
+        usuario = self.sistema.obtener_alumno(dni_usuario)
+
+        nombre_asignatura = input("Asignatura en la que matricular al alumno: ")
+
+        self.sistema.matricular_usuario(usuario, nombre_asignatura)
+
+        print(
+            f"Usuario {usuario.get_nombre()} matriculado correctamente en {nombre_asignatura}"
+        )
+
+    def get_datos_calificar_alumno(self):
+        print("Inicio calificar alumno->", end="")
+        dni_alumno = self.solicitar_dni_usuario()
+
+        alumno = self.sistema.obtener_alumno(dni_alumno)
+
+        self.visualizar_datos_alumno(alumno)
+
+        nombre_asignatura = input("Asignatura a calificar del alumno: ")
+        nota = float(input("Nota a asignar: "))
+
+        asignatura = Asignatura(nombre_asignatura, nota)
+        self.sistema.calificar_alumno(alumno, asignatura)
+
+        print(
+            f"{alumno.get_nombre()}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()} realizada"
+        )
+
+    # Metodos auxiliares
+
+    def solicitar_dni_usuario(self):
         dni = input("DNI: ")
         return Validator.validar_dni(dni)
 
-    def mostrar_datos_usuario(self, persona: Persona):
-        if isinstance(persona, Alumno):
-            print(f"Los datos del dni {persona.get_dni()!r} corresponden al alumno:")
-            print("Nombre:", persona.get_nombre())
-            print("Asignaturas:")
-            for asignatura in persona.get_asignaturas():
-                print("\t-", asignatura.get_nombre(), " nota:", asignatura.get_nota())
-        else:
-            print(f"Los datos del dni {persona.get_dni()!r} corresponden al profesor:")
-            print("Nombre:", persona.get_nombre())
-            print("Especialidad:", persona.get_especialidad())
-            print("Salario:", persona.get_salario())
-
-    def actualizar_datos_usuario(self, persona: Persona):
-        print("DNI actual:", persona.get_dni())
-        dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
-        if dato:
-            persona.set_dni(dato)
-        dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
-        if dato:
-            persona.set_nombre(dato)
-        dato = input("Escriba email nuevo o pulse enter para saltar: ")
-        if dato:
-            persona.set_email(dato)
-        if not isinstance(persona, Alumno):
-            dato = input("Escriba especialidad nuevo o pulse enter para saltar: ")
-            if dato:
-                persona.set_especialidad(dato)
-            dato = input("Escriba salario nuevo o pulse enter para saltar: ")
-            if dato:
-                persona.set_salario(dato)
-        self.sistema.guardar_en_memoria_usuarios(persona)
-
-    def get_datos_calificar_alumno(self):
-        dni_alumno = self.pedir_dni()
-        alumno = self.sistema.obtener_alumno(dni_alumno)
-        self.mostrar_datos_usuario(alumno)
-        nombre_asignatura = input("Asignatura a calificar del alumno: ")
-        nota = float(input("Nota a asignar: "))
-        asignatura = Asignatura(nombre_asignatura, nota)
-        self.sistema.calificar_alumno(alumno, asignatura)
+    def visualizar_datos_alumno(self, usuario):
+        print(f"Los datos del dni {usuario.get_dni()!r} corresponden al alumno:")
+        print("Nombre:", usuario.get_nombre())
+        print("Email:", usuario.get_email())
+        print("Asignaturas:")
+        for asignatura in usuario.get_asignaturas():
+            print("\t-", asignatura.get_nombre(), " nota:", asignatura.get_nota())

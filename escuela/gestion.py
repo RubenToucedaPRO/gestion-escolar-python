@@ -58,20 +58,13 @@ class CentroEducativo:
         return lista_dict
 
     def crear_usuario(self, persona):
-        dni_nuevo = persona.get_dni()
-        for usuario in self._usuarios:
-            if dni_nuevo == usuario.get_dni():
-                raise Duplicado(
-                    f"{dni_nuevo!r} ya existe en el sistema -> se omite usuario"
-                )
+        """Se crea el usuario, la verificación de que el dni no existe en el centro se
+        hace tras introducir el dni"""
         self._usuarios.append(persona)
         self.guardar_en_memoria_usuarios(persona)
 
-    def listar_usuarios(self):
-        if not self._usuarios:
-            print("Sin usuarios registrados en el centro")
-        for usuario in self._usuarios:
-            print(usuario)
+    def get_usuarios(self):
+        return self._usuarios
 
     def obtener_numero_usuarios(self):
         return len(self._usuarios)
@@ -87,6 +80,13 @@ class CentroEducativo:
             raise DatoInvalido(
                 f"Usuario con dni: {dni_usuario}-> No existe el usuario en el centro"
             )
+
+    def verificar_dni_no_registrado(self, dni_usuario):
+        for usuario in self.get_usuarios():
+            if usuario.get_dni() == dni_usuario:
+                raise Duplicado(
+                    f"Usuario con dni: {dni_usuario}-> Ya existe en el centro"
+                )
 
     def obtener_alumno(self, dni_alumno):
         encontrado = False
@@ -109,7 +109,7 @@ class CentroEducativo:
 
         if not encontrado:
             raise DatoInvalido(
-                f"No existe el profesor de {asignatura.get_nombre()!r}en el centro para realizar la calificacion"
+                f"No existe el profesor de {asignatura.get_nombre()!r} en el centro para realizar la calificacion"
             )
 
     def obtener_alumnos(self):
@@ -130,14 +130,20 @@ class CentroEducativo:
 
     def obtener_asignaturas(self):
         """Obtenemos las asignaturas en funcion del las asignaturas en las que están
-        matriculados los alumnos para tener siempre el json de asignaturas
-        actualizado"""
+        matriculados los alumnos y especializados los profesores para tener siempre
+        el json de asignaturas actualizado"""
         lista_asignaturas = []
+
         lista_alumnos = self.obtener_alumnos()
         for alumno in lista_alumnos:
             if len(alumno.get_asignaturas()) > 0:
                 for asignatura in alumno.get_asignaturas():
                     lista_asignaturas.append(asignatura.get_nombre())
+
+        lista_profesores = self.obtener_profesores()
+        for profesor in lista_profesores:
+            lista_asignaturas.append(profesor.get_especialidad())
+
         # lo pasamos a conjunto para evitar asignaturas repetidas y volvemos a
         # devolver una lista
         return list(set(lista_asignaturas))
@@ -182,9 +188,6 @@ class CentroEducativo:
             profesor = self.obtener_profesor_asignatura(asignatura)
             # Calificar el alumno desde el profesor de la asignatura
             profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
-            print(
-                f"{alumno.get_nombre()}: Calificado {asignatura.get_nombre()} con {asignatura.get_nota()}"
-            )
             self.guardar_en_memoria_usuarios(alumno)
         except DatoInvalido as e:
             print(f"ERROR: {e}")

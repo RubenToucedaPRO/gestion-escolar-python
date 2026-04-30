@@ -50,8 +50,19 @@
   },
   {
     "dni": "67676767A",
-    "nombre": "Asd",
-    "email": "as",
+    "nombre": "Ana",
+    "email": "ana@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Diseño",
+        "nota": 0.0
+      }
+    ]
+  },
+  {
+    "dni": "77889900A",
+    "nombre": "Rubén",
+    "email": "ruben@email.com",
     "asignaturas": []
   }
 ]
