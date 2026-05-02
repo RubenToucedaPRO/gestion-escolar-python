@@ -1,0 +1,21 @@
+[2026-05-02 13:29:57] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-02 13:30:21] TAREA: Alta alumno | ESTADO: ERROR: Usuario con dni: '33333333A'-> Ya existe en el centro
+[2026-05-02 13:30:26] TAREA: Alta alumno | ESTADO: ERROR: DNI 'ASDF' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-02 13:30:48] TAREA: Alta alumno | ESTADO: Alumno con dni '33333333C' dado de alta correctamente
+[2026-05-02 13:30:58] TAREA: Alta profesor | ESTADO: ERROR: Usuario con dni: '33333333A'-> Ya existe en el centro
+[2026-05-02 13:31:09] TAREA: Alta profesor | ESTADO: ERROR: DNI '121212121212' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-02 13:31:41] TAREA: Alta profesor | ESTADO: Profesor con dni '33333333P' dado de alta correctamente
+[2026-05-02 13:31:52] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33333333A' exitosa
+[2026-05-02 13:32:04] TAREA: Buscar usuario | ESTADO: ERROR: Usuario con dni: '12324244E'-> No existe el usuario en el centro
+[2026-05-02 13:32:19] TAREA: Modificar usuario | ESTADO: ERROR: Usuario con dni: '33333333R'-> No existe el usuario en el centro
+[2026-05-02 13:32:25] TAREA: Modificar usuario | ESTADO: Usuario con dni '33333333A' actualizado correctamente
+[2026-05-02 13:32:36] TAREA: Eliminar usuario | ESTADO: ERROR: DNI '33333333' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite Usuario
+[2026-05-02 13:36:41] TAREA: Eliminar usuario | ESTADO: ERROR: Usuario con dni: '55555555P'-> No existe el usuario en el centro
+[2026-05-02 13:37:02] TAREA: Eliminar usuario | ESTADO: Usuario con dni '99889911P' eliminado correctamente
+[2026-05-02 13:37:33] TAREA: Matricular alumno | ESTADO: Usuario 'Martin' matriculado correctamente en 'Bases de datos'
+[2026-05-02 13:37:48] TAREA: Matricular alumno | ESTADO: ERROR: Alumon con DNI: '33333333C'-> Ya está matriculado en 'Bases de datos'
+[2026-05-02 13:37:58] TAREA: Matricular alumno | ESTADO: ERROR: Alumno con dni: '33333333D'-> No existe el alumno en el centro
+[2026-05-02 13:38:14] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Bases de datos' en el centro para realizar la calificacion
+[2026-05-02 13:39:42] TAREA: Calificar alumno | ESTADO: 'Ana': Calificación 'Fol' con la nota 9.1 realizada
+[2026-05-02 13:39:56] TAREA: Calificar alumno | ESTADO: ERROR: Alumno con dni: '33333333X'-> No existe el alumno en el centro
+[2026-05-02 13:40:03] TAREA: Salir de la aplicacion | ESTADO: Validacion datos en memoria exitosa
