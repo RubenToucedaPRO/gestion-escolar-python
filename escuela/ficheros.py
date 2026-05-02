@@ -3,10 +3,6 @@ from pathlib import Path
 
 
 class GestorFicheros:
-    # ATRIBUTOS DE CLASE
-    ficheros_abiertos = 0
-    operaciones_ficheros = 0
-
     def __init__(self, ruta: str):
         """Inicialización para un fichero concreto.
         Mantenemos el objeto creado para tratar con un fichero determinado
@@ -43,6 +39,9 @@ class GestorFicheros:
         :param lista: nuevo contenido que va a tener el fichero json"""
 
         ruta = Path(self._ruta)
+
+        # Creamos la carpeta 'datos' si no existe
+        ruta.parent.mkdir(parents=True, exist_ok=True)
 
         # Guardamos de nuevo el fichero
         with open(ruta, "w", encoding="utf-8") as f:
