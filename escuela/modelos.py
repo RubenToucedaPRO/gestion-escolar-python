@@ -84,7 +84,7 @@ class Alumno(Persona):
         self._asignaturas = []
 
     def __str__(self):
-        return f"[ALUMNO] {super().get_nombre()}"
+        return f"[ALUMNO] {super().__str__()}"
 
     def get_asignaturas(self):
         return self._asignaturas
