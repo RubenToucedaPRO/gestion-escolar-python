@@ -12,6 +12,9 @@ class CentroEducativo:
         self._usuarios = self.set_usuarios(
             self.archivo_alumnos.leer_json() + self.archivo_profesores.leer_json()
         )
+        # Asignaturas lo creamos en base a las asignaturas y especialidades
+        # registradas en alumnos y profesores. Se instancian en los objetos alumno
+        self.guardar_en_memoria_asignaturas()
 
     def get_usuarios(self):
         return self._usuarios
@@ -55,8 +58,8 @@ class CentroEducativo:
 
     def lista_to_dict(self, lista):
         lista_dict = []
-        for objeto in lista:
-            lista_dict.append(objeto.to_dict())
+        for usuario in lista:
+            lista_dict.append(usuario.to_dict())
         return lista_dict
 
     def crear_usuario(self, persona):

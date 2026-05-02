@@ -99,7 +99,7 @@ class InterfazConsola:
         return False
 
     def mostrar_usuarios(self):
-        print("ALumnos del centro:")
+        print("Usuarios del centro:")
         usuarios = self.sistema.get_usuarios()
 
         if not usuarios:
