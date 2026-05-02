@@ -8,9 +8,13 @@ from escuela.modelos import (
     Validator,
 )
 from escuela.common import IntegridadDatos
+from escuela.registrar import Registrar
 
 
 class InterfazConsola:
+    tarea = ""
+    mensaje = ""
+
     def __init__(self):
         self.sistema = CentroEducativo()
 
@@ -24,16 +28,21 @@ class InterfazConsola:
                 seleccion = input("Ingrese numero de opción menu a seleccionar: ")
                 salir = self.seleccionar_opcion(seleccion)
             except (Duplicado, DatoInvalido) as e:
-                print(f"ERROR: {e}")
+                self.mensaje = f"ERROR: {e}"
             except IntegridadDatos as e:
-                print(f"ERROR: {e}")
+                self.mensaje = f"ERROR: {e}"
+                print(self.mensaje)
                 forzar = input("Si desea forzar salida escriba SI: ").strip()
                 if forzar == "SI":
                     salir = True
+                    self.mensaje += " - Salida forzada"
             except ValueError as e:
-                print(f"ERROR: {e}")
+                self.mensaje = f"ERROR: {e}"
             except Exception as e:
-                print(f"Ocurrió un error inesperado ({type(e).__name__}): {e}")
+                self.mensaje = f"Ocurrió un error inesperado ({type(e).__name__}): {e}"
+            finally:
+                print(self.mensaje)
+                Registrar.registrar_log(self.tarea, self.mensaje)
 
     def mostrar_bienvenida(self):
         print("\n=== SISTEMA DE GESTIÓN ESCOLAR — INICIO ===​\n")
@@ -58,22 +67,31 @@ class InterfazConsola:
         print("*" * 40)
         match seleccion:
             case "1":
+                self.tarea = "Listar usuarios"
                 self.mostrar_usuarios()
             case "2":
+                self.tarea = "Alta alumno"
                 self.dar_alta_alumno()
             case "3":
+                self.tarea = "Alta profesor"
                 self.dar_alta_profesor()
             case "4":
+                self.tarea = "Buscar usuario"
                 self.mostrar_datos_usuario()
             case "5":
+                self.tarea = "Modificar usuario"
                 self.actualizar_datos_usuario()
             case "6":
+                self.tarea = "Eliminar usuario"
                 self.eliminar_usuario()
             case "7":
+                self.tarea = "Matricular alumno"
                 self.matricular_usuario()
             case "8":
+                self.tarea = "Calificar alumno"
                 self.get_datos_calificar_alumno()
             case "9":
+                self.tarea = "Salir de la aplicacion"
                 return self.guardar_salir_aplicacion()
             case _:
                 print("Selección errónea")
@@ -90,6 +108,7 @@ class InterfazConsola:
 
         for usuario in usuarios:
             print(usuario)
+        self.mensaje = "Visualizacion exitosa"
 
     def dar_alta_alumno(self) -> Alumno:
         print("Inicio alta alumno->", end="")
@@ -103,7 +122,7 @@ class InterfazConsola:
 
         self.sistema.crear_usuario(alumno)
 
-        print(f"Alumno con dni {dni!r} dado de alta correctamente")
+        self.mensaje = f"Alumno con dni {dni!r} dado de alta correctamente"
 
     def dar_alta_profesor(self) -> Profesor:
         print("Inicio alta profesor->", end="")
@@ -123,7 +142,7 @@ class InterfazConsola:
         )
         self.sistema.crear_usuario(profesor)
 
-        print(f"Profesor con dni {dni!r} dado de alta correctamente")
+        self.mensaje = f"Profesor con dni {dni!r} dado de alta correctamente"
 
     def mostrar_datos_usuario(self):
         print("Inicio mostrar usuario->", end="")
@@ -135,10 +154,9 @@ class InterfazConsola:
         if isinstance(usuario, Alumno):
             self.visualizar_datos_alumno(usuario)
         else:
-            print(f"Los datos del dni {usuario.get_dni()!r} corresponden al profesor:")
-            print("Nombre:", usuario.get_nombre())
-            print("Especialidad:", usuario.get_especialidad())
-            print("Salario:", usuario.get_salario())
+            self.visualizar_datos_profesor(usuario)
+
+        self.mensaje = f"Mostrar usuario con dni {dni_usuario!r} exitosa"
 
     def actualizar_datos_usuario(self):
         print("Inicio actualizar usuario->", end="")
@@ -167,14 +185,14 @@ class InterfazConsola:
 
         self.sistema.guardar_en_memoria_usuarios(usuario)
 
-        print(f"Usuario con dni {dni_usuario!r} actualizado correctamente")
+        self.mensaje = f"Usuario con dni {dni_usuario!r} actualizado correctamente"
 
     def eliminar_usuario(self):
         print("Inicio eliminar usuario->", end="")
         dni_usuario = self.solicitar_dni_usuario()
 
         self.sistema.eliminar_usuario(dni_usuario)
-        print(f"Usuario con dni {dni_usuario!r} eliminado correctamente")
+        self.mensaje = f"Usuario con dni {dni_usuario!r} eliminado correctamente"
 
     def matricular_usuario(self):
         print("Inicio matricular alumno->", end="")
@@ -186,9 +204,7 @@ class InterfazConsola:
 
         self.sistema.matricular_usuario(usuario, nombre_asignatura)
 
-        print(
-            f"Usuario {usuario.get_nombre()} matriculado correctamente en {nombre_asignatura}"
-        )
+        self.mensaje = f"Usuario {usuario.get_nombre()!r} matriculado correctamente en {nombre_asignatura!r}"
 
     def get_datos_calificar_alumno(self):
         print("Inicio calificar alumno->", end="")
@@ -204,9 +220,7 @@ class InterfazConsola:
         asignatura = Asignatura(nombre_asignatura, nota)
         self.sistema.calificar_alumno(alumno, asignatura)
 
-        print(
-            f"{alumno.get_nombre()}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()} realizada"
-        )
+        self.mensaje = f"{alumno.get_nombre()!r}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()!r} realizada"
 
     def guardar_salir_aplicacion(self):
         """
@@ -215,7 +229,7 @@ class InterfazConsola:
         """
         print("Inicio confirmacion simetría datos entre programa y memoria")
         self.sistema.verificar_datos_en_memoria()
-        print("Validacion datos en memoria exitosa")
+        self.mensaje = "Validacion datos en memoria exitosa"
         return True
 
     # Metodos auxiliares
@@ -231,3 +245,9 @@ class InterfazConsola:
         print("Asignaturas:")
         for asignatura in usuario.get_asignaturas():
             print("\t-", asignatura.get_nombre(), " nota:", asignatura.get_nota())
+
+    def visualizar_datos_profesor(self, usuario):
+        print(f"Los datos del dni {usuario.get_dni()!r} corresponden al profesor:")
+        print("Nombre:", usuario.get_nombre())
+        print("Especialidad:", usuario.get_especialidad())
+        print("Salario:", usuario.get_salario())

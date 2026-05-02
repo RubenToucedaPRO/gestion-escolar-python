@@ -64,5 +64,41 @@
     "nombre": "Rubéna",
     "email": "ruben@email.com",
     "asignaturas": []
+  },
+  {
+    "dni": "99889900A",
+    "nombre": "Marco",
+    "email": "marco@email.com",
+    "asignaturas": []
+  },
+  {
+    "dni": "33333333A",
+    "nombre": "Ana",
+    "email": "ana@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Matematicas",
+        "nota": 8.0
+      },
+      {
+        "nombre": "Bases de datos",
+        "nota": 0.0
+      },
+      {
+        "nombre": "Fol",
+        "nota": 9.1
+      }
+    ]
+  },
+  {
+    "dni": "33333333C",
+    "nombre": "Martin",
+    "email": "martin@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Bases de datos",
+        "nota": 0.0
+      }
+    ]
   }
 ]

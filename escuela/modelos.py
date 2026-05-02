@@ -104,7 +104,7 @@ class Alumno(Persona):
         ]
         if self._asignaturas and any(existe_asignatura):
             raise Duplicado(
-                f"Alumon con DNI: {self.get_dni()}-> Ya está matriculado en {asignatura.get_nombre()!r}"
+                f"Alumon con DNI: {self.get_dni()!r}-> Ya está matriculado en {asignatura.get_nombre()!r}"
             )
         self._asignaturas.append(asignatura)
 
@@ -143,7 +143,7 @@ class Profesor(Persona):
     def set_especialidad(self, especialidad):
         if not especialidad:
             raise ValueError(
-                f"Profesor {self.get_nombre()}-> La especialidad no puede estar vacía."
+                f"Profesor {self.get_nombre()!r}-> La especialidad no puede estar vacía."
             )
         self.especialidad = especialidad.strip().capitalize()
 
@@ -167,7 +167,7 @@ class Profesor(Persona):
                 asignatura.set_nota(nota)
         if not encontrada:
             raise DatoInvalido(
-                f"El alumno {alumno.get_nombre()} no tiene la asignatura {nombre_asignatura}"
+                f"El alumno {alumno.get_nombre()!r} no tiene la asignatura {nombre_asignatura!r}"
             )
 
     def to_dict(self):

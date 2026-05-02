@@ -80,14 +80,14 @@ class CentroEducativo:
 
         if not encontrado:
             raise DatoInvalido(
-                f"Usuario con dni: {dni_usuario}-> No existe el usuario en el centro"
+                f"Usuario con dni: {dni_usuario!r}-> No existe el usuario en el centro"
             )
 
     def verificar_dni_no_registrado(self, dni_usuario):
         for usuario in self.get_usuarios():
             if usuario.get_dni() == dni_usuario:
                 raise Duplicado(
-                    f"Usuario con dni: {dni_usuario}-> Ya existe en el centro"
+                    f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
                 )
 
     def obtener_alumno(self, dni_alumno):
@@ -99,7 +99,7 @@ class CentroEducativo:
 
         if not encontrado:
             raise DatoInvalido(
-                f"Alumno con dni: {dni_alumno}-> No existe el alumno en el centro"
+                f"Alumno con dni: {dni_alumno!r}-> No existe el alumno en el centro"
             )
 
     def obtener_profesor_asignatura(self, asignatura: Asignatura):
@@ -185,14 +185,11 @@ class CentroEducativo:
     def calificar_alumno(self, alumno: Alumno, asignatura: Asignatura):
         """Se reciben los datos del alumno si ha sido matriculado y se procede
         a calificarlo"""
-        try:
-            # Obtenemos el profesor de la asignatura para calificar al alumno
-            profesor = self.obtener_profesor_asignatura(asignatura)
-            # Calificar el alumno desde el profesor de la asignatura
-            profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
-            self.guardar_en_memoria_usuarios(alumno)
-        except DatoInvalido as e:
-            print(f"ERROR: {e}")
+        # Obtenemos el profesor de la asignatura para calificar al alumno
+        profesor = self.obtener_profesor_asignatura(asignatura)
+        # Calificar el alumno desde el profesor de la asignatura
+        profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
+        self.guardar_en_memoria_usuarios(alumno)
 
     def verificar_datos_en_memoria(self):
         """Se comparan los datos de los json de alumnos y profesores dado que asignaturas

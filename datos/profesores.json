@@ -14,31 +14,17 @@
     "salario": 2005.0
   },
   {
-    "dni": "55555555P",
+    "dni": "77665566P",
+    "nombre": "Arturo",
+    "email": "arturo@email.com",
+    "especialidad": "Fol",
+    "salario": 1900.0
+  },
+  {
+    "dni": "33333333P",
     "nombre": "Paco",
     "email": "paco@email.com",
-    "especialidad": "Dibujo",
-    "salario": 3000.0
-  },
-  {
-    "dni": "99889911P",
-    "nombre": "Pablo",
-    "email": "pablo@gmail.com",
-    "especialidad": "Diseño",
-    "salario": 3000.1
-  },
-  {
-    "dni": "67676767Z",
-    "nombre": "Asd",
-    "email": "asd",
-    "especialidad": "F",
-    "salario": 2.0
-  },
-  {
-    "dni": "77676767Z",
-    "nombre": "Asd",
-    "email": "asd",
-    "especialidad": "F",
-    "salario": 2.0
+    "especialidad": "Informatica",
+    "salario": 2500.0
   }
 ]
