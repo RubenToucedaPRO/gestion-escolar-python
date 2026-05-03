@@ -26,9 +26,9 @@ El sistema destaca por las siguientes funcionalidades implementadas en esta prim
 
 ![Diagrama registro de logs](images/registrar.png)
 
-![Diagrama centro educativo](images/centroEducativo.png)
-
 ![Diagrama interfaz consola](images/interfazConsola.png)
+
+![Diagrama centro educativo](images/centroEducativo.png)
 
 ## Estructura del proyecto
 ```

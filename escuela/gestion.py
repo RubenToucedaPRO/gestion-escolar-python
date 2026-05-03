@@ -171,6 +171,8 @@ class CentroEducativo:
 
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()
+        if not lista_alumnos:
+            return 0.0
         medias_alumnos = [alumno.nota_media() for alumno in lista_alumnos]
         return round(sum(medias_alumnos) / len(medias_alumnos), 2)
 
@@ -252,4 +254,5 @@ class CentroEducativo:
             )
 
     def registro_historial(self, tarea, mensaje):
+        """Realiza registro de las tareas en el log cuando son exitosas"""
         Registrar.registrar_log(tarea, mensaje)

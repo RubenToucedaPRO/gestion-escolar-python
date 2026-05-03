@@ -57,3 +57,10 @@
 [2026-05-03 20:40:50] TAREA: Modificar usuario | ESTADO: Usuario con dni '77889900A' actualizado correctamente
 [2026-05-03 20:40:53] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
 [2026-05-03 20:41:15] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 20:50:18] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 20:50:35] TAREA: Alta alumno | ESTADO: Alumno con dni '12121212A' dado de alta correctamente
+[2026-05-03 20:50:41] TAREA: Eliminar usuario | ESTADO: ERROR: DNI '' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 20:50:46] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '12121212A' exitosa
+[2026-05-03 20:50:57] TAREA: Matricular alumno | ESTADO: Usuario '12121212A' matriculado correctamente en 'python'
+[2026-05-03 20:51:07] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Python' en el centro para realizar la calificacion
+[2026-05-03 20:51:12] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion

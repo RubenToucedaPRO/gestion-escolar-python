@@ -102,5 +102,16 @@
         "nota": 9.0
       }
     ]
+  },
+  {
+    "dni": "12121212A",
+    "nombre": "Asd",
+    "email": "as",
+    "asignaturas": [
+      {
+        "nombre": "Python",
+        "nota": 0.0
+      }
+    ]
   }
 ]
