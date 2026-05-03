@@ -104,7 +104,7 @@ class Alumno(Persona):
         ]
         if self._asignaturas and any(existe_asignatura):
             raise Duplicado(
-                f"Alumon con DNI: {self.get_dni()!r}-> Ya está matriculado en {asignatura.get_nombre()!r}"
+                f"Alumno con DNI: {self.get_dni()!r}-> Ya está matriculado en {asignatura.get_nombre()!r}"
             )
         self._asignaturas.append(asignatura)
 
@@ -167,7 +167,7 @@ class Profesor(Persona):
                 asignatura.set_nota(nota)
         if not encontrada:
             raise DatoInvalido(
-                f"El alumno {alumno.get_nombre()!r} no tiene la asignatura {nombre_asignatura!r}"
+                f"El alumno {alumno.get_dni()!r} no tiene la asignatura {nombre_asignatura!r}"
             )
 
     def to_dict(self):

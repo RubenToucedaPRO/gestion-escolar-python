@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from .registrar import Registrar
 
 
 class GestorFicheros:
@@ -28,10 +29,19 @@ class GestorFicheros:
         if not ruta.exists():
             return []
 
-        with open(ruta, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        lista = list(data)
-        return lista
+        try:
+            with open(ruta, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            lista = list(data)
+            return lista
+        except Exception:
+            # captura excepcion en arranque de programa
+            mensaje = (
+                f"ERROR: El fichero {self.get_fichero()} tiene un formato corrupto."
+            )
+            print(mensaje)
+            Registrar.registrar_log("Lectura json", mensaje)
+            return []
 
     def guardar_en_json(self, lista: list) -> None:
         """

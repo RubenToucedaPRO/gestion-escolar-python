@@ -3,46 +3,27 @@ from escuela.modelos import (
     Alumno,
     Profesor,
     Asignatura,
-    Duplicado,
-    DatoInvalido,
     Validator,
 )
-from escuela.common import IntegridadDatos
-from escuela.registrar import Registrar
 
 
 class InterfazConsola:
-    tarea = ""
-    mensaje = ""
-
     def __init__(self):
         self.sistema = CentroEducativo()
+        self.tarea = ""  # variable para registrar tarea seleccionada
 
     def ejecutar(self):
-        self.mostrar_bienvenida()
-        salir = False
-        while not salir:
-            try:
-                input("Pulse tecla para mostrar menu\n")
-                self.mostrar_menu()
-                seleccion = input("Ingrese numero de opción menu a seleccionar: ")
-                salir = self.seleccionar_opcion(seleccion)
-            except (Duplicado, DatoInvalido) as e:
-                self.mensaje = f"ERROR: {e}"
-            except IntegridadDatos as e:
-                self.mensaje = f"ERROR: {e}"
-                print(self.mensaje)
-                forzar = input("Si desea forzar salida escriba SI: ").strip()
-                if forzar == "SI":
-                    salir = True
-                    self.mensaje += " - Salida forzada"
-            except ValueError as e:
-                self.mensaje = f"ERROR: {e}"
-            except Exception as e:
-                self.mensaje = f"Ocurrió un error inesperado ({type(e).__name__}): {e}"
-            finally:
-                print(self.mensaje)
-                Registrar.registrar_log(self.tarea, self.mensaje)
+        input("Pulse tecla para mostrar menu\n")
+        self.mostrar_menu()
+        seleccion = input("Ingrese numero de opción menu a seleccionar: ")
+        self.seleccionar_opcion(seleccion)
+        return seleccion
+
+    def get_tarea(self):
+        return self.tarea
+
+    def set_tarea(self, tarea: str):
+        self.tarea = tarea
 
     def mostrar_bienvenida(self):
         print("\n=== SISTEMA DE GESTIÓN ESCOLAR — INICIO ===​\n")
@@ -64,38 +45,40 @@ class InterfazConsola:
         print("9. Guardar y Salir: Volcará los cambios a los ficheros JSON.")
 
     def seleccionar_opcion(self, seleccion: str):
+        self.set_tarea("")
         print("*" * 40)
         match seleccion:
             case "1":
-                self.tarea = "Listar usuarios"
-                self.mostrar_usuarios()
+                self.set_tarea("Listar usuarios")
+                mensaje = self.mostrar_usuarios()
             case "2":
-                self.tarea = "Alta alumno"
-                self.dar_alta_alumno()
+                self.set_tarea("Alta alumno")
+                mensaje = self.dar_alta_alumno()
             case "3":
-                self.tarea = "Alta profesor"
-                self.dar_alta_profesor()
+                self.set_tarea("Alta profesor")
+                mensaje = self.dar_alta_profesor()
             case "4":
-                self.tarea = "Buscar usuario"
-                self.mostrar_datos_usuario()
+                self.set_tarea("Buscar usuario")
+                mensaje = self.mostrar_datos_usuario()
             case "5":
-                self.tarea = "Modificar usuario"
-                self.actualizar_datos_usuario()
+                self.set_tarea("Modificar usuario")
+                mensaje = self.actualizar_datos_usuario()
             case "6":
-                self.tarea = "Eliminar usuario"
-                self.eliminar_usuario()
+                self.set_tarea("Eliminar usuario")
+                mensaje = self.eliminar_usuario()
             case "7":
-                self.tarea = "Matricular alumno"
-                self.matricular_usuario()
+                self.set_tarea("Matricular alumno")
+                mensaje = self.matricular_usuario()
             case "8":
-                self.tarea = "Calificar alumno"
-                self.get_datos_calificar_alumno()
+                self.set_tarea("Calificar alumno")
+                mensaje = self.get_datos_calificar_alumno()
             case "9":
-                self.tarea = "Salir de la aplicacion"
-                return self.guardar_salir_aplicacion()
+                self.set_tarea("Salir de la aplicacion")
+                mensaje = self.guardar_salir_aplicacion()
             case _:
                 print("Selección errónea")
         print("*" * 40)
+        self.sistema.registro_historial(self.tarea, mensaje)
         return False
 
     def mostrar_usuarios(self):
@@ -108,7 +91,7 @@ class InterfazConsola:
 
         for usuario in usuarios:
             print(usuario)
-        self.mensaje = "Visualizacion exitosa"
+        return "Visualizacion exitosa"
 
     def dar_alta_alumno(self) -> Alumno:
         print("Inicio alta alumno->", end="")
@@ -122,7 +105,7 @@ class InterfazConsola:
 
         self.sistema.crear_usuario(alumno)
 
-        self.mensaje = f"Alumno con dni {dni!r} dado de alta correctamente"
+        return f"Alumno con dni {dni!r} dado de alta correctamente"
 
     def dar_alta_profesor(self) -> Profesor:
         print("Inicio alta profesor->", end="")
@@ -142,7 +125,7 @@ class InterfazConsola:
         )
         self.sistema.crear_usuario(profesor)
 
-        self.mensaje = f"Profesor con dni {dni!r} dado de alta correctamente"
+        return f"Profesor con dni {dni!r} dado de alta correctamente"
 
     def mostrar_datos_usuario(self):
         print("Inicio mostrar usuario->", end="")
@@ -156,7 +139,7 @@ class InterfazConsola:
         else:
             self.visualizar_datos_profesor(usuario)
 
-        self.mensaje = f"Mostrar usuario con dni {dni_usuario!r} exitosa"
+        return f"Mostrar usuario con dni {dni_usuario!r} exitosa"
 
     def actualizar_datos_usuario(self):
         print("Inicio actualizar usuario->", end="")
@@ -185,14 +168,15 @@ class InterfazConsola:
 
         self.sistema.guardar_en_memoria_usuarios(usuario)
 
-        self.mensaje = f"Usuario con dni {dni_usuario!r} actualizado correctamente"
+        return f"Usuario con dni {dni_usuario!r} actualizado correctamente"
 
     def eliminar_usuario(self):
         print("Inicio eliminar usuario->", end="")
         dni_usuario = self.solicitar_dni_usuario()
 
         self.sistema.eliminar_usuario(dni_usuario)
-        self.mensaje = f"Usuario con dni {dni_usuario!r} eliminado correctamente"
+
+        return f"Usuario con dni {dni_usuario!r} eliminado correctamente"
 
     def matricular_usuario(self):
         print("Inicio matricular alumno->", end="")
@@ -204,7 +188,7 @@ class InterfazConsola:
 
         self.sistema.matricular_usuario(usuario, nombre_asignatura)
 
-        self.mensaje = f"Usuario {usuario.get_nombre()!r} matriculado correctamente en {nombre_asignatura!r}"
+        return f"Usuario {usuario.get_dni()!r} matriculado correctamente en {nombre_asignatura!r}"
 
     def get_datos_calificar_alumno(self):
         print("Inicio calificar alumno->", end="")
@@ -220,17 +204,17 @@ class InterfazConsola:
         asignatura = Asignatura(nombre_asignatura, nota)
         self.sistema.calificar_alumno(alumno, asignatura)
 
-        self.mensaje = f"{alumno.get_nombre()!r}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()!r} realizada"
+        return f"{alumno.get_dni()!r}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()!r} realizada"
 
     def guardar_salir_aplicacion(self):
         """
         Guarda los datos en ficheros JSON
         :return: True si la operacion fué realizada con exito
         """
-        print("Inicio confirmacion simetría datos entre programa y memoria")
+        print("Confirmacion simetría datos entre programa y memoria")
         self.sistema.verificar_datos_en_memoria()
-        self.mensaje = "Validacion datos en memoria exitosa"
-        return True
+
+        return "Verificacion datos memoria y salir de la aplicacion"
 
     # Metodos auxiliares
 

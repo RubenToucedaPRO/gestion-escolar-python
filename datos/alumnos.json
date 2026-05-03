@@ -1,8 +1,8 @@
 [
   {
     "dni": "12312312A",
-    "nombre": "Mar",
-    "email": "mar@email.com",
+    "nombre": "Jacinto",
+    "email": "jacinto@email.com",
     "asignaturas": [
       {
         "nombre": "Bases de datos",
@@ -20,8 +20,8 @@
   },
   {
     "dni": "12312312C",
-    "nombre": "Juan",
-    "email": "juan@email.com",
+    "nombre": "Leo",
+    "email": "leo@email.com",
     "asignaturas": [
       {
         "nombre": "Mates",
@@ -52,16 +52,11 @@
     "dni": "67676767A",
     "nombre": "Ana",
     "email": "ana@email.com",
-    "asignaturas": [
-      {
-        "nombre": "Diseño",
-        "nota": 0.0
-      }
-    ]
+    "asignaturas": []
   },
   {
     "dni": "77889900A",
-    "nombre": "Rubéna",
+    "nombre": "Ruben",
     "email": "ruben@email.com",
     "asignaturas": []
   },
@@ -77,16 +72,8 @@
     "email": "ana@email.com",
     "asignaturas": [
       {
-        "nombre": "Matematicas",
-        "nota": 8.0
-      },
-      {
         "nombre": "Bases de datos",
         "nota": 0.0
-      },
-      {
-        "nombre": "Fol",
-        "nota": 9.1
       }
     ]
   },
@@ -97,7 +84,22 @@
     "asignaturas": [
       {
         "nombre": "Bases de datos",
+        "nota": 6.75
+      },
+      {
+        "nombre": "Android",
         "nota": 0.0
+      }
+    ]
+  },
+  {
+    "dni": "12399999A",
+    "nombre": "Uxia",
+    "email": "uxia@email.com",
+    "asignaturas": [
+      {
+        "nombre": "Python",
+        "nota": 9.0
       }
     ]
   }

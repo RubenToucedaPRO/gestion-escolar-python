@@ -1,21 +1,59 @@
-[2026-05-02 13:29:57] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
-[2026-05-02 13:30:21] TAREA: Alta alumno | ESTADO: ERROR: Usuario con dni: '33333333A'-> Ya existe en el centro
-[2026-05-02 13:30:26] TAREA: Alta alumno | ESTADO: ERROR: DNI 'ASDF' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
-[2026-05-02 13:30:48] TAREA: Alta alumno | ESTADO: Alumno con dni '33333333C' dado de alta correctamente
-[2026-05-02 13:30:58] TAREA: Alta profesor | ESTADO: ERROR: Usuario con dni: '33333333A'-> Ya existe en el centro
-[2026-05-02 13:31:09] TAREA: Alta profesor | ESTADO: ERROR: DNI '121212121212' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
-[2026-05-02 13:31:41] TAREA: Alta profesor | ESTADO: Profesor con dni '33333333P' dado de alta correctamente
-[2026-05-02 13:31:52] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33333333A' exitosa
-[2026-05-02 13:32:04] TAREA: Buscar usuario | ESTADO: ERROR: Usuario con dni: '12324244E'-> No existe el usuario en el centro
-[2026-05-02 13:32:19] TAREA: Modificar usuario | ESTADO: ERROR: Usuario con dni: '33333333R'-> No existe el usuario en el centro
-[2026-05-02 13:32:25] TAREA: Modificar usuario | ESTADO: Usuario con dni '33333333A' actualizado correctamente
-[2026-05-02 13:32:36] TAREA: Eliminar usuario | ESTADO: ERROR: DNI '33333333' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite Usuario
-[2026-05-02 13:36:41] TAREA: Eliminar usuario | ESTADO: ERROR: Usuario con dni: '55555555P'-> No existe el usuario en el centro
-[2026-05-02 13:37:02] TAREA: Eliminar usuario | ESTADO: Usuario con dni '99889911P' eliminado correctamente
-[2026-05-02 13:37:33] TAREA: Matricular alumno | ESTADO: Usuario 'Martin' matriculado correctamente en 'Bases de datos'
-[2026-05-02 13:37:48] TAREA: Matricular alumno | ESTADO: ERROR: Alumon con DNI: '33333333C'-> Ya está matriculado en 'Bases de datos'
-[2026-05-02 13:37:58] TAREA: Matricular alumno | ESTADO: ERROR: Alumno con dni: '33333333D'-> No existe el alumno en el centro
-[2026-05-02 13:38:14] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Bases de datos' en el centro para realizar la calificacion
-[2026-05-02 13:39:42] TAREA: Calificar alumno | ESTADO: 'Ana': Calificación 'Fol' con la nota 9.1 realizada
-[2026-05-02 13:39:56] TAREA: Calificar alumno | ESTADO: ERROR: Alumno con dni: '33333333X'-> No existe el alumno en el centro
-[2026-05-02 13:40:03] TAREA: Salir de la aplicacion | ESTADO: Validacion datos en memoria exitosa
+[2026-05-03 08:27:09] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:27:39] TAREA: Alta alumno | ESTADO: Alumno con dni '12399999A' dado de alta correctamente
+[2026-05-03 08:28:07] TAREA: Alta alumno | ESTADO: Alumno con dni '98798765P' dado de alta correctamente
+[2026-05-03 08:28:20] TAREA: Buscar usuario | ESTADO: ERROR: DNI '12345' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:29:42] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:29:46] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:29:50] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:30:31] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:31:01] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 08:31:15] TAREA: Alta alumno | ESTADO: ERROR: DNI 'ASD' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:31:47] TAREA: Alta alumno | ESTADO: ERROR: El nombre no puede estar vacío.
+[2026-05-03 08:31:57] TAREA: Buscar usuario | ESTADO: ERROR: DNI '12312312' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:32:05] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '12312312A' exitosa
+[2026-05-03 08:32:35] TAREA: Modificar usuario | ESTADO: ERROR: DNI '123' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:33:10] TAREA: Modificar usuario | ESTADO: Usuario con dni '12312312A' actualizado correctamente
+[2026-05-03 08:33:40] TAREA: Eliminar usuario | ESTADO: ERROR: DNI '12312312' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:33:46] TAREA: Eliminar usuario | ESTADO: Usuario con dni '98798765P' eliminado correctamente
+[2026-05-03 08:33:51] TAREA: Eliminar usuario | ESTADO: ERROR: Usuario con dni: '98798765P'-> No existe el usuario en el centro
+[2026-05-03 08:47:39] TAREA: Matricular alumno | ESTADO: Usuario '12399999A' matriculado correctamente en 'python'
+[2026-05-03 08:47:46] TAREA: Matricular alumno | ESTADO: ERROR: DNI '12399999' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 08:48:36] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Python' en el centro para realizar la calificacion
+[2026-05-03 08:49:30] TAREA: Alta profesor | ESTADO: Profesor con dni '55445544P' dado de alta correctamente
+[2026-05-03 08:49:48] TAREA: Calificar alumno | ESTADO: '12399999A': Calificación 'Python' con la nota 9.0 realizada
+[2026-05-03 08:54:41] TAREA: Calificar alumno | ESTADO: ERROR: El alumno '12399999A' no tiene la asignatura 'Bases de datos'
+[2026-05-03 08:54:55] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 09:00:23] TAREA: Salir de la aplicacion | ESTADO: ERROR: Los datos del profesor entre memoria y programa no coinciden,'54645678Q' -> se regularizan en memoria
+[2026-05-03 09:00:23] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 09:01:56] TAREA: Salir de la aplicacion | ESTADO: ERROR: Alguna lista del programa no coincide con la lista en memoria -> actualizado en memoria 
+[2026-05-03 09:01:56] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 19:19:31] TAREA:  | ESTADO: Ocurrió un error inesperado (UnboundLocalError): cannot access local variable 'mensaje' where it is not associated with a value
+[2026-05-03 19:19:34] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:21:05] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:22:13] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 19:27:37] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:29:24] TAREA: Lectura json | ESTADO: ERROR: El fichero alumnos.json tiene un formato corrupto.
+[2026-05-03 19:29:53] TAREA: Lectura json | ESTADO: ERROR: El fichero alumnos.json tiene un formato corrupto.
+[2026-05-03 19:29:54] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion[2026-05-03 19:32:37] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:32:56] TAREA: Alta alumno | ESTADO: ERROR: DNI 'SD' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 19:33:23] TAREA: Alta alumno | ESTADO: Alumno con dni '12354999A' dado de alta correctamente
+[2026-05-03 19:33:26] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:33:43] TAREA: Alta profesor | ESTADO: ERROR: DNI 'ASF' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-03 19:34:36] TAREA: Alta profesor | ESTADO: Profesor con dni '65465477P' dado de alta correctamente
+[2026-05-03 19:34:38] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 19:34:51] TAREA: Buscar usuario | ESTADO: ERROR: Usuario con dni: '12345123A'-> No existe el usuario en el centro
+[2026-05-03 19:35:02] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '54645678Q' exitosa
+[2026-05-03 19:35:39] TAREA: Modificar usuario | ESTADO: ERROR: Usuario con dni: '12345645A'-> No existe el usuario en el centro
+[2026-05-03 19:46:21] TAREA: Modificar usuario | ESTADO: Usuario con dni '54645678Q' actualizado correctamente
+[2026-05-03 19:47:12] TAREA: Modificar usuario | ESTADO: Usuario con dni '12312312C' actualizado correctamente
+[2026-05-03 19:47:32] TAREA: Eliminar usuario | ESTADO: ERROR: Usuario con dni: '43563456A'-> No existe el usuario en el centro
+[2026-05-03 19:47:53] TAREA: Eliminar usuario | ESTADO: Usuario con dni '54645678Q' eliminado correctamente
+[2026-05-03 19:48:19] TAREA: Eliminar usuario | ESTADO: Usuario con dni '12354999A' eliminado correctamente
+[2026-05-03 19:49:08] TAREA: Matricular alumno | ESTADO: Usuario '33333333C' matriculado correctamente en 'android'
+[2026-05-03 19:49:29] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Asdf' en el centro para realizar la calificacion
+[2026-05-03 19:50:39] TAREA: Calificar alumno | ESTADO: '33333333C': Calificación 'Bases de datos' con la nota 6.75 realizada
+[2026-05-03 19:50:47] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
+[2026-05-03 20:40:26] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 20:40:50] TAREA: Modificar usuario | ESTADO: Usuario con dni '77889900A' actualizado correctamente
+[2026-05-03 20:40:53] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-03 20:41:15] TAREA: Salir de la aplicacion | ESTADO: Verificacion datos memoria y salir de la aplicacion
