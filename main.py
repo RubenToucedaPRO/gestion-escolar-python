@@ -1,6 +1,7 @@
 from app.interfaz_usuario import InterfazConsola
 from escuela.modelos import Duplicado, DatoInvalido
 from escuela.registrar import Registrar
+from escuela.common import IntegridadDatos
 
 
 def main():
@@ -18,6 +19,11 @@ def main():
             print(mensaje)
             # Mantuve aqui los registros de logs para poder saber en que tarea sucedía
             # la excepcion
+            Registrar.registrar_log(tarea, mensaje)
+        except IntegridadDatos as e:
+            tarea = app.get_tarea()
+            mensaje = f"ERROR: {e}"
+            print(mensaje)
             Registrar.registrar_log(tarea, mensaje)
         except ValueError as e:
             tarea = app.get_tarea()

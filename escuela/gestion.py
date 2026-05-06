@@ -1,24 +1,32 @@
 from .common import Duplicado, DatoInvalido, IntegridadDatos
 from .modelos import Alumno, Profesor, Persona, Asignatura
-from .ficheros import GestorFicheros
 from .registrar import Registrar
+from .db_manager import DBManager
+# from .ficheros import GestorFicheros
 
 
 class CentroEducativo:
     def __init__(self):
-        #self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
-        #self.archivo_profesores = GestorFicheros("datos/profesores.json")
-        #self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
+        self.db = DBManager
+        # self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
+        # self.archivo_profesores = GestorFicheros("datos/profesores.json")
+        # self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
 
-        #self._usuarios = self.set_usuarios(
+        # self._usuarios = self.set_usuarios(
         #    self.archivo_alumnos.leer_json() + self.archivo_profesores.leer_json()
-        #)
+        # )
         # Asignaturas lo creamos en base a las asignaturas y especialidades
         # registradas en alumnos y profesores. Se instancian en los objetos alumno
-        #self.guardar_en_memoria_asignaturas()
+        # self.guardar_en_memoria_asignaturas()
 
     def get_usuarios(self):
-        return self._usuarios
+        lista_usuarios = []
+        datos_bd = self.db.leer_alumnos(self.db)
+        [lista_usuarios.append(Alumno(**d)) for d in datos_bd]
+        datos_bd = self.db.leer_profesores(self.db)
+        [lista_usuarios.append(Profesor(**d)) for d in datos_bd]
+
+        return lista_usuarios
 
     def set_usuarios(self, lista: list):
         """Convertimos los dict de cada usuario del json al objeto correspondiente"""
@@ -41,27 +49,27 @@ class CentroEducativo:
                 datos.append(profesor)
         return datos
 
-    def guardar_en_memoria_usuarios(self, usuario: Persona):
-        """Según el tipo de objeto recibido realiza la salvaguarda en el fichero json
-        del tipo correspondiente"""
-        if isinstance(usuario, Alumno):
-            self.guardar_en_memoria_alumnos()
-        if isinstance(usuario, Profesor):
-            self.guardar_en_memoria_profesores()
+    # def guardar_en_memoria_usuarios(self, usuario: Persona):
+    #     """Según el tipo de objeto recibido realiza la salvaguarda en el fichero json
+    #     del tipo correspondiente"""
+    #     if isinstance(usuario, Alumno):
+    #         self.guardar_en_memoria_alumnos()
+    #     if isinstance(usuario, Profesor):
+    #         self.guardar_en_memoria_profesores()
 
-    def guardar_en_memoria_alumnos(self):
-        lista = self.obtener_alumnos()
-        lista_dict = self.lista_to_dict(lista)
-        self.archivo_alumnos.guardar_en_json(lista_dict)
+    # def guardar_en_memoria_alumnos(self):
+    #     lista = self.obtener_alumnos()
+    #     lista_dict = self.lista_to_dict(lista)
+    #     self.archivo_alumnos.guardar_en_json(lista_dict)
 
-    def guardar_en_memoria_profesores(self):
-        lista = self.obtener_profesores()
-        lista_dict = self.lista_to_dict(lista)
-        self.archivo_profesores.guardar_en_json(lista_dict)
+    # def guardar_en_memoria_profesores(self):
+    #     lista = self.obtener_profesores()
+    #     lista_dict = self.lista_to_dict(lista)
+    #     self.archivo_profesores.guardar_en_json(lista_dict)
 
-    def guardar_en_memoria_asignaturas(self):
-        lista = self.obtener_asignaturas()
-        self.archivo_asignaturas.guardar_en_json(lista)
+    # def guardar_en_memoria_asignaturas(self):
+    #     lista = self.obtener_asignaturas()
+    #     self.archivo_asignaturas.guardar_en_json(lista)
 
     def lista_to_dict(self, lista):
         lista_dict = []
@@ -75,18 +83,30 @@ class CentroEducativo:
         self._usuarios.append(usuario)
         self.guardar_en_memoria_usuarios(usuario)
 
-    def get_usuarios(self):
-        return self._usuarios
-
     def obtener_numero_usuarios(self):
         return len(self._usuarios)
 
     def obtener_usuario(self, dni_usuario) -> Persona:
         encontrado = False
+        usuario = self.db.obtener_usuario_dni(self.db, dni_usuario)
+        if usuario and usuario["es_alumno"]:
+            id = usuario.pop("es_alumno")
+            usuario.pop("es_profesor")
+            usuario.pop("especialidad")
+            usuario.pop("salario")
+            alumno = Alumno(**usuario)
+            asignaturas = self.db.obtener_asignaturas_alumno(self.db, id)
+            if asignaturas:
+                alumno.set_asignaturas(asignaturas)
+            return alumno
+        if usuario and usuario["es_profesor"]:
+            usuario.pop("es_alumno")
+            usuario.pop("es_profesor")
+            return Profesor(**usuario)
 
-        for usuario in self.get_usuarios():
-            if usuario.get_dni() == dni_usuario:
-                return usuario
+        # for usuario in self.get_usuarios():
+        #     if usuario.get_dni() == dni_usuario:
+        #         return usuario
 
         if not encontrado:
             raise DatoInvalido(
@@ -203,55 +223,55 @@ class CentroEducativo:
         profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
         self.guardar_en_memoria_usuarios(alumno)
 
-    def verificar_datos_en_memoria(self):
-        """Se comparan los datos de los json de alumnos y profesores dado que asignaturas
-        siempre se regulariza con las asignaturas/especialidades existentes en estos"""
-        try:
-            profesores_json = self.archivo_profesores.leer_json()
-            lista_profesores_json = self.set_usuarios(profesores_json)
-            lista_alumnos_programa = self.obtener_profesores()
-            self.comparar_listas(lista_profesores_json, lista_alumnos_programa)
+    # def verificar_datos_en_memoria(self):
+    #     """Se comparan los datos de los json de alumnos y profesores dado que asignaturas
+    #     siempre se regulariza con las asignaturas/especialidades existentes en estos"""
+    #     try:
+    #         profesores_json = self.archivo_profesores.leer_json()
+    #         lista_profesores_json = self.set_usuarios(profesores_json)
+    #         lista_alumnos_programa = self.obtener_profesores()
+    #         self.comparar_listas(lista_profesores_json, lista_alumnos_programa)
 
-            alumnos_json = self.archivo_alumnos.leer_json()
-            lista_alumnos_json = self.set_usuarios(alumnos_json)
-            lista_alumnos_programa = self.obtener_alumnos()
-            self.comparar_listas(lista_alumnos_json, lista_alumnos_programa)
-        except IntegridadDatos as e:
-            mensaje = f"ERROR: {e}"
-            print(mensaje)
-            Registrar.registrar_log("Salir de la aplicacion", mensaje)
-            self.guardar_en_memoria_alumnos()
-            self.guardar_en_memoria_profesores()
-            self.guardar_en_memoria_asignaturas()
+    #         alumnos_json = self.archivo_alumnos.leer_json()
+    #         lista_alumnos_json = self.set_usuarios(alumnos_json)
+    #         lista_alumnos_programa = self.obtener_alumnos()
+    #         self.comparar_listas(lista_alumnos_json, lista_alumnos_programa)
+    #     except IntegridadDatos as e:
+    #         mensaje = f"ERROR: {e}"
+    #         print(mensaje)
+    #         Registrar.registrar_log("Salir de la aplicacion", mensaje)
+    #         self.guardar_en_memoria_alumnos()
+    #         self.guardar_en_memoria_profesores()
+    #         self.guardar_en_memoria_asignaturas()
 
-    def comparar_listas(self, lista_json: list, lista_programa: list):
-        """Compara usuario a usuario de la lista del json con la lista del programa
-        de alumnos o profesores"""
-        tipo = ""
-        encontrado_en_programa = False
-        for usuario_json in lista_json:
-            tipo = type(usuario_json).__name__.lower()
-            for usuario_programa in lista_programa:
-                if usuario_json.get_dni() == usuario_programa.get_dni():
-                    encontrado_en_programa = True
-                    # se convierten a diccionarios para poder comparalos con !=
-                    if usuario_json.to_dict() != usuario_programa.to_dict():
-                        raise IntegridadDatos(
-                            f"Los datos del {tipo} entre memoria y programa no coinciden,"
-                            f"{usuario_json.get_dni()!r} -> se regularizan en memoria"
-                        )
+    # def comparar_listas(self, lista_json: list, lista_programa: list):
+    #     """Compara usuario a usuario de la lista del json con la lista del programa
+    #     de alumnos o profesores"""
+    #     tipo = ""
+    #     encontrado_en_programa = False
+    #     for usuario_json in lista_json:
+    #         tipo = type(usuario_json).__name__.lower()
+    #         for usuario_programa in lista_programa:
+    #             if usuario_json.get_dni() == usuario_programa.get_dni():
+    #                 encontrado_en_programa = True
+    #                 # se convierten a diccionarios para poder comparalos con !=
+    #                 if usuario_json.to_dict() != usuario_programa.to_dict():
+    #                     raise IntegridadDatos(
+    #                         f"Los datos del {tipo} entre memoria y programa no coinciden,"
+    #                         f"{usuario_json.get_dni()!r} -> se regularizan en memoria"
+    #                     )
 
-            if not encontrado_en_programa:
-                raise IntegridadDatos(
-                    f"El {tipo} con dni {usuario_json.get_dni()!r} "
-                    "registrado en memoria no existe en programa "
-                    "-> borrado en memoria"
-                )
-        if len(lista_json) != len(lista_programa):
-            raise IntegridadDatos(
-                f"Alguna lista del programa no coincide "
-                "con la lista en memoria -> actualizado en memoria "
-            )
+    #         if not encontrado_en_programa:
+    #             raise IntegridadDatos(
+    #                 f"El {tipo} con dni {usuario_json.get_dni()!r} "
+    #                 "registrado en memoria no existe en programa "
+    #                 "-> borrado en memoria"
+    #             )
+    #     if len(lista_json) != len(lista_programa):
+    #         raise IntegridadDatos(
+    #             f"Alguna lista del programa no coincide "
+    #             "con la lista en memoria -> actualizado en memoria "
+    #         )
 
     def registro_historial(self, tarea, mensaje):
         """Realiza registro de las tareas en el log cuando son exitosas"""

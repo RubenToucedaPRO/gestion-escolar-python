@@ -4,7 +4,8 @@ from functools import reduce
 
 
 class Persona(ABC):
-    def __init__(self, dni: str, nombre: str, email: str):
+    def __init__(self, id_persona: int, dni: str, nombre: str, email: str):
+        self._id = self.set_id(id_persona)
         self.set_dni(dni)
         self.set_nombre(nombre)
         self.set_email(email)
@@ -12,6 +13,12 @@ class Persona(ABC):
     @abstractmethod
     def __str__(self):
         return f"{self.nombre} ({self._dni})"
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_id(self):
+        return self._id
 
     def get_dni(self):
         return self._dni
@@ -42,12 +49,19 @@ class Persona(ABC):
 
 
 class Asignatura:
-    def __init__(self, nombre: str, nota: float = 0.0):
+    def __init__(self, id_asignatura: int, nombre: str, nota: float = 0.0):
+        self.set_id(id_asignatura)
         self.set_nombre(nombre)
         self.set_nota(nota)
 
     def __str__(self):
         return f"{self.nombre}: {self._nota}"
+
+    def set_id(self, id):
+        self._id = id
+
+    def get_id(self):
+        return self._id
 
     def get_nombre(self):
         return self.nombre
@@ -79,8 +93,8 @@ class Asignatura:
 
 
 class Alumno(Persona):
-    def __init__(self, dni: str, nombre: str, email: str):
-        super().__init__(dni, nombre, email)
+    def __init__(self, id_persona: int, dni: str, nombre: str, email: str):
+        super().__init__(id_persona, dni, nombre, email)
         self._asignaturas = []
 
     def __str__(self):
@@ -93,7 +107,11 @@ class Alumno(Persona):
         """Se crean las instancias de las asignaturas en cada usuario"""
         for asignatura in asignaturas:
             self._asignaturas.append(
-                Asignatura(asignatura["nombre"], asignatura["nota"])
+                Asignatura(
+                    asignatura["id_asignatura"],
+                    asignatura["nombre"],
+                    float(asignatura["nota"]),
+                )
             )
 
     def matricular(self, asignatura: Asignatura):
@@ -129,8 +147,10 @@ class Alumno(Persona):
 
 
 class Profesor(Persona):
-    def __init__(self, dni, nombre, email, especialidad: str, salario: float = 0):
-        super().__init__(dni, nombre, email)
+    def __init__(
+        self, id_persona: int, dni, nombre, email, especialidad: str, salario: float = 0
+    ):
+        super().__init__(id_persona, dni, nombre, email)
         self.set_especialidad(especialidad)
         self.set_salario(salario)
 
