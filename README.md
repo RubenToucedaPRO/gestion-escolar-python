@@ -86,8 +86,12 @@ Ejemplos:
 
 ## Tutorial de uso
 - **Requisitos**: Python version 3.xx
+- **Docker**: Docker Desktop instalado y en funcionamiento.
 - **Clonar repositorio** ```https://github.com/RubenToucedaPRO/gestion-escolar-python```
 - **Situarse en la rama correspondiente**
-- **Ejecucion**: existen dos formas de ejecutar la aplicacion:
+- **Ejecucion**:
+  - En primer lugar debemos levantar el contenedor, desde la terminal nos situamos en la carpeta del proyecto y ejecutamos el siguiente comando:
+    * `docker compose up -d `
+  - Existen dos formas de ejecutar la aplicacion:
     * Opcion 1: Ejecutar el fichero main.py en VsCode
     * Opcion 2: Ejecutar desde la terminal en el directorio raiz del proyecto 'python main.py'
