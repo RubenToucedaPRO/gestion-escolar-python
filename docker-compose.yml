@@ -1,0 +1,22 @@
+#Archivo YAML
+services:
+  db_escuela:
+    container_name: mysqldb-escuela
+    restart: always
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: escuela_db
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d/
+      - db_escuela_data:/var/lib/mysql
+    networks:
+      - red-escuela
+      
+volumes:
+  db_escuela_data:
+
+networks:
+  red-escuela:

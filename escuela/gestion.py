@@ -6,16 +6,16 @@ from .registrar import Registrar
 
 class CentroEducativo:
     def __init__(self):
-        self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
-        self.archivo_profesores = GestorFicheros("datos/profesores.json")
-        self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
+        #self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
+        #self.archivo_profesores = GestorFicheros("datos/profesores.json")
+        #self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
 
-        self._usuarios = self.set_usuarios(
-            self.archivo_alumnos.leer_json() + self.archivo_profesores.leer_json()
-        )
+        #self._usuarios = self.set_usuarios(
+        #    self.archivo_alumnos.leer_json() + self.archivo_profesores.leer_json()
+        #)
         # Asignaturas lo creamos en base a las asignaturas y especialidades
         # registradas en alumnos y profesores. Se instancian en los objetos alumno
-        self.guardar_en_memoria_asignaturas()
+        #self.guardar_en_memoria_asignaturas()
 
     def get_usuarios(self):
         return self._usuarios
