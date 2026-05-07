@@ -101,9 +101,8 @@ class InterfazConsola:
 
         nombre = input("Nombre: ")
         email = input("Email: ")
-        alumno = Alumno(dni, nombre, email)
 
-        self.sistema.crear_usuario(alumno)
+        self.sistema.crear_alumno(dni, nombre, email)
 
         return f"Alumno con dni {dni!r} dado de alta correctamente"
 
@@ -116,14 +115,7 @@ class InterfazConsola:
         especialidad = input("Especialidad: ")
         salario = input("Salario: ")
 
-        profesor = Profesor(
-            dni=dni,
-            nombre=nombre,
-            email=email,
-            especialidad=especialidad,
-            salario=salario,
-        )
-        self.sistema.crear_usuario(profesor)
+        self.sistema.crear_profesor(dni, nombre, email, especialidad, salario)
 
         return f"Profesor con dni {dni!r} dado de alta correctamente"
 

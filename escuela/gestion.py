@@ -28,6 +28,12 @@ class CentroEducativo:
 
         return lista_usuarios
 
+    def crear_alumno(self, dni, nombre, email):
+        self.db.crear_alumno(self.db, dni, nombre, email)
+
+    def crear_profesor(self, dni, nombre, email, especialidad, salario):
+        self.db.crear_profesor(self.db, dni, nombre, email, especialidad, salario)
+
     def set_usuarios(self, lista: list):
         """Convertimos los dict de cada usuario del json al objeto correspondiente"""
         datos = []
@@ -77,11 +83,11 @@ class CentroEducativo:
             lista_dict.append(usuario.to_dict())
         return lista_dict
 
-    def crear_usuario(self, usuario):
-        """Se crea el usuario, la verificación de que el dni no existe en el centro se
-        hace tras introducir el dni"""
-        self._usuarios.append(usuario)
-        self.guardar_en_memoria_usuarios(usuario)
+    # def crear_usuario(self, usuario):
+    #     """Se crea el usuario, la verificación de que el dni no existe en el centro se
+    #     hace tras introducir el dni"""
+    #     self._usuarios.append(usuario)
+    #     self.guardar_en_memoria_usuarios(usuario)
 
     def obtener_numero_usuarios(self):
         return len(self._usuarios)
@@ -114,11 +120,12 @@ class CentroEducativo:
             )
 
     def verificar_dni_no_registrado(self, dni_usuario):
-        for usuario in self.get_usuarios():
-            if usuario.get_dni() == dni_usuario:
-                raise Duplicado(
-                    f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
-                )
+        existe = self.db.existe_dni(self.db, dni_usuario)
+        if existe:
+            raise Duplicado(
+                f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
+            )
+        return False
 
     def obtener_alumno(self, dni_alumno):
         encontrado = False

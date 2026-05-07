@@ -20,8 +20,8 @@ CREATE TABLE personas (
 
 CREATE TABLE profesores (
     id_persona INT PRIMARY KEY,
-    salario DECIMAL(10,2),
     especialidad VARCHAR(50) NOT NULL,
+    salario DECIMAL(10,2),
     FOREIGN KEY (id_persona) REFERENCES personas(id_persona) ON DELETE CASCADE
 );
 
