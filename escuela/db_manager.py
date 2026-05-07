@@ -3,28 +3,25 @@ from .common import IntegridadDatos
 
 
 class DBManager:
-    _conexion = None
-
-    @classmethod
-    def __obtener_conexion(cls):
-        if cls._conexion is None or not cls._conexion.is_connected():
-            try:
-                # Crear conexion
-                cls._conexion = mysql.connector.connect(
-                    host="127.0.0.1",
-                    user="root",
-                    password="admin",
-                    database="db_escuela",
-                )
-            except Exception as e:
-                mensaje = f"Error al crear la conexion a la BD-> {e}"
-                raise IntegridadDatos(mensaje)
-        return cls._conexion
+    def __init__(self):
+        try:
+            self.host = "127.0.0.1"
+            self.user = "root"
+            self.password = "admin"
+            self.nombre_bd = "db_escuela"
+            self.con = mysql.connector.connect(
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.nombre_bd,
+            )
+        except Exception as e:
+            mensaje = f"Error al crear la conexion a la BD-> {e}"
+            raise IntegridadDatos(mensaje)
 
     def leer_alumnos(self):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor(dictionary=True)
+            cursor = self.con.cursor(dictionary=True)
             query = """
             SELECT p.* 
             FROM alumnos as a 
@@ -40,9 +37,8 @@ class DBManager:
                 cursor.close()
 
     def leer_profesores(self):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor(dictionary=True)
+            cursor = self.con.cursor(dictionary=True)
             query = """
             SELECT p.*,pr.especialidad, pr.salario 
             FROM profesores as pr 
@@ -58,9 +54,8 @@ class DBManager:
                 cursor.close()
 
     def obtener_usuario_dni(self, dni):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor(dictionary=True)
+            cursor = self.con.cursor(dictionary=True)
             query = """
             SELECT a.id_persona AS es_alumno, pr.id_persona AS es_profesor, p.*, pr.especialidad, pr.salario
             FROM personas as p 
@@ -77,9 +72,8 @@ class DBManager:
                 cursor.close()
 
     def obtener_asignaturas_alumno(self, id):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor(dictionary=True)
+            cursor = self.con.cursor(dictionary=True)
             query = """
             SELECT a.*,m.nota
             FROM asignaturas as a 
@@ -95,30 +89,28 @@ class DBManager:
                 cursor.close()
 
     def crear_alumno(self, dni, nombre, email):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
-            nuevo_id = self.__crear_persona(self, cursor, dni, nombre, email)
+            cursor = self.con.cursor()
+            nuevo_id = self.__crear_persona(cursor, dni, nombre, email)
             query = "INSERT INTO alumnos (id_persona) VALUES (%s)"
             cursor.execute(query, (nuevo_id,))
-            con.commit()
+            self.con.commit()
         except Exception as e:
-            con.rollback()
+            self.con.rollback()
             raise IntegridadDatos(f"Error al crear alumno en BD->{e}")
         finally:
             if cursor:
                 cursor.close()
 
     def crear_profesor(self, dni, nombre, email, especialidad, salario):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
-            nuevo_id = self.__crear_persona(self, cursor, dni, nombre, email)
+            cursor = self.con.cursor()
+            nuevo_id = self.__crear_persona(cursor, dni, nombre, email)
             query = "INSERT INTO profesores (id_persona,especialidad,salario) VALUES (%s,%s,%s)"
             cursor.execute(query, (nuevo_id, especialidad, salario))
-            con.commit()
+            self.con.commit()
         except Exception as e:
-            con.rollback()
+            self.con.rollback()
             raise IntegridadDatos(f"Error al crear profesor en BD->{e}")
         finally:
             if cursor:
@@ -135,9 +127,8 @@ class DBManager:
         return cursor.lastrowid
 
     def existe_dni(self, dni):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
+            cursor = self.con.cursor()
             query = "SELECT COUNT(*) FROM personas as p where p.dni=%s"
             cursor.execute(query, (dni,))
             resultado = cursor.fetchone()
@@ -149,9 +140,8 @@ class DBManager:
                 cursor.close()
 
     def actualizar_persona(self, id, dni, nombre, email):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
+            cursor = self.con.cursor()
             query = (
                 "UPDATE personas SET dni=%s, nombre=%s, email=%s  WHERE  id_persona=%s"
             )
@@ -159,18 +149,17 @@ class DBManager:
                 query,
                 (dni, nombre, email, id),
             )
-            con.commit()
+            self.con.commit()
         except Exception as e:
-            con.rollback()
+            self.con.rollback()
             raise IntegridadDatos(f"Error al actualizar usuario en BD:{e}")
         finally:
             if cursor:
                 cursor.close()
 
     def actualizar_profesor(self, id, especialidad, salario):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
+            cursor = self.con.cursor()
             query = (
                 "UPDATE profesores SET especialidad=%s, salario=%s where id_persona=%s"
             )
@@ -178,26 +167,25 @@ class DBManager:
                 query,
                 (especialidad, salario, id),
             )
-            con.commit()
+            self.con.commit()
         except Exception as e:
-            con.rollback()
+            self.con.rollback()
             raise IntegridadDatos(f"Error al actualizar profeson en BD: {e}")
         finally:
             if cursor:
                 cursor.close()
 
     def eliminar_usuario(self, dni):
-        con = self.__obtener_conexion()
         try:
-            cursor = con.cursor()
+            cursor = self.con.cursor()
             query = "DELETE FROM personas where dni=%s"
             cursor.execute(
                 query,
                 (dni,),
             )
-            con.commit()
+            self.con.commit()
         except Exception as e:
-            con.rollback()
+            self.con.rollback()
             raise IntegridadDatos(f"Error al eliminar usuario en BD: {e}")
         finally:
             if cursor:

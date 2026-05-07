@@ -7,7 +7,7 @@ from .db_manager import DBManager
 
 class CentroEducativo:
     def __init__(self):
-        self.db = DBManager
+        self.db = DBManager()
         # self.archivo_alumnos = GestorFicheros("datos/alumnos.json")
         # self.archivo_profesores = GestorFicheros("datos/profesores.json")
         # self.archivo_asignaturas = GestorFicheros("datos/asignaturas.json")
@@ -21,18 +21,18 @@ class CentroEducativo:
 
     def get_usuarios(self):
         lista_usuarios = []
-        datos_bd = self.db.leer_alumnos(self.db)
+        datos_bd = self.db.leer_alumnos()
         [lista_usuarios.append(Alumno(**d)) for d in datos_bd]
-        datos_bd = self.db.leer_profesores(self.db)
+        datos_bd = self.db.leer_profesores()
         [lista_usuarios.append(Profesor(**d)) for d in datos_bd]
 
         return lista_usuarios
 
     def crear_alumno(self, dni, nombre, email):
-        self.db.crear_alumno(self.db, dni, nombre, email)
+        self.db.crear_alumno(dni, nombre, email)
 
     def crear_profesor(self, dni, nombre, email, especialidad, salario):
-        self.db.crear_profesor(self.db, dni, nombre, email, especialidad, salario)
+        self.db.crear_profesor(dni, nombre, email, especialidad, salario)
 
     def actualizar_persona(self, usuario, **datos):
         modificado = False
@@ -47,7 +47,6 @@ class CentroEducativo:
             modificado = True
         if modificado:
             self.db.actualizar_persona(
-                self.db,
                 usuario.get_id(),
                 usuario.get_dni(),
                 usuario.get_nombre(),
@@ -67,7 +66,6 @@ class CentroEducativo:
             modificado = True
         if modificado:
             self.db.actualizar_profesor(
-                self.db,
                 usuario.get_id(),
                 usuario.get_especialidad(),
                 usuario.get_salario(),
@@ -133,14 +131,14 @@ class CentroEducativo:
 
     def obtener_usuario(self, dni_usuario) -> Persona:
         encontrado = False
-        usuario = self.db.obtener_usuario_dni(self.db, dni_usuario)
+        usuario = self.db.obtener_usuario_dni(dni_usuario)
         if usuario and usuario["es_alumno"]:
             id = usuario.pop("es_alumno")
             usuario.pop("es_profesor")
             usuario.pop("especialidad")
             usuario.pop("salario")
             alumno = Alumno(**usuario)
-            asignaturas = self.db.obtener_asignaturas_alumno(self.db, id)
+            asignaturas = self.db.obtener_asignaturas_alumno(id)
             if asignaturas:
                 alumno.set_asignaturas(asignaturas)
             return alumno
@@ -159,7 +157,7 @@ class CentroEducativo:
             )
 
     def verificar_dni_no_registrado(self, dni_usuario):
-        existe = self.db.existe_dni(self.db, dni_usuario)
+        existe = self.db.existe_dni(dni_usuario)
         if existe:
             raise Duplicado(
                 f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
@@ -227,7 +225,7 @@ class CentroEducativo:
         return list(set(lista_asignaturas))
 
     def eliminar_usuario(self, dni_usuario: str):
-        self.db.eliminar_usuario(self.db, dni_usuario)
+        self.db.eliminar_usuario(dni_usuario)
 
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()
