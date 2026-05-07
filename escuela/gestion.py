@@ -227,13 +227,7 @@ class CentroEducativo:
         return list(set(lista_asignaturas))
 
     def eliminar_usuario(self, dni_usuario: str):
-        usuario = self.obtener_usuario(dni_usuario)
-        self.get_usuarios().remove(usuario)
-        self.guardar_en_memoria_usuarios(usuario)
-        # En caso de ser un alumno dado que tiene asignaturas se actualiza el fihero de
-        # asignaturas por si se elimina alguna
-        if isinstance(usuario, Alumno):
-            self.guardar_en_memoria_asignaturas()
+        self.db.eliminar_usuario(self.db, dni_usuario)
 
     def media_global_centro(self):
         lista_alumnos = self.obtener_alumnos()

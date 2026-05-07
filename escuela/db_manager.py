@@ -174,11 +174,31 @@ class DBManager:
             query = (
                 "UPDATE profesores SET especialidad=%s, salario=%s where id_persona=%s"
             )
-            cursor.execute(query, (especialidad, salario, id),)
+            cursor.execute(
+                query,
+                (especialidad, salario, id),
+            )
             con.commit()
         except Exception as e:
             con.rollback()
             raise IntegridadDatos(f"Error al actualizar profeson en BD: {e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def eliminar_usuario(self, dni):
+        con = self.__obtener_conexion()
+        try:
+            cursor = con.cursor()
+            query = "DELETE FROM personas where dni=%s"
+            cursor.execute(
+                query,
+                (dni,),
+            )
+            con.commit()
+        except Exception as e:
+            con.rollback()
+            raise IntegridadDatos(f"Error al eliminar usuario en BD: {e}")
         finally:
             if cursor:
                 cursor.close()
