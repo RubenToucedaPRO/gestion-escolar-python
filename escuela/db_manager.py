@@ -126,7 +126,7 @@ class DBManager:
         )
         return cursor.lastrowid
 
-    def existe_dni(self, dni):
+    def existe_dni_usuario(self, dni):
         try:
             cursor = self.con.cursor()
             query = "SELECT COUNT(*) FROM personas as p where p.dni=%s"
@@ -135,6 +135,18 @@ class DBManager:
             return resultado[0] > 0
         except Exception as e:
             raise IntegridadDatos(f"Error al consultar existencia DNI en BD->{e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def obtener_alumno(self, dni):
+        try:
+            cursor = self.con.cursor(dictionary=True)
+            query = "SELECT * FROM personas as p where p.dni=%s"
+            cursor.execute(query, (dni,))
+            return cursor.fetchone()
+        except Exception as e:
+            raise IntegridadDatos(f"Error al consultar existencia Alumno en BD->{e}")
         finally:
             if cursor:
                 cursor.close()
@@ -187,6 +199,56 @@ class DBManager:
         except Exception as e:
             self.con.rollback()
             raise IntegridadDatos(f"Error al eliminar usuario en BD: {e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def existe_asignatura(self, nombre):
+        try:
+            cursor = self.con.cursor()
+            query = "SELECT id_asignatura FROM asignaturas where nombre=%s"
+            cursor.execute(
+                query,
+                (nombre,),
+            )
+            return cursor.fetchone()
+        except Exception as e:
+            raise IntegridadDatos(f"Error al comprobar existencia asig. en BD: {e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def crear_asignatura(self, nombre):
+        try:
+            cursor = self.con.cursor()
+            query = "INSERT INTO asignaturas (nombre) VALUES(%s)"
+            cursor.execute(
+                query,
+                (nombre,),
+            )
+            self.con.commit()
+            return cursor.lastrowid
+        except Exception as e:
+            self.con.rollback()
+            raise IntegridadDatos(f"Error al crear asig. en BD: {e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def matricular_alumno(self, id_alumno, id_asignatura):
+        try:
+            cursor = self.con.cursor()
+            query = (
+                "INSERT INTO matriculas (id_alumno,id_asignatura,nota) VALUES(%s,%s,%s)"
+            )
+            cursor.execute(
+                query,
+                (id_alumno, id_asignatura, 0),
+            )
+            self.con.commit()
+        except Exception as e:
+            self.con.rollback()
+            raise IntegridadDatos(f"Error al matricular alumno en BD: {e}")
         finally:
             if cursor:
                 cursor.close()

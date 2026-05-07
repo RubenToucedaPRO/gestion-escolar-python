@@ -174,15 +174,15 @@ class InterfazConsola:
 
     def matricular_usuario(self):
         print("Inicio matricular alumno->", end="")
-        dni_usuario = self.solicitar_dni_usuario()
+        dni_alumno = self.solicitar_dni_usuario()
 
-        usuario = self.sistema.obtener_alumno(dni_usuario)
+        alumno = self.sistema.obtener_alumno(dni_alumno)
 
         nombre_asignatura = input("Asignatura en la que matricular al alumno: ")
 
-        self.sistema.matricular_usuario(usuario, nombre_asignatura)
+        self.sistema.matricular_alumno(alumno, nombre_asignatura)
 
-        return f"Usuario {usuario.get_dni()!r} matriculado correctamente en {nombre_asignatura!r}"
+        return f"Alumno {alumno.get_dni()!r} matriculado correctamente en {nombre_asignatura!r}"
 
     def get_datos_calificar_alumno(self):
         print("Inicio calificar alumno->", end="")

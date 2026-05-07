@@ -157,24 +157,19 @@ class CentroEducativo:
             )
 
     def verificar_dni_no_registrado(self, dni_usuario):
-        existe = self.db.existe_dni(dni_usuario)
+        existe = self.db.existe_dni_usuario(dni_usuario)
         if existe:
             raise Duplicado(
                 f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
             )
-        return False
 
     def obtener_alumno(self, dni_alumno):
-        encontrado = False
-
-        for usuario in self.obtener_alumnos():
-            if usuario.get_dni() == dni_alumno:
-                return usuario
-
-        if not encontrado:
+        datos_alumno = self.db.obtener_alumno(dni_alumno)
+        if not datos_alumno:
             raise DatoInvalido(
-                f"Alumno con dni: {dni_alumno!r}-> No existe el alumno en el centro"
+                f"Alumno con dni: {dni_alumno!r}-> No existe en el centro"
             )
+        return Alumno(**datos_alumno)
 
     def obtener_profesor_asignatura(self, asignatura: Asignatura):
         encontrado = False
@@ -244,13 +239,14 @@ class CentroEducativo:
         estadisticas["Nota media global del centro"] = self.media_global_centro()
         return estadisticas
 
-    def matricular_usuario(self, usuario: Alumno, nombre_asignatura: str):
-        asignatura = Asignatura(nombre_asignatura)
-        usuario.matricular(asignatura)
-        # guardamos en memoria tanto los alumnos como las asignaturas para que queden
-        # actualizados
-        self.guardar_en_memoria_usuarios(usuario)
-        self.guardar_en_memoria_asignaturas()
+    def matricular_alumno(self, alumno: Alumno, nombre_asignatura: str):
+        existe_asignatura = self.db.existe_asignatura(nombre_asignatura)
+        if not existe_asignatura:
+            id_asignatura = self.db.crear_asignatura(nombre_asignatura)
+        else:
+            id_asignatura = existe_asignatura[0]
+        id_alumno = alumno.get_id()
+        self.db.matricular_alumno(id_alumno, id_asignatura)
 
     def calificar_alumno(self, alumno: Alumno, asignatura: Asignatura):
         """Se reciben los datos del alumno si ha sido matriculado y se procede
