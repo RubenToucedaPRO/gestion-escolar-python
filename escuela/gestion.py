@@ -34,6 +34,45 @@ class CentroEducativo:
     def crear_profesor(self, dni, nombre, email, especialidad, salario):
         self.db.crear_profesor(self.db, dni, nombre, email, especialidad, salario)
 
+    def actualizar_persona(self, usuario, **datos):
+        modificado = False
+        if datos.get("dni") and datos["dni"] != usuario.get_dni():
+            usuario.set_dni(datos["dni"])
+            modificado = True
+        if datos.get("nombre") and datos["nombre"] != usuario.get_nombre():
+            usuario.set_nombre(datos["nombre"])
+            modificado = True
+        if datos.get("email") and datos["email"] != usuario.get_email():
+            usuario.set_email(datos["email"])
+            modificado = True
+        if modificado:
+            self.db.actualizar_persona(
+                self.db,
+                usuario.get_id(),
+                usuario.get_dni(),
+                usuario.get_nombre(),
+                usuario.get_email(),
+            )
+
+    def actualizar_profesor(self, usuario, **datos):
+        modificado = False
+        if (
+            datos.get("especialidad")
+            and datos["especialidad"] != usuario.get_especialidad()
+        ):
+            usuario.set_especialidad(datos["especialidad"])
+            modificado = True
+        if datos.get("salario") and datos["salario"] != usuario.get_salario():
+            usuario.set_salario(datos["salario"])
+            modificado = True
+        if modificado:
+            self.db.actualizar_profesor(
+                self.db,
+                usuario.get_id(),
+                usuario.get_especialidad(),
+                usuario.get_salario(),
+            )
+
     def set_usuarios(self, lista: list):
         """Convertimos los dict de cada usuario del json al objeto correspondiente"""
         datos = []

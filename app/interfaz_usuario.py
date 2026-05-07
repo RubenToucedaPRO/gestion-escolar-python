@@ -77,6 +77,7 @@ class InterfazConsola:
                 mensaje = self.guardar_salir_aplicacion()
             case _:
                 print("Selección errónea")
+        print(mensaje)
         print("*" * 40)
         self.sistema.registro_historial(self.tarea, mensaje)
         return False
@@ -139,26 +140,27 @@ class InterfazConsola:
 
         usuario = self.sistema.obtener_usuario(dni_usuario)
 
+        datos = {}
         print("DNI actual:", dni_usuario)
         dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
         if dato:
-            usuario.set_dni(dato)
+            datos["dni"] = dato
         dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
         if dato:
-            usuario.set_nombre(dato)
+            datos["nombre"] = dato
         dato = input("Escriba email nuevo o pulse enter para saltar: ")
         if dato:
-            usuario.set_email(dato)
+            datos["email"] = dato
+        self.sistema.actualizar_persona(usuario, **datos)
 
         if not isinstance(usuario, Alumno):
             dato = input("Escriba especialidad nuevo o pulse enter para saltar: ")
             if dato:
-                usuario.set_especialidad(dato)
+                datos["especialidad"] = dato
             dato = input("Escriba salario nuevo o pulse enter para saltar: ")
             if dato:
-                usuario.set_salario(dato)
-
-        self.sistema.guardar_en_memoria_usuarios(usuario)
+                datos["salario"] = dato
+            self.sistema.actualizar_profesor(usuario, **datos)
 
         return f"Usuario con dni {dni_usuario!r} actualizado correctamente"
 

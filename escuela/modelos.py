@@ -5,7 +5,7 @@ from functools import reduce
 
 class Persona(ABC):
     def __init__(self, id_persona: int, dni: str, nombre: str, email: str):
-        self._id = self.set_id(id_persona)
+        self.set_id(id_persona)
         self.set_dni(dni)
         self.set_nombre(nombre)
         self.set_email(email)

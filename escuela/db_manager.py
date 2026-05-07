@@ -98,7 +98,7 @@ class DBManager:
         con = self.__obtener_conexion()
         try:
             cursor = con.cursor()
-            nuevo_id = self.__crear_persona(self,cursor, dni, nombre, email)
+            nuevo_id = self.__crear_persona(self, cursor, dni, nombre, email)
             query = "INSERT INTO alumnos (id_persona) VALUES (%s)"
             cursor.execute(query, (nuevo_id,))
             con.commit()
@@ -113,7 +113,7 @@ class DBManager:
         con = self.__obtener_conexion()
         try:
             cursor = con.cursor()
-            nuevo_id = self.__crear_persona(self,cursor, dni, nombre, email)
+            nuevo_id = self.__crear_persona(self, cursor, dni, nombre, email)
             query = "INSERT INTO profesores (id_persona,especialidad,salario) VALUES (%s,%s,%s)"
             cursor.execute(query, (nuevo_id, especialidad, salario))
             con.commit()
@@ -135,8 +135,8 @@ class DBManager:
         return cursor.lastrowid
 
     def existe_dni(self, dni):
+        con = self.__obtener_conexion()
         try:
-            con = self.__obtener_conexion()
             cursor = con.cursor()
             query = "SELECT COUNT(*) FROM personas as p where p.dni=%s"
             cursor.execute(query, (dni,))
@@ -144,6 +144,41 @@ class DBManager:
             return resultado[0] > 0
         except Exception as e:
             raise IntegridadDatos(f"Error al consultar existencia DNI en BD->{e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def actualizar_persona(self, id, dni, nombre, email):
+        con = self.__obtener_conexion()
+        try:
+            cursor = con.cursor()
+            query = (
+                "UPDATE personas SET dni=%s, nombre=%s, email=%s  WHERE  id_persona=%s"
+            )
+            cursor.execute(
+                query,
+                (dni, nombre, email, id),
+            )
+            con.commit()
+        except Exception as e:
+            con.rollback()
+            raise IntegridadDatos(f"Error al actualizar usuario en BD:{e}")
+        finally:
+            if cursor:
+                cursor.close()
+
+    def actualizar_profesor(self, id, especialidad, salario):
+        con = self.__obtener_conexion()
+        try:
+            cursor = con.cursor()
+            query = (
+                "UPDATE profesores SET especialidad=%s, salario=%s where id_persona=%s"
+            )
+            cursor.execute(query, (especialidad, salario, id),)
+            con.commit()
+        except Exception as e:
+            con.rollback()
+            raise IntegridadDatos(f"Error al actualizar profeson en BD: {e}")
         finally:
             if cursor:
                 cursor.close()
