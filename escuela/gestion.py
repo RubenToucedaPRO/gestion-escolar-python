@@ -133,23 +133,9 @@ class CentroEducativo:
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
         if usuario and usuario["es_alumno"]:
-            id = usuario.pop("es_alumno")
-            usuario.pop("es_profesor")
-            usuario.pop("especialidad")
-            usuario.pop("salario")
-            alumno = Alumno(**usuario)
-            asignaturas = self.db.obtener_asignaturas_alumno(id)
-            if asignaturas:
-                alumno.set_asignaturas(asignaturas)
-            return alumno
+            return self.depurar_datos_db_alumno(usuario)
         if usuario and usuario["es_profesor"]:
-            usuario.pop("es_alumno")
-            usuario.pop("es_profesor")
-            return Profesor(**usuario)
-
-        # for usuario in self.get_usuarios():
-        #     if usuario.get_dni() == dni_usuario:
-        #         return usuario
+            return self.depurar_datos_db_profesor(usuario)
 
         if not encontrado:
             raise DatoInvalido(
@@ -164,24 +150,22 @@ class CentroEducativo:
             )
 
     def obtener_alumno(self, dni_alumno):
-        datos_alumno = self.db.obtener_alumno(dni_alumno)
-        if not datos_alumno:
+        usuario = self.obtener_usuario(dni_alumno)
+        if not usuario or not isinstance(usuario, Alumno):
             raise DatoInvalido(
                 f"Alumno con dni: {dni_alumno!r}-> No existe en el centro"
             )
-        return Alumno(**datos_alumno)
+        return usuario
 
-    def obtener_profesor_asignatura(self, asignatura: Asignatura):
-        encontrado = False
+    def obtener_profesor_asignatura(self, nombre_asignatura):
 
-        for usuario in self.obtener_profesores():
-            if usuario.get_especialidad() == asignatura.get_nombre():
-                return usuario
+        dato = self.db.obtener_profesor_asignatura(nombre_asignatura)
 
-        if not encontrado:
+        if not dato:
             raise DatoInvalido(
-                f"No existe el profesor de {asignatura.get_nombre()!r} en el centro para realizar la calificacion"
+                f"No existe el profesor de {nombre_asignatura!r} en el centro para realizar la calificacion"
             )
+        return Profesor(**dato)
 
     def obtener_alumnos(self):
         lista_alumnos = [
@@ -248,14 +232,14 @@ class CentroEducativo:
         id_alumno = alumno.get_id()
         self.db.matricular_alumno(id_alumno, id_asignatura)
 
-    def calificar_alumno(self, alumno: Alumno, asignatura: Asignatura):
+    def calificar_alumno(self, alumno: Alumno, nombre_asignatura, nota):
         """Se reciben los datos del alumno si ha sido matriculado y se procede
         a calificarlo"""
-        # Obtenemos el profesor de la asignatura para calificar al alumno
-        profesor = self.obtener_profesor_asignatura(asignatura)
-        # Calificar el alumno desde el profesor de la asignatura
-        profesor.calificar(alumno, asignatura.get_nombre(), asignatura.get_nota())
-        self.guardar_en_memoria_usuarios(alumno)
+        # Obtenemos el profesor con la especialidad de la asignatura para calificar al alumno
+        profesor = self.obtener_profesor_asignatura(nombre_asignatura)
+        # Calificar el alumno desde el profesor
+        id_asignatura = profesor.calificar(alumno, nombre_asignatura, nota)
+        self.db.asignar_nota_asignatura_alumno(nota, alumno.get_id(), id_asignatura)
 
     # def verificar_datos_en_memoria(self):
     #     """Se comparan los datos de los json de alumnos y profesores dado que asignaturas
@@ -306,6 +290,25 @@ class CentroEducativo:
     #             f"Alguna lista del programa no coincide "
     #             "con la lista en memoria -> actualizado en memoria "
     #         )
+
+    def depurar_datos_db_alumno(self, usuario):
+        id = usuario.pop("es_alumno")
+        usuario.pop("es_profesor")
+        usuario.pop("especialidad")
+        usuario.pop("salario")
+        alumno = Alumno(**usuario)
+        self.obtener_asignaturas_alumno(alumno)
+        return alumno
+
+    def depurar_datos_db_profesor(self, usuario):
+        usuario.pop("es_alumno")
+        usuario.pop("es_profesor")
+        return Profesor(**usuario)
+
+    def obtener_asignaturas_alumno(self, alumno: Alumno):
+        asignaturas = self.db.obtener_asignaturas_alumno(alumno.get_id())
+        if asignaturas:
+            alumno.set_asignaturas(asignaturas)
 
     def registro_historial(self, tarea, mensaje):
         """Realiza registro de las tareas en el log cuando son exitosas"""

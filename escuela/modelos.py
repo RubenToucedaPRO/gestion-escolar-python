@@ -177,7 +177,9 @@ class Profesor(Persona):
         except ValueError:
             raise DatoInvalido(f"Salario '{salario}' no es un número decimal válido")
 
-    def calificar(self, alumno: Alumno, nombre_asignatura, nota):
+    def calificar(self, alumno: Alumno, nombre_asignatura, nota) -> int:
+        """Se califica la asignatura correspondiente
+        :return: id de la asignatura para guardarlo en BD"""
         nombre_asignatura = nombre_asignatura.strip().capitalize()
         lista_asignaturas = alumno.get_asignaturas()
         encontrada = False
@@ -185,6 +187,7 @@ class Profesor(Persona):
             if asignatura.get_nombre() == nombre_asignatura:
                 encontrada = True
                 asignatura.set_nota(nota)
+                return asignatura.get_id()
         if not encontrada:
             raise DatoInvalido(
                 f"El alumno {alumno.get_dni()!r} no tiene la asignatura {nombre_asignatura!r}"

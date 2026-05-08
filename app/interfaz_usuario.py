@@ -195,10 +195,9 @@ class InterfazConsola:
         nombre_asignatura = input("Asignatura a calificar del alumno: ")
         nota = float(input("Nota a asignar: "))
 
-        asignatura = Asignatura(nombre_asignatura, nota)
-        self.sistema.calificar_alumno(alumno, asignatura)
+        self.sistema.calificar_alumno(alumno, nombre_asignatura, nota)
 
-        return f"{alumno.get_dni()!r}: Calificación {asignatura.get_nombre()!r} con la nota {asignatura.get_nota()!r} realizada"
+        return f"{alumno.get_dni()!r}: Calificación {nombre_asignatura!r} con la nota {nota!r} realizada"
 
     def guardar_salir_aplicacion(self):
         """

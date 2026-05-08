@@ -139,18 +139,6 @@ class DBManager:
             if cursor:
                 cursor.close()
 
-    def obtener_alumno(self, dni):
-        try:
-            cursor = self.con.cursor(dictionary=True)
-            query = "SELECT * FROM personas as p where p.dni=%s"
-            cursor.execute(query, (dni,))
-            return cursor.fetchone()
-        except Exception as e:
-            raise IntegridadDatos(f"Error al consultar existencia Alumno en BD->{e}")
-        finally:
-            if cursor:
-                cursor.close()
-
     def actualizar_persona(self, id, dni, nombre, email):
         try:
             cursor = self.con.cursor()
@@ -252,3 +240,25 @@ class DBManager:
         finally:
             if cursor:
                 cursor.close()
+
+    def obtener_profesor_asignatura(self, nombre_asignatura):
+        try:
+            cursor = self.con.cursor(dictionary=True)
+            query = "Select * FROM profesores as pr JOIN personas as p ON  pr.id_persona=p.id_persona where especialidad=%s"
+            cursor.execute(
+                query,
+                (nombre_asignatura,),
+            )
+            return cursor.fetchone()
+        except Exception as e:
+            raise IntegridadDatos(
+                f"Error al obtener la profesor de la asig. de la BD:{e}"
+            )
+
+    def asignar_nota_asignatura_alumno(self, nota, id_alumno, id_asignatura):
+        cursor = self.con.cursor()
+        query = "UPDATE matriculas SET nota=%s WHERE id_alumno=%s AND id_asignatura=%s"
+        cursor.execute(
+            query,
+            (nota, id_alumno, id_asignatura),
+        )
