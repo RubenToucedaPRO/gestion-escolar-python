@@ -155,6 +155,7 @@ class CentroEducativo:
         self.db.asignar_nota_asignatura_alumno(nota, alumno.get_id(), id_asignatura)
 
     def instanciar_datos_db_alumno(self, usuario):
+        usuario.pop("es_alumno")
         usuario.pop("es_profesor")
         usuario.pop("especialidad")
         usuario.pop("salario")

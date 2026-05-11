@@ -127,14 +127,10 @@ class Alumno(Persona):
         self._asignaturas.append(asignatura)
 
     def to_dict(self):
-        # Convertimos primero las asignaturas a lista de diccionarios
-        asignaturas = [asignatura.to_dict_alumno() for asignatura in self._asignaturas]
-
         return {
             "dni": self._dni,
             "nombre": self.nombre,
             "email": self.email,
-            "asignaturas": asignaturas,
         }
 
 

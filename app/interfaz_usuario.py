@@ -42,7 +42,8 @@ class InterfazConsola:
             "7. Matricular Alumno: Busca a un alumno por DNI y le añade una Asignatura."
         )
         print("8. Calificar: Busca un alumno y una asignatura para poner la nota.")
-        print("9. Salir.")
+        print("9. Estadisticas del centro")
+        print("11. Salir.")
 
     def seleccionar_opcion(self, seleccion: str):
         self.set_tarea("")
@@ -75,9 +76,9 @@ class InterfazConsola:
             case "9":
                 self.set_tarea("Obtener estadisticas")
                 mensaje = self.obtener_estadisticas()
-            case "10":
+            case "11":
                 self.set_tarea("Salir de la aplicacion")
-                mensaje = self.guardar_salir_aplicacion()
+                mensaje = self.salir_aplicacion()
             case _:
                 self.set_tarea("Seleccion menu")
                 mensaje = "Selección errónea"
@@ -205,15 +206,8 @@ class InterfazConsola:
 
         return f"{alumno.get_dni()!r}: Calificación {nombre_asignatura!r} con la nota {nota!r} realizada"
 
-    def guardar_salir_aplicacion(self):
-        """
-        Guarda los datos en ficheros JSON
-        :return: True si la operacion fué realizada con exito
-        """
-        print("Confirmacion simetría datos entre programa y memoria")
-        self.sistema.verificar_datos_en_memoria()
-
-        return "Verificacion datos memoria y salir de la aplicacion"
+    def salir_aplicacion(self):
+        return "Salir de la aplicacion"
 
     def obtener_estadisticas(self):
         estadisticas = self.sistema.obtener_estadisticas()

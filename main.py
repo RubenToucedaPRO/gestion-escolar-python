@@ -10,7 +10,7 @@ def main():
     salir = 0
     app.mostrar_bienvenida()
     # EL while lo saque de interfaz_usuario para en caso de excepciones se mantenga en el bucle
-    while salir != "9":
+    while salir != "11":
         try:
             salir = app.ejecutar()
         except (Duplicado, DatoInvalido) as e:
