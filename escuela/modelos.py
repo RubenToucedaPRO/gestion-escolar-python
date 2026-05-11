@@ -126,14 +126,6 @@ class Alumno(Persona):
             )
         self._asignaturas.append(asignatura)
 
-    def nota_media(self):
-        if not self._asignaturas:
-            return 0
-        suma = reduce(
-            lambda suma, asignatura: suma + asignatura.get_nota(), self._asignaturas, 0
-        )
-        return round(suma / len(self._asignaturas), 2)
-
     def to_dict(self):
         # Convertimos primero las asignaturas a lista de diccionarios
         asignaturas = [asignatura.to_dict_alumno() for asignatura in self._asignaturas]

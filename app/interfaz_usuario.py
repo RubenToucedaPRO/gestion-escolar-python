@@ -42,7 +42,7 @@ class InterfazConsola:
             "7. Matricular Alumno: Busca a un alumno por DNI y le añade una Asignatura."
         )
         print("8. Calificar: Busca un alumno y una asignatura para poner la nota.")
-        print("9. Guardar y Salir: Volcará los cambios a los ficheros JSON.")
+        print("9. Salir.")
 
     def seleccionar_opcion(self, seleccion: str):
         self.set_tarea("")
@@ -73,10 +73,14 @@ class InterfazConsola:
                 self.set_tarea("Calificar alumno")
                 mensaje = self.get_datos_calificar_alumno()
             case "9":
+                self.set_tarea("Obtener estadisticas")
+                mensaje = self.obtener_estadisticas()
+            case "10":
                 self.set_tarea("Salir de la aplicacion")
                 mensaje = self.guardar_salir_aplicacion()
             case _:
-                print("Selección errónea")
+                self.set_tarea("Seleccion menu")
+                mensaje = "Selección errónea"
         print(mensaje)
         print("*" * 40)
         self.sistema.registro_historial(self.tarea, mensaje)
@@ -144,6 +148,8 @@ class InterfazConsola:
         print("DNI actual:", dni_usuario)
         dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
         if dato:
+            dato = Validator.validar_dni(dato)
+            self.sistema.verificar_dni_no_registrado(dato)
             datos["dni"] = dato
         dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
         if dato:
@@ -208,6 +214,12 @@ class InterfazConsola:
         self.sistema.verificar_datos_en_memoria()
 
         return "Verificacion datos memoria y salir de la aplicacion"
+
+    def obtener_estadisticas(self):
+        estadisticas = self.sistema.obtener_estadisticas()
+        for descripcion, dato in estadisticas.items():
+            print(f"- {descripcion}: {dato}")
+        return "Visualizacion estadisticas exitosa"
 
     # Metodos auxiliares
 

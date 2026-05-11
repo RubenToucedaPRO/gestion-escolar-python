@@ -262,3 +262,15 @@ class DBManager:
             query,
             (nota, id_alumno, id_asignatura),
         )
+
+    def obtener_notas_medias(self):
+        cursor = self.con.cursor(dictionary=True)
+        query = """
+            SELECT AVG(m.nota) AS media
+            FROM personas p
+            JOIN alumnos a ON p.id_persona = a.id_persona
+            JOIN matriculas m ON a.id_persona = m.id_alumno
+            GROUP BY p.id_persona;
+        """
+        cursor.execute(query)
+        return cursor.fetchall()
