@@ -77,7 +77,9 @@ class DBManager:
     def crear_profesor(self, dni, nombre, email, especialidad, salario):
         cursor = self.con.cursor()
         nuevo_id = self.__crear_persona(cursor, dni, nombre, email)
-        query = "INSERT INTO profesores (id_persona,especialidad,salario) VALUES (%s,%s,%s)"
+        query = (
+            "INSERT INTO profesores (id_persona,especialidad,salario) VALUES (%s,%s,%s)"
+        )
         cursor.execute(query, (nuevo_id, especialidad, salario))
         self.con.commit()
 
@@ -100,9 +102,7 @@ class DBManager:
 
     def actualizar_persona(self, id, dni, nombre, email):
         cursor = self.con.cursor()
-        query = (
-            "UPDATE personas SET dni=%s, nombre=%s, email=%s  WHERE  id_persona=%s"
-        )
+        query = "UPDATE personas SET dni=%s, nombre=%s, email=%s  WHERE  id_persona=%s"
         cursor.execute(
             query,
             (dni, nombre, email, id),
@@ -111,9 +111,7 @@ class DBManager:
 
     def actualizar_profesor(self, id, especialidad, salario):
         cursor = self.con.cursor()
-        query = (
-            "UPDATE profesores SET especialidad=%s, salario=%s where id_persona=%s"
-        )
+        query = "UPDATE profesores SET especialidad=%s, salario=%s where id_persona=%s"
         cursor.execute(
             query,
             (especialidad, salario, id),
@@ -150,9 +148,7 @@ class DBManager:
 
     def matricular_alumno(self, id_alumno, id_asignatura):
         cursor = self.con.cursor()
-        query = (
-            "INSERT INTO matriculas (id_alumno,id_asignatura,nota) VALUES(%s,%s,%s)"
-        )
+        query = "INSERT INTO matriculas (id_alumno,id_asignatura,nota) VALUES(%s,%s,%s)"
         cursor.execute(
             query,
             (id_alumno, id_asignatura, 0),
@@ -187,3 +183,17 @@ class DBManager:
         """
         cursor.execute(query)
         return cursor.fetchall()
+
+    def ejecutar_consulta(self, query):
+        cursor = self.con.cursor()
+        cursor.execute(query)
+        if cursor.description:
+            columnas = [desc[0] for desc in cursor.description]
+            return columnas, cursor.fetchall()
+        else:
+            self.con.commit()
+            return None, cursor.rowcount
+
+    def cerrar(self):
+        if self.con:
+            self.con.close()

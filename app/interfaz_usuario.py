@@ -43,6 +43,7 @@ class InterfazConsola:
         )
         print("8. Calificar: Busca un alumno y una asignatura para poner la nota.")
         print("9. Estadisticas del centro")
+        print("10. Admin: SQL Libre")
         print("11. Salir.")
 
     def seleccionar_opcion(self, seleccion: str):
@@ -76,6 +77,9 @@ class InterfazConsola:
             case "9":
                 self.set_tarea("Obtener estadisticas")
                 mensaje = self.obtener_estadisticas()
+            case "10":
+                self.set_tarea("Admin: SQL Libre")
+                mensaje = self.ejecutar_sql_libre()
             case "11":
                 self.set_tarea("Salir de la aplicacion")
                 mensaje = self.salir_aplicacion()
@@ -207,13 +211,21 @@ class InterfazConsola:
         return f"{alumno.get_dni()!r}: Calificación {nombre_asignatura!r} con la nota {nota!r} realizada"
 
     def salir_aplicacion(self):
-        return "Salir de la aplicacion"
+        print("Cerrando conexion a BD")
+        self.sistema.cerrar_sistema()
+        return "Salir de la aplicacion exitosa"
 
     def obtener_estadisticas(self):
         estadisticas = self.sistema.obtener_estadisticas()
         for descripcion, dato in estadisticas.items():
             print(f"- {descripcion}: {dato}")
         return "Visualizacion estadisticas exitosa"
+
+    def ejecutar_sql_libre(self):
+        query = input("Introduzca consulta SQL a realizar: ")
+        respuesta = self.sistema.ejecutar_sql_libre(query)
+        print(respuesta)
+        return "Ejecucion SQL libre exitosa"
 
     # Metodos auxiliares
 

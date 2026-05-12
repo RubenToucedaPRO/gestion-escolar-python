@@ -154,6 +154,15 @@ class CentroEducativo:
         id_asignatura = profesor.calificar(alumno, nombre_asignatura, nota)
         self.db.asignar_nota_asignatura_alumno(nota, alumno.get_id(), id_asignatura)
 
+    def ejecutar_sql_libre(self, query):
+        query = query.strip()
+        if query.count(";") > 1:
+            raise ValueError("Error: Solo se permite una sentencia SQL de cada vez")
+        return self.db.ejecutar_consulta(query)
+
+    def cerrar_sistema(self):
+        self.db.cerrar()
+
     def instanciar_datos_db_alumno(self, usuario):
         usuario.pop("es_alumno")
         usuario.pop("es_profesor")
