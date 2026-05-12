@@ -2,8 +2,8 @@
 
 ## Descripción del proyecto
 Esta aplicación es un **Sistema de Gestión de un Centro Educativo** desarrollado en **Python**. Su objetivo principal es modelar de forma progresiva la lógica de negocio de una institución escolar, permitiendo administrar tanto al personal docente como al alumnado.
-El sistema destaca por las siguientes funcionalidades implementadas en esta primera fase:
-- Gestión de usuarios: Permite la creación y almacenamiento de objetos Alumno y Profesor dentro de un contenedor centralizado (CentroEducativo).
+El sistema destaca por las siguientes funcionalidades implementadas:
+- Gestión de usuarios: Permite la creación y almacenamiento de alumnos y profesores.
 - Gestión de Asignaturas: Los alumnos pueden ser matriculados y es posible asignar o modificar sus calificaciones de forma dinámica.
 - Modelo de Herencia y Polimorfismo: Utiliza una clase base abstracta Persona de la que heredan los distintos roles, permitiendo un tratamiento unificado de los datos pero con comportamientos específicos para cada tipo de usuario (por ejemplo, en su representación de texto __str__).
 - Gestión Académica:
@@ -12,10 +12,12 @@ El sistema destaca por las siguientes funcionalidades implementadas en esta prim
 - Sistema de Validación Robusto: 
   * Control estricto de DNIs (formato 8 números + 1 letra).
   * Validación de rango de calificaciones (0-10).
-- Gestión de Excepciones: Implementación de errores personalizados (`DatoInvalido`, `Duplicado`,`IntegridadDatos`) que permiten al programa continuar su ejecución ante datos corruptos, entradas duplicadas, integridad de datos en memoria informando del error por consola.
-- Persistencia de Datos: Los datos de alumnos, profesores y asignaturas se almacenan en ficheros JSON, permitiendo que la información se mantenga entre distintas ejecuciones del programa.
+  * DNIs únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo dni.
+  * Email únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo email.
+- Gestión de Excepciones: Implementación de errores personalizados (`DatoInvalido`, `Duplicado`,`BaseDeDatosError`) que permiten al programa continuar su ejecución ante datos corruptos, entradas duplicadas, errores en base de datos informando del error por consola y registrando en el log tales errores.
+- Persistencia de Datos: Los datos de alumnos, profesores y asignaturas se almacenan en una base de datos mysql alojada en un contenedor docker, permitiendo que la información se mantenga entre distintas ejecuciones del programa.
 - Operaciones CRUD Completas: Se ha implementado la capacidad de Crear, Leer, Actualizar y Borrar tanto para el personal docente como para el alumnado.
-- Sistema de Logging: Registro automático de cada operación (altas, bajas, errores) en el archivo escuela.log, incluyendo marca de tiempo y estado de la tarea.
+- Sistema de Logging: Registro automático de cada operación (altas, bajas, errores) en el archivo escuela.log, incluyendo marca de tiempo y estado de la tarea así como los errores que se producen durante la ejecución.
 
 ## Arquitectura y Modelo de Clases (UML)
 ![Diagrama modelos](images/modelos.png)
@@ -90,8 +92,12 @@ Ejemplos:
 - **Clonar repositorio** ```https://github.com/RubenToucedaPRO/gestion-escolar-python```
 - **Situarse en la rama correspondiente**
 - **Ejecucion**:
-  - En primer lugar debemos levantar el contenedor, desde la terminal nos situamos en la carpeta del proyecto y ejecutamos el siguiente comando:
+  - 1º- En primer lugar debemos levantar el contenedor, desde la terminal nos situamos en la carpeta del proyecto y ejecutamos el siguiente comando:
     * `docker compose up -d `
-  - Existen dos formas de ejecutar la aplicacion:
+  - 2º- Ejecutar la aplicación, existen dos formas:
     * Opcion 1: Ejecutar el fichero main.py en VsCode
     * Opcion 2: Ejecutar desde la terminal en el directorio raiz del proyecto 'python main.py'
+- **Borrar cotenedor**:
+  En caso de querer borrar el contendor de la BD para crear uno nuevo con los datos iniciales utilizar el siguiente comando con la aplicación detenida:
+    * ` docker compose down -v`
+    * Después podemos realizar los pasos del apartado ejecución en caso de querer iniciar la aplicación de nuevo.

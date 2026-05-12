@@ -1,8 +1,7 @@
 from .common import Duplicado, DatoInvalido, Validator
-from .modelos import Alumno, Profesor, Persona, Asignatura
+from .modelos import Alumno, Profesor, Persona
 from .registrar import Registrar
 from .db_manager import DBManager
-# from .ficheros import GestorFicheros
 
 
 class CentroEducativo:
@@ -22,17 +21,19 @@ class CentroEducativo:
 
         return lista_usuarios
 
-    def crear_alumno(self, dni, nombre, email):
+    def crear_alumno(self, dni: str, nombre: str, email: str):
         # instanciamos objeto para verificar y estandarizar datos
         alumno = Alumno(None, dni, nombre, email)
         self.db.crear_alumno(**alumno.to_dict())
 
-    def crear_profesor(self, dni, nombre, email, especialidad, salario):
+    def crear_profesor(
+        self, dni: str, nombre: str, email: str, especialidad: str, salario: float
+    ):
         # instanciamos objeto para verificar y estandarizar datos
         profesor = Profesor(None, dni, nombre, email, especialidad, salario)
         self.db.crear_profesor(**profesor.to_dict())
 
-    def actualizar_persona(self, usuario, **datos):
+    def actualizar_persona(self, usuario: Persona, **datos):
         """Actualiza los datos de usuario de la entidad persona si estos
         han sido modificados"""
         modificado = False
@@ -53,7 +54,7 @@ class CentroEducativo:
                 usuario.get_email(),
             )
 
-    def actualizar_profesor(self, usuario, **datos):
+    def actualizar_profesor(self, usuario: Profesor, **datos):
         """Actualiza los datos de la entidad profesores (especialidad y salario)"""
         modificado = False
         if (
@@ -72,7 +73,7 @@ class CentroEducativo:
                 usuario.get_salario(),
             )
 
-    def obtener_usuario(self, dni_usuario) -> Persona:
+    def obtener_usuario(self, dni_usuario: str) -> Persona:
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
         if usuario and usuario["es_alumno"]:
@@ -85,14 +86,27 @@ class CentroEducativo:
                 f"Usuario con dni: {dni_usuario!r}-> No existe el usuario en el centro"
             )
 
-    def verificar_dni_no_registrado(self, dni_usuario):
+    def verificar_dni_no_registrado(self, dni_usuario: str):
+        # Formateamos el dni
+        dni_usuario = Validator.validar_dni(dni_usuario)
+        # Comprobamos en BD que no existe otro usuario
         existe = self.db.existe_dni_usuario(dni_usuario)
         if existe:
             raise Duplicado(
                 f"Usuario con dni: {dni_usuario!r}-> Ya existe en el centro"
             )
 
-    def obtener_alumno(self, dni_alumno):
+    def verificar_email_no_registrado(self, email: str):
+        # Formateamos el email
+        email = email.strip().lower()
+        # Comprobamos en BD que no existe ya en otro usuario
+        existe = self.db.existe_email_usuario(email)
+        if existe:
+            raise Duplicado(
+                f"Email: {email!r}-> Ya usado por otro usuario en el centro"
+            )
+
+    def obtener_alumno(self, dni_alumno: str) -> Alumno:
         usuario = self.obtener_usuario(dni_alumno)
         if not usuario or not isinstance(usuario, Alumno):
             raise DatoInvalido(
@@ -100,7 +114,7 @@ class CentroEducativo:
             )
         return usuario
 
-    def obtener_profesor_asignatura(self, nombre_asignatura):
+    def obtener_profesor_asignatura(self, nombre_asignatura: str) -> Profesor:
         dato = self.db.obtener_profesor_asignatura(nombre_asignatura)
 
         if not dato:
@@ -112,14 +126,14 @@ class CentroEducativo:
     def eliminar_usuario(self, dni_usuario: str):
         self.db.eliminar_usuario(dni_usuario)
 
-    def media_global_centro(self, numero_alumnos):
+    def media_global_centro(self, numero_alumnos) -> float:
         medias = [dato["media"] for dato in self.db.obtener_notas_medias()]
         if numero_alumnos < 1:
             return 0.0
 
         return round(sum(medias) / numero_alumnos, 2)
 
-    def obtener_estadisticas(self):
+    def obtener_estadisticas(self) -> dict:
         lista_profesores = self.db.leer_profesores()
         lista_alumnos = self.db.leer_alumnos()
         numero_alumnos = len(lista_alumnos)
@@ -148,7 +162,7 @@ class CentroEducativo:
         id_alumno = alumno.get_id()
         self.db.matricular_alumno(id_alumno, id_asignatura)
 
-    def calificar_alumno(self, alumno: Alumno, nombre_asignatura, nota):
+    def calificar_alumno(self, alumno: Alumno, nombre_asignatura: str, nota: float):
         """Se reciben los datos del alumno si ha sido matriculado y se procede
         a calificarlo"""
         nombre_asignatura = Validator.formatear_nombre(nombre_asignatura)
@@ -158,8 +172,10 @@ class CentroEducativo:
         id_asignatura = profesor.calificar(alumno, nombre_asignatura, nota)
         self.db.asignar_nota_asignatura_alumno(nota, alumno.get_id(), id_asignatura)
 
-    def ejecutar_sql_libre(self, query):
-        query = query.strip()
+    def ejecutar_sql_libre(self, query: str):
+        # Limipamos la consulta y la pasamos a minusculas para que reconozca las entidades
+        # dado que estas están en minusculas
+        query = query.strip().lower()
         if query.count(";") > 1:
             raise ValueError("Error: Solo se permite una sentencia SQL de cada vez")
         return self.db.ejecutar_consulta(query)
@@ -167,7 +183,7 @@ class CentroEducativo:
     def cerrar_sistema(self):
         self.db.cerrar()
 
-    def instanciar_datos_db_alumno(self, usuario):
+    def instanciar_datos_db_alumno(self, usuario: Alumno):
         usuario.pop("es_alumno")
         usuario.pop("es_profesor")
         usuario.pop("especialidad")
@@ -176,7 +192,7 @@ class CentroEducativo:
         self.obtener_asignaturas_alumno(alumno)
         return alumno
 
-    def instanciar_datos_db_profesor(self, usuario):
+    def instanciar_datos_db_profesor(self, usuario: Profesor):
         usuario.pop("es_alumno")
         usuario.pop("es_profesor")
         return Profesor(**usuario)
@@ -186,6 +202,6 @@ class CentroEducativo:
         if asignaturas:
             alumno.set_asignaturas(asignaturas)
 
-    def registro_historial(self, tarea, mensaje):
+    def registro_historial(self, tarea: str, mensaje: str):
         """Realiza registro de las tareas en el log cuando son exitosas"""
         Registrar.registrar_log(tarea, mensaje)

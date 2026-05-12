@@ -1,3 +1,89 @@
 [2026-05-06 20:47:35] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
 [2026-05-06 20:47:39] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '85029528T' exitosa
 [2026-05-06 20:47:48] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33551578Y' exitosa
+[2026-05-12 08:04:39] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1054 (42S22): Unknown column 'cocina' in 'field list'
+[2026-05-12 08:05:14] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cocina' at line 1
+[2026-05-12 08:05:49] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"cocina"' at line 1
+[2026-05-12 08:06:16] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (DataError): 1136 (21S01): Column count doesn't match value count at row 1
+[2026-05-12 08:07:20] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (DataError): 1136 (21S01): Column count doesn't match value count at row 1
+[2026-05-12 08:08:34] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-12 08:09:14] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-12 09:04:49] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:08:46] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:30:01] TAREA: Seleccion menu | ESTADO: Selección errónea
+[2026-05-12 09:30:04] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:38:51] TAREA: Salir de la aplicacion | ESTADO: Salir de la aplicacion exitosa
+[2026-05-12 09:39:59] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:55:51] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:55:54] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:56:04] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 09:56:13] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33551578Y' exitosa
+[2026-05-12 09:57:06] TAREA: Alta alumno | ESTADO: Ocurrió un error inesperado (IntegrityError): 1062 (23000): Duplicate entry 'jacinto@email.com' for key 'personas.email'
+[2026-05-12 09:57:20] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 10:03:23] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 10:03:33] TAREA: Alta alumno | ESTADO: ERROR: Usuario con dni: '33551578Y'-> Ya existe en el centro
+[2026-05-12 10:04:56] TAREA: Alta alumno | ESTADO: ERROR: Usuario con dni: '33551578Y'-> Ya existe en el centro
+[2026-05-12 10:05:01] TAREA: Alta profesor | ESTADO: ERROR: Usuario con dni: '33551578Y'-> Ya existe en el centro
+[2026-05-12 10:05:06] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33551578Y' exitosa
+[2026-05-12 10:05:15] TAREA: Modificar usuario | ESTADO: ERROR: Usuario con dni: '33551578Y'-> Ya existe en el centro
+[2026-05-12 10:10:57] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 10:11:19] TAREA: Alta alumno | ESTADO: ERROR: Email: 'Jacinto@email.com'-> Ya usado por otro usuario en el centro
+[2026-05-12 10:11:26] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 10:11:46] TAREA: Alta profesor | ESTADO: ERROR: Email: 'Jacinto@email.com'-> Ya usado por otro usuario en el centro
+[2026-05-12 10:13:33] TAREA: Alta alumno | ESTADO: Ocurrió un error inesperado (AttributeError): 'list' object has no attribute 'lower'
+[2026-05-12 10:14:02] TAREA: Alta alumno | ESTADO: Ocurrió un error inesperado (AttributeError): 'list' object has no attribute 'tolower'
+[2026-05-12 10:14:39] TAREA: Alta alumno | ESTADO: Ocurrió un error inesperado (AttributeError): 'list' object has no attribute 'lower'
+[2026-05-12 10:16:34] TAREA: Alta alumno | ESTADO: ERROR: Email: 'jacinto@email.com'-> Ya usado por otro usuario en el centro
+[2026-05-12 10:29:59] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-12 18:12:09] TAREA: Seleccion menu | ESTADO: Selección errónea
+[2026-05-12 18:12:40] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:13:08] TAREA: Alta alumno | ESTADO: ERROR: DNI '80019491' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-12 18:13:12] TAREA: Seleccion menu | ESTADO: Selección errónea
+[2026-05-12 18:13:18] TAREA: Alta alumno | ESTADO: ERROR: DNI '800194913' invalido - El ultimo caracter debe ser una letra -> se omite usuario
+[2026-05-12 18:13:35] TAREA: Alta alumno | ESTADO: Alumno con dni '80019491F' dado de alta correctamente
+[2026-05-12 18:13:37] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:13:42] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '80019491F' exitosa
+[2026-05-12 18:14:40] TAREA: Matricular alumno | ESTADO: Alumno '80019491F' matriculado correctamente en 'python'
+[2026-05-12 18:14:45] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '80019491F' exitosa
+[2026-05-12 18:14:53] TAREA: Calificar alumno | ESTADO: ERROR: DNI '80019491' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-12 18:14:59] TAREA: Calificar alumno | ESTADO: ERROR: Usuario con dni: '80019491A'-> No existe el usuario en el centro
+[2026-05-12 18:15:08] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Rel' en el centro para realizar la calificacion
+[2026-05-12 18:16:13] TAREA: Matricular alumno | ESTADO: Alumno '80019491F' matriculado correctamente en 'Religion'
+[2026-05-12 18:16:22] TAREA: Calificar alumno | ESTADO: ERROR: No existe el profesor de 'Religion' en el centro para realizar la calificacion
+[2026-05-12 18:24:15] TAREA: Calificar alumno | ESTADO: ERROR: El alumno '80019491F' no tiene la asignatura 'Bases de datos'
+[2026-05-12 18:24:28] TAREA: Modificar usuario | ESTADO: ERROR: DNI '80019491' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-12 18:24:35] TAREA: Modificar usuario | ESTADO: ERROR: Usuario con dni: '80019491F'-> Ya existe en el centro
+[2026-05-12 18:24:57] TAREA: Modificar usuario | ESTADO: Usuario con dni '80019491F' actualizado correctamente
+[2026-05-12 18:25:02] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '80019491F' exitosa
+[2026-05-12 18:25:11] TAREA: Eliminar usuario | ESTADO: Usuario con dni '80019491F' eliminado correctamente
+[2026-05-12 18:25:18] TAREA: Eliminar usuario | ESTADO: ERROR: DNI '80019491' invalido - Longitud erronea. Deben ser 8 numeros y una letra -> se omite usuario
+[2026-05-12 18:25:22] TAREA: Eliminar usuario | ESTADO: Usuario con dni '80019491A' eliminado correctamente
+[2026-05-12 18:25:28] TAREA: Obtener estadisticas | ESTADO: Visualizacion estadisticas exitosa
+[2026-05-12 18:25:33] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:26:14] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1146 (42S02): Table 'db_escuela.ASIGNATURAS' doesn't exist
+[2026-05-12 18:26:31] TAREA: Seleccion menu | ESTADO: Selección errónea
+[2026-05-12 18:26:50] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-12 18:28:00] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-12 18:28:18] TAREA: Alta profesor | ESTADO: ERROR: Email: 'jose@email.com'-> Ya usado por otro usuario en el centro
+[2026-05-12 18:28:38] TAREA: Alta profesor | ESTADO: Profesor con dni '80019491F' dado de alta correctamente
+[2026-05-12 18:28:42] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '80019491F' exitosa
+[2026-05-12 18:29:13] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '80019491F' exitosa
+[2026-05-12 18:29:23] TAREA: Matricular alumno | ESTADO: ERROR: Alumno con dni: '80019491F'-> No existe en el centro
+[2026-05-12 18:29:27] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:29:45] TAREA: Calificar alumno | ESTADO: '33551578Y': Calificación 'PYTHON' con la nota 10.0 realizada
+[2026-05-12 18:29:50] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '33551578Y' exitosa
+[2026-05-12 18:29:55] TAREA: Obtener estadisticas | ESTADO: Visualizacion estadisticas exitosa
+[2026-05-12 18:31:00] TAREA: Obtener estadisticas | ESTADO: Visualizacion estadisticas exitosa
+[2026-05-12 18:32:51] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:32:56] TAREA: Alta alumno | ESTADO: Alumno con dni '57532756G' dado de alta correctamente
+[2026-05-12 18:33:00] TAREA: Buscar usuario | ESTADO: Mostrar usuario con dni '57532756G' exitosa
+[2026-05-12 18:33:14] TAREA: Matricular alumno | ESTADO: Alumno '57532756G' matriculado correctamente en 'religion'
+[2026-05-12 18:33:23] TAREA: Calificar alumno | ESTADO: ERROR: El alumno '57532756G' no tiene la asignatura 'Python'
+[2026-05-12 18:33:31] TAREA: Matricular alumno | ESTADO: Alumno '57532756G' matriculado correctamente en 'python'
+[2026-05-12 18:33:42] TAREA: Calificar alumno | ESTADO: ERROR: La nota debe de ser un numero decimal entre 0 y 10
+[2026-05-12 18:34:52] TAREA: Calificar alumno | ESTADO: '57532756G': Calificación 'python' con la nota 9.0 realizada
+[2026-05-12 18:35:04] TAREA: Calificar alumno | ESTADO: '57532756G': Calificación 'religion' con la nota 7.0 realizada
+[2026-05-12 18:35:15] TAREA: Listar usuarios | ESTADO: Visualizacion exitosa
+[2026-05-12 18:35:29] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selec * from asignaturas' at line 1
+[2026-05-12 18:35:40] TAREA: Seleccion menu | ESTADO: Selección errónea
+[2026-05-12 18:35:49] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa

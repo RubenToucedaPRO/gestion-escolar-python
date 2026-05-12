@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from .common import DatoInvalido, Duplicado, Validator
-from functools import reduce
 
 
 class Persona(ABC):

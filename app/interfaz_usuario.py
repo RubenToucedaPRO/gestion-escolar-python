@@ -1,8 +1,6 @@
 from escuela.gestion import CentroEducativo
 from escuela.modelos import (
     Alumno,
-    Profesor,
-    Asignatura,
     Validator,
 )
 
@@ -103,7 +101,7 @@ class InterfazConsola:
             print(usuario)
         return "Visualizacion exitosa"
 
-    def dar_alta_alumno(self) -> Alumno:
+    def dar_alta_alumno(self) -> str:
         print("Inicio alta alumno->", end="")
         dni = self.solicitar_dni_usuario()
 
@@ -111,17 +109,19 @@ class InterfazConsola:
 
         nombre = input("Nombre: ")
         email = input("Email: ")
+        self.sistema.verificar_email_no_registrado(email)
 
         self.sistema.crear_alumno(dni, nombre, email)
 
         return f"Alumno con dni {dni!r} dado de alta correctamente"
 
-    def dar_alta_profesor(self) -> Profesor:
+    def dar_alta_profesor(self) -> str:
         print("Inicio alta profesor->", end="")
         dni = self.solicitar_dni_usuario()
         self.sistema.verificar_dni_no_registrado(dni)
         nombre = input("Nombre: ")
         email = input("Email: ")
+        self.sistema.verificar_email_no_registrado(email)
         especialidad = input("Especialidad: ")
         salario = input("Salario: ")
 
@@ -129,7 +129,7 @@ class InterfazConsola:
 
         return f"Profesor con dni {dni!r} dado de alta correctamente"
 
-    def mostrar_datos_usuario(self):
+    def mostrar_datos_usuario(self) -> str:
         print("Inicio mostrar usuario->", end="")
         dni_usuario = self.solicitar_dni_usuario()
 
@@ -143,7 +143,7 @@ class InterfazConsola:
 
         return f"Mostrar usuario con dni {dni_usuario!r} exitosa"
 
-    def actualizar_datos_usuario(self):
+    def actualizar_datos_usuario(self) -> str:
         print("Inicio actualizar usuario->", end="")
         dni_usuario = self.solicitar_dni_usuario()
 
@@ -153,7 +153,6 @@ class InterfazConsola:
         print("DNI actual:", dni_usuario)
         dato = input("Escriba DNI nuevo o pulse enter para saltar: ")
         if dato:
-            dato = Validator.validar_dni(dato)
             self.sistema.verificar_dni_no_registrado(dato)
             datos["dni"] = dato
         dato = input("Escriba nombre nuevo o pulse enter para saltar: ")
@@ -162,6 +161,7 @@ class InterfazConsola:
         dato = input("Escriba email nuevo o pulse enter para saltar: ")
         if dato:
             datos["email"] = dato
+            self.sistema.verificar_email_no_registrado(dato)
         self.sistema.actualizar_persona(usuario, **datos)
 
         if not isinstance(usuario, Alumno):
@@ -175,7 +175,7 @@ class InterfazConsola:
 
         return f"Usuario con dni {dni_usuario!r} actualizado correctamente"
 
-    def eliminar_usuario(self):
+    def eliminar_usuario(self) -> str:
         print("Inicio eliminar usuario->", end="")
         dni_usuario = self.solicitar_dni_usuario()
 
@@ -183,7 +183,7 @@ class InterfazConsola:
 
         return f"Usuario con dni {dni_usuario!r} eliminado correctamente"
 
-    def matricular_usuario(self):
+    def matricular_usuario(self) -> str:
         print("Inicio matricular alumno->", end="")
         dni_alumno = self.solicitar_dni_usuario()
 
@@ -195,7 +195,7 @@ class InterfazConsola:
 
         return f"Alumno {alumno.get_dni()!r} matriculado correctamente en {nombre_asignatura!r}"
 
-    def get_datos_calificar_alumno(self):
+    def get_datos_calificar_alumno(self) -> str:
         print("Inicio calificar alumno->", end="")
         dni_alumno = self.solicitar_dni_usuario()
 
@@ -210,18 +210,19 @@ class InterfazConsola:
 
         return f"{alumno.get_dni()!r}: Calificación {nombre_asignatura!r} con la nota {nota!r} realizada"
 
-    def salir_aplicacion(self):
+    def salir_aplicacion(self) -> str:
         print("Cerrando conexion a BD")
         self.sistema.cerrar_sistema()
         return "Salir de la aplicacion exitosa"
 
-    def obtener_estadisticas(self):
+    def obtener_estadisticas(self) -> str:
         estadisticas = self.sistema.obtener_estadisticas()
+        print("Estadisticas:")
         for descripcion, dato in estadisticas.items():
             print(f"- {descripcion}: {dato}")
         return "Visualizacion estadisticas exitosa"
 
-    def ejecutar_sql_libre(self):
+    def ejecutar_sql_libre(self) -> str:
         query = input("Introduzca consulta SQL a realizar: ")
         respuesta = self.sistema.ejecutar_sql_libre(query)
         print(respuesta)
@@ -229,7 +230,7 @@ class InterfazConsola:
 
     # Metodos auxiliares
 
-    def solicitar_dni_usuario(self):
+    def solicitar_dni_usuario(self) -> str:
         dni = input("DNI: ")
         return Validator.validar_dni(dni)
 
@@ -244,5 +245,6 @@ class InterfazConsola:
     def visualizar_datos_profesor(self, usuario):
         print(f"Los datos del dni {usuario.get_dni()!r} corresponden al profesor:")
         print("Nombre:", usuario.get_nombre())
+        print("Email:", usuario.get_email())
         print("Especialidad:", usuario.get_especialidad())
         print("Salario:", usuario.get_salario())
