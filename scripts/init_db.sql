@@ -15,7 +15,7 @@ CREATE TABLE personas (
     id_persona INT AUTO_INCREMENT PRIMARY KEY,
     dni VARCHAR(9) UNIQUE NOT NULL,
     nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100)
+    email VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE profesores (
@@ -50,9 +50,6 @@ CREATE TABLE matriculas (
 INSERT INTO asignaturas (nombre) VALUES 
 ('Bases de datos'),
 ('Python'),
-('Mates'),
-('Fol'),
-('Religion'),
 ('Android');
 
 -- 2. INSERTAR PROFESORES
@@ -64,7 +61,7 @@ VALUES (LAST_INSERT_ID(), 'Bases de datos', 2005.0);
 -- Arturo
 INSERT INTO personas (dni, nombre, email) VALUES ('05732516L', 'Arturo', 'arturo@email.com');
 INSERT INTO profesores (id_persona, especialidad, salario) 
-VALUES (LAST_INSERT_ID(), 'Fol', 1900.0);
+VALUES (LAST_INSERT_ID(), 'Python', 1900.0);
 
 -- 3. INSERTAR ALUMNOS Y SUS MATRICULAS
 -- Jacinto
@@ -83,7 +80,7 @@ SET @id_leo = LAST_INSERT_ID();
 INSERT INTO alumnos (id_persona) VALUES (@id_leo);
 -- Matrículas de Leo
 INSERT INTO matriculas (id_alumno, id_asignatura, nota) VALUES 
-(@id_leo, (SELECT id_asignatura FROM asignaturas WHERE nombre='Mates'), 0.0),
+(@id_leo, (SELECT id_asignatura FROM asignaturas WHERE nombre='Bases de datos'), 0.0),
 (@id_leo, (SELECT id_asignatura FROM asignaturas WHERE nombre='Python'), 0.0);
 
 -- Alba
@@ -92,8 +89,8 @@ SET @id_alba = LAST_INSERT_ID();
 INSERT INTO alumnos (id_persona) VALUES (@id_alba);
 -- Matrículas de Alba
 INSERT INTO matriculas (id_alumno, id_asignatura, nota) VALUES 
-(@id_alba, (SELECT id_asignatura FROM asignaturas WHERE nombre='Mates'), 0.0),
-(@id_alba, (SELECT id_asignatura FROM asignaturas WHERE nombre='Religion'), 0.0);
+(@id_alba, (SELECT id_asignatura FROM asignaturas WHERE nombre='Bases de datos'), 0.0),
+(@id_alba, (SELECT id_asignatura FROM asignaturas WHERE nombre='Python'), 0.0);
 
 -- Ana
 INSERT INTO personas (dni, nombre, email) VALUES ('85029528T', 'Ana', 'ana@email.com');

@@ -7,7 +7,11 @@ from .db_manager import DBManager
 
 class CentroEducativo:
     def __init__(self):
-        self.db = DBManager()
+        self.host = "127.0.0.1"
+        self.user = "root"
+        self.password = "admin"
+        self.nombre_bd = "db_escuela"
+        self.db = DBManager(self.host, self.user, self.password, self.nombre_bd)
 
     def get_usuarios(self):
         lista_usuarios = []

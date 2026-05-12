@@ -10,8 +10,8 @@ class Duplicado(Exception):
     pass
 
 
-class IntegridadDatos(Exception):
-    """Excepción lanzada cuando los datos en memoria no coinciden con el programa."""
+class BaseDatosError(Exception):
+    """Excepción lanzada para errores de base de datos."""
 
     pass
 

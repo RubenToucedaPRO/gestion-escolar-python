@@ -1,26 +1,23 @@
 import mysql.connector
-from .common import IntegridadDatos
+from .common import BaseDatosError
 
 
 class DBManager:
-    def __init__(self):
-        self.host = "127.0.0.1"
-        self.user = "root"
-        self.password = "admin"
-        self.nombre_bd = "db_escuela"
-        self._conectar()
+    def __init__(self, host, user, password, nombre_bd):
+        self.con = None
+        self._conectar(host, user, password, nombre_bd)
 
-    def _conectar(self):
+    def _conectar(self, host, user, password, nombre_bd):
         try:
             self.con = mysql.connector.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                database=self.nombre_bd,
+                host=host,
+                user=user,
+                password=password,
+                database=nombre_bd,
             )
         except Exception as e:
             mensaje = f"Error al crear la conexion a la BD-> {e}"
-            raise IntegridadDatos(mensaje)
+            raise BaseDatosError(mensaje)
 
     def leer_alumnos(self):
         cursor = self.con.cursor(dictionary=True)

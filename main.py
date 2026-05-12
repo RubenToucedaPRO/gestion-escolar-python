@@ -1,7 +1,7 @@
 from app.interfaz_usuario import InterfazConsola
 from escuela.modelos import Duplicado, DatoInvalido
 from escuela.registrar import Registrar
-from escuela.common import IntegridadDatos
+from escuela.common import BaseDatosError
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
             # Mantuve aqui los registros de logs para poder saber en que tarea sucedía
             # la excepcion
             Registrar.registrar_log(tarea, mensaje)
-        except IntegridadDatos as e:
+        except BaseDatosError as e:
             tarea = app.get_tarea()
             mensaje = f"ERROR: {e}"
             print(mensaje)
@@ -35,6 +35,7 @@ def main():
             mensaje = f"Ocurrió un error inesperado ({type(e).__name__}): {e}"
             print(mensaje)
             Registrar.registrar_log(tarea, mensaje)
+
 
 if __name__ == "__main__":
     main()

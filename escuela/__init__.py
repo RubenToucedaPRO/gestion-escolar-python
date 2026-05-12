@@ -1,4 +1,4 @@
-from .common import DatoInvalido, Duplicado, IntegridadDatos, Validator
+from .common import DatoInvalido, Duplicado, BaseDatosError, Validator
 from .modelos import Persona, Asignatura, Alumno, Profesor
 from .gestion import CentroEducativo
 from .registrar import Registrar
@@ -6,7 +6,7 @@ from .registrar import Registrar
 __all__ = [
     "DatoInvalido",
     "Duplicado",
-    "IntegridadDatos",
+    "BaseDatosError",
     "Validator",
     "Persona",
     "Asignatura",
