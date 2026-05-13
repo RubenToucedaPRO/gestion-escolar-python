@@ -1,8 +1,4 @@
-from escuela.gestion import CentroEducativo
-from escuela.modelos import (
-    Alumno,
-    Validator,
-)
+from escuela import CentroEducativo, Alumno, Validator
 
 
 class InterfazConsola:

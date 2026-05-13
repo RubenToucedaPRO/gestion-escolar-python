@@ -1,7 +1,5 @@
 from app.interfaz_usuario import InterfazConsola
-from escuela.modelos import Duplicado, DatoInvalido
-from escuela.registrar import Registrar
-from escuela.common import BaseDatosError
+from escuela import Duplicado, DatoInvalido, Registrar, BaseDatosError
 
 
 def main():
