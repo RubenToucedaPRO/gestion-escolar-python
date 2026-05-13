@@ -101,3 +101,35 @@ Ejemplos:
   En caso de querer borrar el contendor de la BD para crear uno nuevo con los datos iniciales utilizar el siguiente comando con la aplicación detenida:
     * ` docker compose down -v`
     * Después podemos realizar los pasos del apartado ejecución en caso de querer iniciar la aplicación de nuevo.
+
+
+## Calidad y Testing
+
+Se ha implementado una suite de pruebas automatizadas para validar la lógica de negocio, garantizando la integridad del sistema y facilitando la detección de posibles regresiones en futuras modificaciones del código.
+
+### Estrategia de Pruebas
+Se han desarrollado **tests de integración** que interactúan directamente con la base de datos MySQL desplegada en el entorno de Docker. Para asegurar las pruebas (permitiendo su ejecución repetida sin conflictos), se ha implementado una política de limpieza de datos creados: cada test se encarga de eliminar los registros creados al finalizar su ejecución mediante llamadas explícitas a métodos de borrado.
+
+### Ejecución de los Tests
+Para lanzar la suite de pruebas completa, sitúese en la terminal dentro de la raíz del proyecto y ejecute el siguiente comando:
+
+`python3 -m unittest escuela.tests.test_centro`
+
+### Análisis de Cobertura
+El proyecto integra la herramienta **Coverage** para medir con precisión qué porcentaje del código fuente ha sido ejecutado y validado por las pruebas.
+
+**Reporte rápido en terminal:**
+1. **Generar datos de cobertura:** `python3 -m coverage run -m unittest escuela.tests.test_centro`
+2. **Visualizar reporte:** `python3 -m coverage report`
+
+![Covertura test](images/coverageTest.png)
+
+
+**Reporte detallado en HTML:**
+Para un análisis visual exhaustivo que permite identificar línea a línea las partes del código no probadas por ficheros, funciones o clases:
+1. **Generar el sitio web de reporte:** `python3 -m coverage html`
+2. **Localizar los archivos:** Se creará una carpeta llamada `htmlcov/` en la raíz.
+3. **Visualización:** Abra el archivo `index.html` en cualquier navegador web.
+
+![Covertura test detallada](images/coverageTestDetail.png)
+
