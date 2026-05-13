@@ -16,7 +16,7 @@ El sistema destaca por las siguientes funcionalidades implementadas:
   * Validación de rango de calificaciones (0-10).
   * DNIs únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo dni.
   * Email únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo email.
-- Gestión de Excepciones: Implementación de errores personalizados (`DatoInvalido`, `Duplicado`,`BaseDeDatosError`) que permiten al programa continuar su ejecución ante datos corruptos, entradas duplicadas, errores en base de datos informando del error por consola y registrando en el log tales errores.
+- Gestión de Excepciones: Implementación de errores personalizados (`DatoInvalido`, `Duplicado`,`BaseDatosError`) que permiten al programa continuar su ejecución ante datos corruptos, entradas duplicadas, errores en base de datos informando del error por consola y registrando en el log tales errores.
 - Persistencia de Datos: Los datos de alumnos, profesores y asignaturas se almacenan en una base de datos mysql alojada en un contenedor docker, permitiendo que la información se mantenga entre distintas ejecuciones del programa.
 - Operaciones CRUD Completas: Se ha implementado la capacidad de Crear, Leer, Actualizar y Borrar tanto para el personal docente como para el alumnado.
 - Sistema de Logging: Registro automático de cada operación (altas, bajas, errores) en el archivo escuela.log, incluyendo marca de tiempo y estado de la tarea así como los errores que se producen durante la ejecución.
@@ -62,7 +62,7 @@ Define el sistema de errores personalizados para el control de la lógica de neg
 ![Diagrama common](images/common.png)
 
 #### 6. Registro de Logs
-Subsistema encargado de la trazabilidad de operaciones y gestión de errores en tiempo de ejecución.
+Subsistema encargado de la trazabilidad de operaciones y registro de errores en tiempo de ejecución.
 
 ![Diagrama registro de logs](images/registrar.png)
 
@@ -87,13 +87,13 @@ Subsistema encargado de la trazabilidad de operaciones y gestión de errores en 
         ├── init_db.sql           # Script de creación de tablas y datos iniciales
     ├── .gitignore                # Archivos excluidos de control de versiones
     ├── docker-compose.yml        # Orquestación del contenedor MySQL
-    ├── escuela.log               # Logs de la aplicacion
+    ├── escuela.log               # Logs de la aplicación
     ├── main.py                   # Punto de entrada principal de la aplicación
     ├── README.md                 # Documentación de la aplicación
     └── requirements.txt          # Dependencias (mysql-connector, coverage, etc.)
 ```
 
-## Tecnologías y Conceptos Aplicados
+## Tecnologías y conceptos aplicados
 
 * **Programación Orientada a Objetos (POO) Avanzada**:
     * **Herencia y Polimorfismo**: Implementación de una jerarquía de clases con `Persona` como base y especialización en `Alumno` y `Profesor`, permitiendo un tratamiento uniforme de las entidades.
@@ -117,7 +117,7 @@ El sistema delega la persistencia de datos en un sistema de gestión de bases de
 
 La persistencia se articula a través de la clase `DBManager`, que actúa como capa de acceso a datos (DAO), gestionando la conexión con el servidor MySQL desplegado en un contenedor **Docker**.
 
-* **Conectividad**: La aplicación utiliza el driver `mysql-connector-python` para establecer una comunicación persistente con la base de datos, configurada mediante variables de entorno para facilitar su despliegue.
+* **Conectividad**: La aplicación utiliza el driver `mysql-connector-python` para establecer una comunicación persistente con la base de datos, configurada mediante variables para facilitar su despliegue.
 * **Modelo Relacional**: Los datos se organizan en tablas normalizadas (`personas`, `alumnos`, `profesores`, `asignaturas` y `matriculas`), relacionadas mediante claves foráneas (Foreign Keys) que aseguran la integridad referencial.
 
 ![Modelo entidad relacion](images/ER_Diagram.png)
@@ -225,7 +225,7 @@ docker compose up -d
 ```
 
 ### Paso 3: Ejecución
-Inicie la aplicación mediante la terminal o su IDE:
+Inicie la aplicación:
 * Opcion 1: Ejecutar el fichero **main.py** en VsCode
 * Opcion 2: Ejecutar desde la terminal
   - Si su sistema operativo es windows:
@@ -240,7 +240,7 @@ python3 main.py
 ```
 
 ### Paso 4: Mantenimiento y Reseteo
-Si desea borrar todos los datos y volver al estado inicial del script SQL, elimine los volúmenes del contenedor:
+Si desea borrar todos los datos y volver al estado iniciar del script SQL, elimine los volúmenes del contenedor:
 ```bash
 docker compose down -v
 ```
