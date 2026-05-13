@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de usuarios{% endblock %}
+
+{% block content %}
+    <h2>Listado de usuarios</h2>
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('formulario_alumno') }}">
+            ➕ Añadir Nuevo Alumno
+        </a>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('formulario_profesor') }}">
+            ➕ Añadir Nuevo Profesor
+        </a>
+    </div>
+    <table>
+        <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Email</th>
+        </tr>
+        {% for usuario in lista %}
+        <tr>
+            <td>
+                <a href="{{ url_for('detalle_usuario', dni=usuario.get_dni()) }}">
+                {{ usuario.get_dni() }}
+                </a>
+            </td>
+            <td>{{ usuario.get_nombre() }}</td>
+            <td>{{ usuario.get_email() }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('home') }}">Volver al inicio</a>
+{% endblock %}

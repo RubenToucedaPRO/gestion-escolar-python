@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Nuevo Profesor{% endblock %}
+
+{% block content %}
+    <h2>Registro de Nuevo Profesor</h2>
+    
+    <form action="{{ url_for('guardar_profesor') }}" method="POST" style="max-width: 400px;">
+        <div style="margin-bottom: 10px;">
+            <label>DNI:</label><br>
+            <input type="text" name="dni" required>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Nombre:</label><br>
+            <input type="text" name="nombre" required>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Email:</label><br>
+            <input type="email" name="email" required>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Especialidad:</label><br>
+            <input type="text" name="especialidad" required>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Salario:</label><br>
+            <input type="number" name="salario" required>
+        </div>
+        
+        <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Guardar Profesor
+        </button>
+        <a href="{{ url_for('listar_usuarios') }}">Cancelar</a>
+    </form>
+{% endblock %}

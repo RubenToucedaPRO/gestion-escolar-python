@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<!-- Título que aparece en la pestaña del navegador -->
+<title>{% block title %}Mi centro escolar web{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>
+<h1>🌐 Mi Centro Escolar</h1>
+<nav>
+<a href="{{ url_for('home') }}">Inicio</a> |
+<a href="{{ url_for('listar_usuarios') }}">Usuarios</a>
+</nav>
+</header>
+<main>
+{% block content %}
+<!-- Contenido específico de cada página -->
+{% endblock %}
+</main>
+<footer>
+<p>© 2026 Mi Sitio Web</p>
+</footer>
+</body>
+</html>
