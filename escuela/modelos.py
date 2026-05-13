@@ -160,9 +160,15 @@ class Profesor(Persona):
     def set_salario(self, salario):
         try:
             valor_float = float(salario)
+            if valor_float <= 0:
+                raise ValueError(
+                    f"El salario {salario} debe ser un numero decimal positivo"
+                )
             self.salario = valor_float
         except ValueError:
-            raise DatoInvalido(f"Salario '{salario}' no es un número decimal válido")
+            raise DatoInvalido(
+                f"Salario '{salario}' no es un número decimal positivo válido"
+            )
 
     def calificar(self, alumno: Alumno, nombre_asignatura, nota) -> int:
         """Se califica la asignatura correspondiente
