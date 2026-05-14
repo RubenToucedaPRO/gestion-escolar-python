@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Estadísticas{% endblock %}
+
+{% block content %}
+    <h2>Estadísticas del centro</h2>
+    <table>
+        <tr>
+            <th>Parametro</th>
+            <th>Valor</th>
+        </tr>
+        {% for clave,valor in lista.items() %}
+        <tr>
+            <td>{{ clave }}</td>
+            <td>{{ valor }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

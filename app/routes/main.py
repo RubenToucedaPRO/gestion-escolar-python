@@ -57,3 +57,11 @@ def eliminar_usuario(dni):
 
     flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
     return redirect(url_for("main.listar_usuarios"))
+
+
+@main_bp.route("/estadisticas")
+def listar_estadisticas():
+
+    estadisticas = sistema.obtener_estadisticas()
+
+    return render_template("estadisticas.html", lista=estadisticas)
