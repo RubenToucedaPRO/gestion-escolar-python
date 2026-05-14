@@ -5,18 +5,42 @@
 {% block content %}
     <h2>Información Detallada</h2>
     
-    <div class="card" style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 500px;">
+    <div class="card">
         {% if usuario.__class__.__name__ == 'Alumno' %}
             <p><strong>Alumno:</strong></p>
+            <div>
+                <a href="{{ url_for('editar_alumno', dni=usuario.get_dni()) }}">
+                    &#9999; Modificar
+                </a>
+            </div>
         {% elif usuario.__class__.__name__ == 'Profesor' %}
             <p><strong>Profesor:</strong></p>
+            <div>
+                <a href="{{ url_for('editar_profesor', dni=usuario.get_dni()) }}">
+                    &#9999; Modificar
+                </a>
+            </div>
         {% endif %}
         <p><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
         <p><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
         <p><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
         
         {% if usuario.__class__.__name__ == 'Alumno' %}
-            
+            {% if usuario.get_asignaturas()|length>0 %}
+                <div class="card">
+                    <p><strong>Asignaturas:</strong></p>
+                    <table>
+                        {% for asignatura in usuario.get_asignaturas() %}
+                        <tr>
+                            <td>{{ asignatura.get_nombre() }}</td>
+                            <td>{{ asignatura.get_nota() }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+             {% else %}
+             <p><strong>Sin asignaturas</strong></p>
+             {% endif %}
         {% elif usuario.__class__.__name__ == 'Profesor' %}
             <p><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
             <p><strong>Salario:</strong> {{ usuario.get_salario() }}</p>

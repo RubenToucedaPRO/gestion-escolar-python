@@ -86,6 +86,19 @@ class CentroEducativo:
                 f"Usuario con dni: {dni_usuario!r}-> No existe el usuario en el centro"
             )
 
+    def obtener_usuario_por_id(self, id: int) -> Persona:
+        encontrado = False
+        usuario = self.db.obtener_usuario_id(id)
+        if usuario and usuario["es_alumno"]:
+            return self.instanciar_datos_db_alumno(usuario)
+        if usuario and usuario["es_profesor"]:
+            return self.instanciar_datos_db_profesor(usuario)
+
+        if not encontrado:
+            raise DatoInvalido(
+                f"Usuario con id: {id!r}-> No existe el usuario en el centro"
+            )
+
     def verificar_dni_no_registrado(self, dni_usuario: str):
         # Formateamos el dni
         dni_usuario = Validator.validar_dni(dni_usuario)

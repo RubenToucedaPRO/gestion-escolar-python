@@ -15,9 +15,20 @@
 </nav>
 </header>
 <main>
-{% block content %}
-<!-- Contenido específico de cada página -->
-{% endblock %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}
+    <!-- Contenido específico de cada página -->
+    {% endblock %}
 </main>
 <footer>
 <p>© 2026 Mi Sitio Web</p>

@@ -54,6 +54,18 @@ class DBManager:
         cursor.execute(query, (dni,))
         return cursor.fetchone()
 
+    def obtener_usuario_id(self, id: int) -> dict:
+        cursor = self.con.cursor(dictionary=True)
+        query = """
+        SELECT a.id_persona AS es_alumno, pr.id_persona AS es_profesor, p.*, pr.especialidad, pr.salario
+        FROM personas as p 
+        LEFT JOIN alumnos as a ON  p.id_persona=a.id_persona 
+        LEFT JOIN profesores as pr ON p.id_persona=pr.id_persona 
+        where p.id_persona=%s
+        """
+        cursor.execute(query, (id,))
+        return cursor.fetchone()
+
     def obtener_asignaturas_alumno(self, id: int) -> list:
         cursor = self.con.cursor(dictionary=True)
         query = """

@@ -19,14 +19,14 @@ def listar_usuarios():
     return render_template("usuarios.html", lista=usuarios)
 
 
-@app.route("/usuarios/nuevo_alumno")
+@app.route("/alumno/nuevo_alumno")
 def formulario_alumno():
     """Muestra el formulario vacío"""
     return render_template("nuevo_alumno.html")
 
 
-@app.route("/usuarios/guardar", methods=["POST"])
-def guardar_alumno():
+@app.route("/alumno/guardar", methods=["POST"])
+def guardar_nuevo_alumno():
     """Recibe los datos del formulario y los guarda en la BD"""
     dni = request.form.get("dni")
     nombre = request.form.get("nombre")
@@ -40,14 +40,14 @@ def guardar_alumno():
         return f"Error al guardar: {e}", 400
 
 
-@app.route("/usuarios/nuevo_profesor")
+@app.route("/profesor/nuevo_profesor")
 def formulario_profesor():
     """Muestra el formulario vacío"""
     return render_template("nuevo_profesor.html")
 
 
-@app.route("/usuarios/guardar", methods=["POST"])
-def guardar_profesor():
+@app.route("/profesor/guardar", methods=["POST"])
+def guardar_nuevo_profesor():
     """Recibe los datos del formulario y los guarda en la BD"""
     dni = request.form.get("dni")
     nombre = request.form.get("nombre")
@@ -72,6 +72,65 @@ def detalle_usuario(dni):
         return redirect(url_for("listar_usuarios"))
 
     return render_template("detalle_usuario.html", usuario=usuario)
+
+
+@app.route("/alumno/editar/<dni>")
+def editar_alumno(dni):
+    # Buscamos al usuario existente
+    usuario = sistema.obtener_usuario(dni)
+    if not usuario:
+        flash("Alumno no encontrado", "danger")
+        return redirect(url_for("listar_usuarios"))
+
+    return render_template("editar_alumno.html", usuario=usuario)
+
+
+@app.route("/alumno/actualizar", methods=["POST"])
+def actualizar_alumno():
+    id = request.form.get("id")
+    dni = request.form.get("dni")
+    nombre = request.form.get("nombre")
+    email = request.form.get("email")
+
+    try:
+        usuario = sistema.obtener_usuario_por_id(id)
+        sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
+        flash("Alumno actualizado con éxito", "success")
+        return redirect(url_for("detalle_usuario", dni=dni))
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+        return render_template("detalle_usuario.html", usuario=usuario)
+
+
+@app.route("/profesor/editar/<dni>")
+def editar_profesor(dni):
+    # Buscamos al usuario existente
+    usuario = sistema.obtener_usuario(dni)
+    if not usuario:
+        flash("Profesor no encontrado", "danger")
+        return redirect(url_for("listar_usuarios"))
+
+    return render_template("editar_profesor.html", usuario=usuario)
+
+
+@app.route("/profesor/actualizar", methods=["POST"])
+def actualizar_profesor():
+    id = request.form.get("id")
+    dni = request.form.get("dni")
+    nombre = request.form.get("nombre")
+    email = request.form.get("email")
+    especialidad = request.form.get("especialidad")
+    salario = request.form.get("salario")
+
+    try:
+        usuario = sistema.obtener_usuario_por_id(id)
+        sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
+        sistema.actualizar_profesor(usuario, especialidad=especialidad, salario=salario)
+        flash("Profesor actualizado con éxito", "success")
+        return redirect(url_for("detalle_usuario", dni=dni))
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+        return render_template("detalle_usuario.html", usuario=usuario)
 
 
 if __name__ == "__main__":

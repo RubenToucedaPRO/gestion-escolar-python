@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Registro de Nuevo Profesor</h2>
     
-    <form action="{{ url_for('guardar_profesor') }}" method="POST" style="max-width: 400px;">
+    <form action="{{ url_for('guardar_nuevo_profesor') }}" method="POST" style="max-width: 400px;">
         <div style="margin-bottom: 10px;">
             <label>DNI:</label><br>
             <input type="text" name="dni" required>
@@ -24,7 +24,7 @@
         </div>
         <div style="margin-bottom: 10px;">
             <label>Salario:</label><br>
-            <input type="number" name="salario" required>
+            <input type="number" name="salario" step="0.01" required>
         </div>
         
         <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
