@@ -27,3 +27,12 @@ def detalle_usuario(dni):
         return redirect(url_for("main.listar_usuarios"))
 
     return render_template("detalle_usuario.html", usuario=usuario)
+
+
+@main_bp.route("/eliminar_usuario/<dni>", methods=["POST"])
+def eliminar_usuario(dni):
+
+    sistema.eliminar_usuario(dni)
+
+    flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
+    return redirect(url_for("main.listar_usuarios"))

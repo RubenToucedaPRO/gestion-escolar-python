@@ -29,6 +29,12 @@
             </td>
             <td>{{ usuario.get_nombre() }}</td>
             <td>{{ usuario.get_email() }}</td>
+            <td>
+                <form action="{{ url_for('main.eliminar_usuario', dni=usuario.get_dni()) }}" method="POST"
+                    onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+                    <button type="submit">🗑️</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>

@@ -48,5 +48,8 @@
     </div>
 
     <br>
-    <a href="{{ url_for('main.listar_usuarios') }}" class="btn">Volver al listado</a>
+    <form action="{{ url_for('main.eliminar_usuario', dni=usuario.get_dni()) }}" method="POST"
+        onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+        <button type="submit">🗑️</button>
+    </form>
 {% endblock %}

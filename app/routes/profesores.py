@@ -21,6 +21,7 @@ def crear():
 
     try:
         sistema.crear_profesor(dni, nombre, email, especialidad, salario)
+        flash(f"Profesor con dni {dni} creado con éxito")
         return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
         return f"Error al guardar: {e}", 400
