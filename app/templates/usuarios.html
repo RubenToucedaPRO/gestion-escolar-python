@@ -6,12 +6,12 @@
     <h2>Listado de usuarios</h2>
     <div>
         <a href="{{ url_for('alumnos.formulario') }}">
-            ➕ Añadir Nuevo Alumno
+            ➕ Alta Alumno
         </a>
     </div>
     <div>
         <a href="{{ url_for('profesores.formulario') }}">
-            ➕ Añadir Nuevo Profesor
+            ➕ Alta Profesor
         </a>
     </div>
     <form action="{{ url_for('main.buscar_usuario') }}" method="POST">

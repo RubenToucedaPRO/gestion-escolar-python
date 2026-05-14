@@ -176,6 +176,12 @@ class DBManager:
         )
         self.con.commit()
 
+    def obtener_todas_las_asignaturas(self):
+        cursor = self.con.cursor()
+        query = "SELECT nombre FROM asignaturas"
+        cursor.execute(query)
+        return cursor.fetchall()
+
     def obtener_profesor_asignatura(self, nombre_asignatura: str) -> dict:
         cursor = self.con.cursor(dictionary=True)
         query = "Select * FROM profesores as pr JOIN personas as p ON  pr.id_persona=p.id_persona where especialidad=%s"

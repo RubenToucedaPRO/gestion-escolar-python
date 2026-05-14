@@ -199,6 +199,10 @@ class CentroEducativo:
     def cerrar_sistema(self):
         self.db.cerrar()
 
+    def obtener_todas_las_asignaturas(self):
+        lista = [dato[0] for dato in self.db.obtener_todas_las_asignaturas()]
+        return lista
+
     def instanciar_datos_db_alumno(self, usuario: Alumno):
         usuario.pop("es_alumno")
         usuario.pop("es_profesor")

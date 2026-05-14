@@ -52,3 +52,24 @@ def actualizar():
     except Exception as e:
         flash(f"Error: {e}", "danger")
         return render_template("detalle_usuario.html", usuario=usuario)
+
+
+@alumnos_bp.route("/matricular", methods=["POST"])
+def matricular():
+    dni = request.form.get("dni")
+    nombre_asig = request.form.get("nombre_asignatura")
+
+    # 1. Recuperamos el objeto alumno completo
+    alumno = sistema.obtener_usuario(dni)
+
+    if not alumno:
+        flash("Error: Alumno no encontrado", "danger")
+        return redirect(url_for("main.listar_usuarios"))
+
+    try:
+        sistema.matricular_alumno(alumno, nombre_asig)
+        flash(f"Matriculado con éxito en {nombre_asig}", "success")
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+
+    return redirect(url_for("main.detalle_usuario", dni=dni))

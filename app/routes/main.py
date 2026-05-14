@@ -26,7 +26,13 @@ def detalle_usuario(dni):
         flash("Usuario no encontrado", "danger")
         return redirect(url_for("main.listar_usuarios"))
 
-    return render_template("detalle_usuario.html", usuario=usuario)
+    todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
+
+    return render_template(
+        "detalle_usuario.html",
+        usuario=usuario,
+        asignaturas_sistema=todas_las_asignaturas,
+    )
 
 
 @main_bp.route("/usuario", methods=["POST"])
