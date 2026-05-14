@@ -1,0 +1,57 @@
+from flask import render_template, request, redirect, url_for, flash, Blueprint
+from app.extensions import sistema
+
+profesores_bp = Blueprint("profesores", __name__)
+
+
+@profesores_bp.route("/crear")
+def formulario():
+    """Muestra el formulario vacío"""
+    return render_template("nuevo_profesor.html")
+
+
+@profesores_bp.route("/crear", methods=["POST"])
+def crear():
+    """Recibe los datos del formulario y los guarda en la BD"""
+    dni = request.form.get("dni")
+    nombre = request.form.get("nombre")
+    email = request.form.get("email")
+    especialidad = request.form.get("especialidad")
+    salario = request.form.get("salario")
+
+    try:
+        sistema.crear_profesor(dni, nombre, email, especialidad, salario)
+        return redirect(url_for("main.listar_usuarios"))
+    except Exception as e:
+        return f"Error al guardar: {e}", 400
+
+
+@profesores_bp.route("/editar/<dni>")
+def editar(dni):
+    # Buscamos al usuario existente
+    usuario = sistema.obtener_usuario(dni)
+    if not usuario:
+        flash("Profesor no encontrado", "danger")
+        return redirect(url_for("listar_usuarios"))
+
+    return render_template("editar_profesor.html", usuario=usuario)
+
+
+@profesores_bp.route("/actualizar", methods=["POST"])
+def actualizar():
+    id = request.form.get("id")
+    dni = request.form.get("dni")
+    nombre = request.form.get("nombre")
+    email = request.form.get("email")
+    especialidad = request.form.get("especialidad")
+    salario = request.form.get("salario")
+
+    try:
+        usuario = sistema.obtener_usuario_por_id(id)
+        sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
+        sistema.actualizar_profesor(usuario, especialidad=especialidad, salario=salario)
+        flash("Profesor actualizado con éxito", "success")
+        return redirect(url_for("main.detalle_usuario", dni=dni))
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+        return render_template("detalle_usuario.html", usuario=usuario)

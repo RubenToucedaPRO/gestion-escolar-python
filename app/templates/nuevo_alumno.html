@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Registro de Nuevo Alumno</h2>
     
-    <form action="{{ url_for('guardar_nuevo_alumno') }}" method="POST" style="max-width: 400px;">
+    <form action="{{ url_for('alumnos.crear') }}" method="POST" style="max-width: 400px;">
         <div style="margin-bottom: 10px;">
             <label>DNI:</label><br>
             <input type="text" name="dni" required>
@@ -22,6 +22,6 @@
         <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
             Guardar Alumno
         </button>
-        <a href="{{ url_for('listar_usuarios') }}">Cancelar</a>
+        <a href="{{ url_for('main.listar_usuarios') }}">Cancelar</a>
     </form>
 {% endblock %}

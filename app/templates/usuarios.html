@@ -5,12 +5,12 @@
 {% block content %}
     <h2>Listado de usuarios</h2>
     <div>
-        <a href="{{ url_for('formulario_alumno') }}">
+        <a href="{{ url_for('alumnos.formulario') }}">
             ➕ Añadir Nuevo Alumno
         </a>
     </div>
     <div>
-        <a href="{{ url_for('formulario_profesor') }}">
+        <a href="{{ url_for('profesores.formulario') }}">
             ➕ Añadir Nuevo Profesor
         </a>
     </div>
@@ -23,7 +23,7 @@
         {% for usuario in lista %}
         <tr>
             <td>
-                <a href="{{ url_for('detalle_usuario', dni=usuario.get_dni()) }}">
+                <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni()) }}">
                 {{ usuario.get_dni() }}
                 </a>
             </td>
@@ -32,5 +32,4 @@
         </tr>
         {% endfor %}
     </table>
-    <a href="{{ url_for('home') }}">Volver al inicio</a>
 {% endblock %}

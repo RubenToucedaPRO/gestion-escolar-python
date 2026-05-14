@@ -9,14 +9,14 @@
         {% if usuario.__class__.__name__ == 'Alumno' %}
             <p><strong>Alumno:</strong></p>
             <div>
-                <a href="{{ url_for('editar_alumno', dni=usuario.get_dni()) }}">
+                <a href="{{ url_for('alumnos.editar', dni=usuario.get_dni()) }}">
                     &#9999; Modificar
                 </a>
             </div>
         {% elif usuario.__class__.__name__ == 'Profesor' %}
             <p><strong>Profesor:</strong></p>
             <div>
-                <a href="{{ url_for('editar_profesor', dni=usuario.get_dni()) }}">
+                <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}">
                     &#9999; Modificar
                 </a>
             </div>
@@ -48,5 +48,5 @@
     </div>
 
     <br>
-    <a href="{{ url_for('listar_usuarios') }}" class="btn">Volver al listado</a>
+    <a href="{{ url_for('main.listar_usuarios') }}" class="btn">Volver al listado</a>
 {% endblock %}

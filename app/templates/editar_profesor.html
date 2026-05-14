@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Editar Alumno</h2>
     
-    <form action="{{ url_for('actualizar_profesor') }}" method="POST">
+    <form action="{{ url_for('profesores.actualizar') }}" method="POST">
         <input type="number" name="id" value="{{usuario.get_id()}}" hidden>
         <div style="margin-bottom: 10px;">
             <label>DNI:</label><br>
@@ -30,6 +30,6 @@
         <button type="submit">
             Guardar
         </button>
-        <a href="{{ url_for('detalle_usuario', dni=usuario.get_dni()) }}">Cancelar</a>
+        <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni()) }}">Cancelar</a>
     </form>
 {% endblock %}
