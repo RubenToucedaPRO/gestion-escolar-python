@@ -52,7 +52,9 @@ class DBManager:
         where p.dni=%s
         """
         cursor.execute(query, (dni,))
-        return cursor.fetchone()
+        resultado = cursor.fetchone()
+        cursor.fetchall()
+        return resultado
 
     def obtener_usuario_id(self, id: int) -> dict:
         cursor = self.con.cursor(dictionary=True)
@@ -64,7 +66,9 @@ class DBManager:
         where p.id_persona=%s
         """
         cursor.execute(query, (id,))
-        return cursor.fetchone()
+        resultado = cursor.fetchone()
+        cursor.fetchall()
+        return resultado
 
     def obtener_asignaturas_alumno(self, id: int) -> list:
         cursor = self.con.cursor(dictionary=True)
@@ -112,6 +116,7 @@ class DBManager:
         query = "SELECT COUNT(*) FROM personas as p where p.dni=%s"
         cursor.execute(query, (dni,))
         resultado = cursor.fetchone()
+        cursor.fetchall()
         return resultado[0] > 0
 
     def existe_email_usuario(self, email: str) -> bool:
@@ -119,6 +124,7 @@ class DBManager:
         query = "SELECT COUNT(*) FROM personas as p where p.email=%s"
         cursor.execute(query, (email,))
         resultado = cursor.fetchone()
+        cursor.fetchall()
         return resultado[0] > 0
 
     def actualizar_persona(self, id: int, dni: str, nombre: str, email: str):
@@ -155,7 +161,9 @@ class DBManager:
             query,
             (nombre,),
         )
-        return cursor.fetchone()
+        resultado = cursor.fetchone()
+        cursor.fetchall()
+        return resultado
 
     def crear_asignatura(self, nombre: str) -> int:
         cursor = self.con.cursor()
@@ -189,7 +197,9 @@ class DBManager:
             query,
             (nombre_asignatura,),
         )
-        return cursor.fetchone()
+        resultado = cursor.fetchone()
+        cursor.fetchall()
+        return resultado
 
     def asignar_nota_asignatura_alumno(
         self, nota: float, id_alumno: int, id_asignatura: int
