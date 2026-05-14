@@ -231,7 +231,7 @@ class DBManager:
             return columnas, cursor.fetchall()
         else:
             self.con.commit()
-            return None, cursor.rowcount
+            return [("Nº operaciones",), ((cursor.rowcount,),)]
 
     def cerrar(self):
         if self.con:

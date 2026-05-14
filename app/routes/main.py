@@ -44,7 +44,7 @@ def buscar_usuario():
             flash("Usuario no encontrado", "danger")
             return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
-        flash(f"Error: {e}", "danger")
+        flash(f"{e}", "danger")
         return redirect(url_for("main.listar_usuarios"))
 
     return render_template("detalle_usuario.html", usuario=usuario)
@@ -65,3 +65,23 @@ def listar_estadisticas():
     estadisticas = sistema.obtener_estadisticas()
 
     return render_template("estadisticas.html", lista=estadisticas)
+
+
+@main_bp.route("/sql")
+def sql_libre():
+    lista = []
+    return render_template("sql_libre.html", lista=lista)
+
+
+@main_bp.route("/sql", methods=["POST"])
+def ejecutar_sql_libre():
+    query = request.form.get("query")
+
+    try:
+        resultado = sistema.ejecutar_sql_libre(query)
+
+    except Exception as e:
+        flash(f"{e}", "danger")
+        return redirect(url_for("main.sql_libre"))
+
+    return render_template("sql_libre.html", lista=resultado)

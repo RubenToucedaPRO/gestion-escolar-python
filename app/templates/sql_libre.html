@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}SQL Libre{% endblock %}
+
+{% block content %}
+    <h2>Consultas SQL libre a la base de datos</h2>
+    
+    <form action="{{ url_for('main.ejecutar_sql_libre') }}" method="POST" style="max-width: 400px;">
+        <div style="margin-bottom: 10px;">
+            <label>Consulta:</label><br>
+            <input type="text" name="query" required>
+        </div>        
+        <button type="submit">
+            Ejecutar consulta
+        </button>
+    </form>
+
+    <table>
+        <tr>
+            {% for dato in lista[0] %}
+                <td>{{ dato }}</td>
+            {% endfor %}
+        </tr>
+        {% for dato in lista[1] %}
+            <tr>
+                {% for celda in dato %}
+                    <td>{{ celda }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

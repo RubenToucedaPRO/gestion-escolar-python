@@ -25,7 +25,7 @@ def crear():
         flash(f"Profesor con dni {dni} creado con éxito")
         return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
-        flash(f"Error al guardar: {e}", "danger")
+        flash(f"Error al guardar - {e}", "danger")
         return redirect(url_for("main.listar_usuarios"))
 
 
@@ -59,5 +59,5 @@ def actualizar():
         flash("Profesor actualizado con éxito", "success")
         return redirect(url_for("main.detalle_usuario", dni=dni))
     except Exception as e:
-        flash(f"Error: {e}", "danger")
+        flash(f"{e}", "danger")
         return render_template("detalle_usuario.html", usuario=usuario)

@@ -22,7 +22,7 @@ def crear():
         flash(f"Alumno con dni {dni} creado con éxito")
         return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
-        flash(f"Error al guardar: {e}", "danger")
+        flash(f"Error al guardar - {e}", "danger")
         return redirect(url_for("main.listar_usuarios"))
 
 
@@ -50,7 +50,7 @@ def actualizar():
         flash("Alumno actualizado con éxito", "success")
         return redirect(url_for("main.detalle_usuario", dni=dni))
     except Exception as e:
-        flash(f"Error: {e}", "danger")
+        flash(f"{e}", "danger")
         return render_template("detalle_usuario.html", usuario=usuario)
 
 
@@ -70,7 +70,7 @@ def matricular():
         sistema.matricular_alumno(alumno, nombre_asig)
         flash(f"Matriculado con éxito en {nombre_asig}", "success")
     except Exception as e:
-        flash(f"Error: {e}", "danger")
+        flash(f"{e}", "danger")
 
     return redirect(url_for("main.detalle_usuario", dni=dni))
 
@@ -92,6 +92,6 @@ def calificar():
         sistema.calificar_alumno(alumno, nombre_asig, nota)
         flash(f"Matriculado con éxito en {nombre_asig}", "success")
     except Exception as e:
-        flash(f"Error: {e}", "danger")
+        flash(f"{e}", "danger")
 
     return redirect(url_for("main.detalle_usuario", dni=dni))

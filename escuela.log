@@ -19,3 +19,5 @@
 [2026-05-13 17:06:33] TAREA: Admin: SQL Libre | ESTADO: Ocurrió un error inesperado (ProgrammingError): 1146 (42S02): Table 'db_escuela.persona' doesn't exist
 [2026-05-13 17:07:10] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
 [2026-05-13 17:07:19] TAREA: Salir de la aplicacion | ESTADO: Salir de la aplicacion exitosa
+[2026-05-14 17:36:58] TAREA: Salir de la aplicacion | ESTADO: Salir de la aplicacion exitosa
+[2026-05-14 17:41:58] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
