@@ -14,6 +14,10 @@
             ➕ Añadir Nuevo Profesor
         </a>
     </div>
+    <form action="{{ url_for('main.buscar_usuario') }}" method="POST">
+        <input type="text" name="dni">
+        <button type="submit">🔍</button>
+    </form>
     <table>
         <tr>
             <th>DNI</th>

@@ -24,7 +24,8 @@ def crear():
         flash(f"Profesor con dni {dni} creado con éxito")
         return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
-        return f"Error al guardar: {e}", 400
+        flash(f"Error al guardar: {e}", "danger")
+        return redirect(url_for("main.listar_usuarios"))
 
 
 @profesores_bp.route("/editar/<dni>")

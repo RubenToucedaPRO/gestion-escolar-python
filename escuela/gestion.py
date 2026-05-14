@@ -74,6 +74,7 @@ class CentroEducativo:
             )
 
     def obtener_usuario(self, dni_usuario: str) -> Persona:
+        Validator.validar_dni(dni_usuario)
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
         if usuario and usuario["es_alumno"]:
@@ -120,6 +121,7 @@ class CentroEducativo:
             )
 
     def obtener_alumno(self, dni_alumno: str) -> Alumno:
+        Validator.validar_dni(dni_alumno)
         usuario = self.obtener_usuario(dni_alumno)
         if not usuario or not isinstance(usuario, Alumno):
             raise DatoInvalido(
@@ -137,6 +139,7 @@ class CentroEducativo:
         return Profesor(**dato)
 
     def eliminar_usuario(self, dni_usuario: str):
+        Validator.validar_dni(dni_usuario)
         self.db.eliminar_usuario(dni_usuario)
 
     def media_global_centro(self, numero_alumnos) -> float:

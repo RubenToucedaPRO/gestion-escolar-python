@@ -29,6 +29,22 @@ def detalle_usuario(dni):
     return render_template("detalle_usuario.html", usuario=usuario)
 
 
+@main_bp.route("/usuario", methods=["POST"])
+def buscar_usuario():
+    dni = request.form.get("dni")
+    # Usamos el método de tu clase CentroEducativo para buscar por DNI
+    try:
+        usuario = sistema.obtener_usuario(dni)
+        if not usuario:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("main.listar_usuarios"))
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+        return redirect(url_for("main.listar_usuarios"))
+
+    return render_template("detalle_usuario.html", usuario=usuario)
+
+
 @main_bp.route("/eliminar_usuario/<dni>", methods=["POST"])
 def eliminar_usuario(dni):
 
