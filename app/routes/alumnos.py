@@ -73,3 +73,25 @@ def matricular():
         flash(f"Error: {e}", "danger")
 
     return redirect(url_for("main.detalle_usuario", dni=dni))
+
+
+@alumnos_bp.route("/calificar", methods=["POST"])
+def calificar():
+    dni = request.form.get("dni")
+    nota = float(request.form.get("nota"))
+    nombre_asig = request.form.get("nombre_asignatura")
+
+    # 1. Recuperamos el objeto alumno completo
+    alumno = sistema.obtener_usuario(dni)
+
+    if not alumno:
+        flash("Error: Alumno no encontrado", "danger")
+        return redirect(url_for("main.listar_usuarios"))
+
+    try:
+        sistema.calificar_alumno(alumno, nombre_asig, nota)
+        flash(f"Matriculado con éxito en {nombre_asig}", "success")
+    except Exception as e:
+        flash(f"Error: {e}", "danger")
+
+    return redirect(url_for("main.detalle_usuario", dni=dni))

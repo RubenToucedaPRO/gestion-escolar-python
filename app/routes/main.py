@@ -11,7 +11,7 @@ def home():
 
 @main_bp.route("/usuarios")
 def listar_usuarios():
-    # Usas tus métodos de siempre
+
     usuarios = sistema.get_usuarios()
 
     return render_template("usuarios.html", lista=usuarios)
@@ -19,13 +19,12 @@ def listar_usuarios():
 
 @main_bp.route("/usuario/<dni>")
 def detalle_usuario(dni):
-    # Usamos el método de tu clase CentroEducativo para buscar por DNI
+
     usuario = sistema.obtener_usuario(dni)
 
     if not usuario:
         flash("Usuario no encontrado", "danger")
         return redirect(url_for("main.listar_usuarios"))
-
     todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
 
     return render_template(
@@ -38,7 +37,7 @@ def detalle_usuario(dni):
 @main_bp.route("/usuario", methods=["POST"])
 def buscar_usuario():
     dni = request.form.get("dni")
-    # Usamos el método de tu clase CentroEducativo para buscar por DNI
+
     try:
         usuario = sistema.obtener_usuario(dni)
         if not usuario:
