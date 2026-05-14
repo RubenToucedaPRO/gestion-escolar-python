@@ -20,7 +20,14 @@
         </div>
         <div style="margin-bottom: 10px;">
             <label>Especialidad:</label><br>
-            <input type="text" name="especialidad" required>
+            <input type="text" name="especialidad" list="lista-asignaturas" value="{{ usuario.get_especialidad() if usuario else '' }}" required
+                   placeholder="Escribe o selecciona..." required style="flex-grow: 1; padding: 5px;">
+            
+            <datalist id="lista-asignaturas">
+                {% for asignatura in asignaturas_sistema %}
+                    <option value="{{ asignatura }}">
+                {% endfor %}
+            </datalist>
         </div>
         <div style="margin-bottom: 10px;">
             <label>Salario:</label><br>

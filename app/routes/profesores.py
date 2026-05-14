@@ -7,7 +7,8 @@ profesores_bp = Blueprint("profesores", __name__)
 @profesores_bp.route("/crear")
 def formulario():
     """Muestra el formulario vacío"""
-    return render_template("nuevo_profesor.html")
+    asignaturas = sistema.obtener_todas_las_asignaturas()
+    return render_template("nuevo_profesor.html", asignaturas_sistema=asignaturas)
 
 
 @profesores_bp.route("/crear", methods=["POST"])
@@ -32,11 +33,14 @@ def crear():
 def editar(dni):
     # Buscamos al usuario existente
     usuario = sistema.obtener_usuario(dni)
+    asignaturas = sistema.obtener_todas_las_asignaturas()
     if not usuario:
         flash("Profesor no encontrado", "danger")
         return redirect(url_for("listar_usuarios"))
 
-    return render_template("editar_profesor.html", usuario=usuario)
+    return render_template(
+        "editar_profesor.html", usuario=usuario, asignaturas_sistema=asignaturas
+    )
 
 
 @profesores_bp.route("/actualizar", methods=["POST"])
