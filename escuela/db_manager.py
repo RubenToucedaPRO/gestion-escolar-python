@@ -45,7 +45,7 @@ class DBManager:
     def obtener_usuario_dni(self, dni: str) -> dict:
         cursor = self.con.cursor(dictionary=True)
         query = """
-        SELECT a.id_persona AS es_alumno, pr.id_persona AS es_profesor, p.*, pr.especialidad, pr.salario
+        SELECT p.*, pr.especialidad, pr.salario
         FROM personas as p 
         LEFT JOIN alumnos as a ON  p.id_persona=a.id_persona 
         LEFT JOIN profesores as pr ON p.id_persona=pr.id_persona 
@@ -59,7 +59,7 @@ class DBManager:
     def obtener_usuario_id(self, id: int) -> dict:
         cursor = self.con.cursor(dictionary=True)
         query = """
-        SELECT a.id_persona AS es_alumno, pr.id_persona AS es_profesor, p.*, pr.especialidad, pr.salario
+        SELECT p.*, pr.especialidad, pr.salario
         FROM personas as p 
         LEFT JOIN alumnos as a ON  p.id_persona=a.id_persona 
         LEFT JOIN profesores as pr ON p.id_persona=pr.id_persona 
@@ -81,18 +81,27 @@ class DBManager:
         cursor.execute(query, (id,))
         return cursor.fetchall()
 
-    def crear_alumno(self, dni: str, nombre: str, email: str):
+    def crear_alumno(
+        self, dni: str, nombre: str, email: str, rol: str, contrasena: str
+    ):
         cursor = self.con.cursor()
-        nuevo_id = self.__crear_persona(cursor, dni, nombre, email)
+        nuevo_id = self.__crear_persona(cursor, dni, nombre, email, rol, contrasena)
         query = "INSERT INTO alumnos (id_persona) VALUES (%s)"
         cursor.execute(query, (nuevo_id,))
         self.con.commit()
 
     def crear_profesor(
-        self, dni: str, nombre: str, email: str, especialidad: str, salario: float
+        self,
+        dni: str,
+        nombre: str,
+        email: str,
+        especialidad: str,
+        salario: float,
+        rol: str,
+        contrasena: str,
     ):
         cursor = self.con.cursor()
-        nuevo_id = self.__crear_persona(cursor, dni, nombre, email)
+        nuevo_id = self.__crear_persona(cursor, dni, nombre, email, rol, contrasena)
         query = (
             "INSERT INTO profesores (id_persona,especialidad,salario) VALUES (%s,%s,%s)"
         )
@@ -100,14 +109,20 @@ class DBManager:
         self.con.commit()
 
     def __crear_persona(
-        self, cursor: MySQLCursor, dni: str, nombre: str, email: str
+        self,
+        cursor: MySQLCursor,
+        dni: str,
+        nombre: str,
+        email: str,
+        rol: str,
+        contrasena: str,
     ) -> int:
         """Submetodo de crear alumno/profesor para dar de alta el mismo en la entidad
         personas"""
-        query = "INSERT INTO personas (dni,nombre,email) VALUES (%s,%s,%s)"
+        query = "INSERT INTO personas (dni,nombre,email,rol,contrasena) VALUES (%s,%s,%s,%s,%s)"
         cursor.execute(
             query,
-            (dni, nombre, email),
+            (dni, nombre, email, rol, contrasena),
         )
         return cursor.lastrowid
 
@@ -232,6 +247,15 @@ class DBManager:
         else:
             self.con.commit()
             return [("Nº operaciones",), ((cursor.rowcount,),)]
+
+    def validar_credenciales(self, dni, contrasena):
+        cursor = self.con.cursor(dictionary=True, buffered=True)
+        # Buscamos en la tabla personas
+        query = (
+            "SELECT dni, nombre, rol FROM personas WHERE dni = %s AND contrasena = %s"
+        )
+        cursor.execute(query, (dni, contrasena))
+        return cursor.fetchone()
 
     def cerrar(self):
         if self.con:

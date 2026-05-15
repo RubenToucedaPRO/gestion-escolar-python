@@ -11,9 +11,17 @@
 <h1>🌐 Mi Centro Escolar</h1>
 <nav>
 <a href="{{ url_for('main.home') }}">Inicio</a> |
+{% if session.get('role') == 'admin' %}
 <a href="{{ url_for('main.listar_usuarios') }}">Usuarios</a>
-<a href="{{ url_for('main.listar_estadisticas') }}">Estadísticas</a>
 <a href="{{ url_for('main.sql_libre') }}">SQL Libre</a>
+{% endif %}
+{% if session.get('dni') %}
+    <a href="{{ url_for('main.listar_estadisticas') }}">Estadísticas</a>
+    <span>Hola, {{ session['nombre'] }} ({{ session['role'] }})</span>
+    <a href="{{ url_for('auth.logout') }}">Cerrar Sesión</a>
+{% else %}
+        <a href="{{ url_for('auth.login') }}">Login</a>
+{% endif %}
 </nav>
 </header>
 <main>

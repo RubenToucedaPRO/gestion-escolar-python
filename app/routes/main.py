@@ -1,4 +1,5 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
+from app.routes.auth import login_required
 from app.extensions import sistema
 
 main_bp = Blueprint("main", __name__)
@@ -10,6 +11,7 @@ def home():
 
 
 @main_bp.route("/usuarios")
+@login_required(role="admin")
 def listar_usuarios():
 
     usuarios = sistema.get_usuarios()
@@ -18,6 +20,7 @@ def listar_usuarios():
 
 
 @main_bp.route("/usuario/<dni>")
+@login_required(role="admin")
 def detalle_usuario(dni):
 
     usuario = sistema.obtener_usuario(dni)
@@ -35,6 +38,7 @@ def detalle_usuario(dni):
 
 
 @main_bp.route("/usuario", methods=["POST"])
+@login_required(role="admin")
 def buscar_usuario():
     dni = request.form.get("dni")
 
@@ -51,6 +55,7 @@ def buscar_usuario():
 
 
 @main_bp.route("/eliminar_usuario/<dni>", methods=["POST"])
+@login_required(role="admin")
 def eliminar_usuario(dni):
 
     sistema.eliminar_usuario(dni)
@@ -60,6 +65,7 @@ def eliminar_usuario(dni):
 
 
 @main_bp.route("/estadisticas")
+@login_required(role=["admin", "profesor", "alumno"])
 def listar_estadisticas():
 
     estadisticas = sistema.obtener_estadisticas()
@@ -68,12 +74,14 @@ def listar_estadisticas():
 
 
 @main_bp.route("/sql")
+@login_required(role="admin")
 def sql_libre():
     lista = []
     return render_template("sql_libre.html", lista=lista)
 
 
 @main_bp.route("/sql", methods=["POST"])
+@login_required(role="admin")
 def ejecutar_sql_libre():
     query = request.form.get("query")
 

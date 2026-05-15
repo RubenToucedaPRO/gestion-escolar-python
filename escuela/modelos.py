@@ -3,11 +3,21 @@ from .common import DatoInvalido, Duplicado, Validator
 
 
 class Persona(ABC):
-    def __init__(self, id_persona: int, dni: str, nombre: str, email: str):
+    def __init__(
+        self,
+        id_persona: int,
+        dni: str,
+        nombre: str,
+        email: str,
+        rol: str,
+        contrasena: str,
+    ):
         self.set_id(id_persona)
         self.set_dni(dni)
         self.set_nombre(nombre)
         self.set_email(email)
+        self.set_rol(rol)
+        self.set_contrasena(contrasena)
 
     @abstractmethod
     def __str__(self):
@@ -42,6 +52,20 @@ class Persona(ABC):
 
     def set_email(self, email: str):
         self.email = email.lower()
+
+    def set_rol(self, rol: str):
+        self._rol = rol
+
+    def get_rol(self):
+        return self._rol
+
+    def set_contrasena(self, contrasena: str):
+        if contrasena.find(" ") > 0:
+            raise DatoInvalido("La contraseña no puede tener espacios.")
+        self._contrasena = contrasena
+
+    def get_contrasena(self):
+        return self._contrasena
 
     def to_dict(self):
         return {"dni": self._dni, "nombre": self.nombre, "email": self.email}
@@ -92,8 +116,16 @@ class Asignatura:
 
 
 class Alumno(Persona):
-    def __init__(self, id_persona: int, dni: str, nombre: str, email: str):
-        super().__init__(id_persona, dni, nombre, email)
+    def __init__(
+        self,
+        id_persona: int,
+        dni: str,
+        nombre: str,
+        email: str,
+        rol: str,
+        contrasena: str,
+    ):
+        super().__init__(id_persona, dni, nombre, email, rol, contrasena)
         self._asignaturas = []
 
     def __str__(self):
@@ -130,14 +162,24 @@ class Alumno(Persona):
             "dni": self._dni,
             "nombre": self.nombre,
             "email": self.email,
+            "rol": self._rol,
+            "contrasena": self._contrasena,
         }
 
 
 class Profesor(Persona):
     def __init__(
-        self, id_persona: int, dni, nombre, email, especialidad: str, salario: float = 0
+        self,
+        id_persona: int,
+        dni,
+        nombre,
+        email,
+        especialidad: str,
+        salario: float,
+        rol: str,
+        contrasena: str,
     ):
-        super().__init__(id_persona, dni, nombre, email)
+        super().__init__(id_persona, dni, nombre, email, rol, contrasena)
         self.set_especialidad(especialidad)
         self.set_salario(salario)
 
@@ -193,4 +235,29 @@ class Profesor(Persona):
             "email": self.email,
             "especialidad": self.especialidad,
             "salario": self.salario,
+            "rol": self._rol,
+            "contrasena": self._contrasena,
+        }
+
+
+class Administrador(Persona):
+    def __init__(
+        self,
+        id_persona: int,
+        dni: str,
+        nombre: str,
+        email: str,
+        rol: str,
+        contrasena: str,
+    ):
+        super().__init__(id_persona, dni, nombre, email, rol, contrasena)
+
+    def __str__(self):
+        return f"[ADMIN] {super().__str__()}"
+
+    def to_dict(self):
+        return {
+            "dni": self._dni,
+            "nombre": self.nombre,
+            "email": self.email,
         }

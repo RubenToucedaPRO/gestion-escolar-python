@@ -1,5 +1,5 @@
 from .common import Duplicado, DatoInvalido, Validator
-from .modelos import Alumno, Profesor, Persona
+from .modelos import Alumno, Profesor, Persona, Administrador
 from .registrar import Registrar
 from .db_manager import DBManager
 
@@ -12,6 +12,13 @@ class CentroEducativo:
         self.nombre_bd = "db_escuela"
         self.db = DBManager(self.host, self.user, self.password, self.nombre_bd)
 
+    def validar_login(self, dni, contrasena):
+        datos_usuario = self.db.validar_credenciales(dni, contrasena)
+
+        if datos_usuario:
+            return self.obtener_usuario(dni)
+        return None
+
     def get_usuarios(self):
         lista_usuarios = []
         datos_bd = self.db.leer_alumnos()
@@ -22,15 +29,21 @@ class CentroEducativo:
         return lista_usuarios
 
     def crear_alumno(self, dni: str, nombre: str, email: str):
+        contrasena = dni
+        rol = "alumno"
         # instanciamos objeto para verificar y estandarizar datos
-        alumno = Alumno(None, dni, nombre, email)
+        alumno = Alumno(None, dni, nombre, email, rol, contrasena)
         self.db.crear_alumno(**alumno.to_dict())
 
     def crear_profesor(
         self, dni: str, nombre: str, email: str, especialidad: str, salario: float
     ):
+        contrasena = dni
+        rol = "profesor"
         # instanciamos objeto para verificar y estandarizar datos
-        profesor = Profesor(None, dni, nombre, email, especialidad, salario)
+        profesor = Profesor(
+            None, dni, nombre, email, especialidad, salario, rol, contrasena
+        )
         self.db.crear_profesor(**profesor.to_dict())
 
     def actualizar_persona(self, usuario: Persona, **datos):
@@ -77,10 +90,12 @@ class CentroEducativo:
         Validator.validar_dni(dni_usuario)
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
-        if usuario and usuario["es_alumno"]:
+        if usuario and usuario["rol"] == "alumno":
             return self.instanciar_datos_db_alumno(usuario)
-        if usuario and usuario["es_profesor"]:
+        elif usuario and usuario["rol"] == "profesor":
             return self.instanciar_datos_db_profesor(usuario)
+        elif usuario and usuario["rol"] == "admin":
+            return self.instanciar_datos_db_admin(usuario)
 
         if not encontrado:
             raise DatoInvalido(
@@ -90,10 +105,12 @@ class CentroEducativo:
     def obtener_usuario_por_id(self, id: int) -> Persona:
         encontrado = False
         usuario = self.db.obtener_usuario_id(id)
-        if usuario and usuario["es_alumno"]:
+        if usuario and usuario["rol"] == "alumno":
             return self.instanciar_datos_db_alumno(usuario)
-        if usuario and usuario["es_profesor"]:
+        if usuario and usuario["rol"] == "profesor":
             return self.instanciar_datos_db_profesor(usuario)
+        if usuario and usuario["rol"] == "admin":
+            return self.instanciar_datos_db_admin(usuario)
 
         if not encontrado:
             raise DatoInvalido(
@@ -204,8 +221,6 @@ class CentroEducativo:
         return lista
 
     def instanciar_datos_db_alumno(self, usuario: Alumno):
-        usuario.pop("es_alumno")
-        usuario.pop("es_profesor")
         usuario.pop("especialidad")
         usuario.pop("salario")
         alumno = Alumno(**usuario)
@@ -213,9 +228,13 @@ class CentroEducativo:
         return alumno
 
     def instanciar_datos_db_profesor(self, usuario: Profesor):
-        usuario.pop("es_alumno")
-        usuario.pop("es_profesor")
         return Profesor(**usuario)
+
+    def instanciar_datos_db_admin(self, usuario: Alumno):
+        usuario.pop("especialidad")
+        usuario.pop("salario")
+        administrador = Administrador(**usuario)
+        return administrador
 
     def obtener_asignaturas_alumno(self, alumno: Alumno):
         asignaturas = self.db.obtener_asignaturas_alumno(alumno.get_id())

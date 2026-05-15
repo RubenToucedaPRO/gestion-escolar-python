@@ -1,16 +1,19 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
+from app.routes.auth import login_required
 from app.extensions import sistema
 
 alumnos_bp = Blueprint("alumnos", __name__)
 
 
 @alumnos_bp.route("/crear")
+@login_required(role="admin")
 def formulario():
     """Muestra el formulario vacío"""
     return render_template("nuevo_alumno.html")
 
 
 @alumnos_bp.route("/crear", methods=["POST"])
+@login_required(role="admin")
 def crear():
     """Recibe los datos del formulario y los guarda en la BD"""
     dni = request.form.get("dni")
@@ -27,6 +30,7 @@ def crear():
 
 
 @alumnos_bp.route("/editar/<dni>")
+@login_required(role="admin")
 def editar(dni):
     # Buscamos al usuario existente
     usuario = sistema.obtener_usuario(dni)
@@ -38,6 +42,7 @@ def editar(dni):
 
 
 @alumnos_bp.route("/actualizar", methods=["POST"])
+@login_required(role="admin")
 def actualizar():
     id = request.form.get("id")
     dni = request.form.get("dni")
@@ -55,6 +60,7 @@ def actualizar():
 
 
 @alumnos_bp.route("/matricular", methods=["POST"])
+@login_required(role=["admin", "alumno"])
 def matricular():
     dni = request.form.get("dni")
     nombre_asig = request.form.get("nombre_asignatura")
@@ -76,6 +82,7 @@ def matricular():
 
 
 @alumnos_bp.route("/calificar", methods=["POST"])
+@login_required(role=["admin", "profesor"])
 def calificar():
     dni = request.form.get("dni")
     nota = float(request.form.get("nota"))
