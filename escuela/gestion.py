@@ -1,21 +1,22 @@
 from .common import Duplicado, DatoInvalido, Validator
 from .modelos import Alumno, Profesor, Persona, Administrador, Asignatura
+from .config import (
+    CONTRASENA_POR_DEFECTO,
+    ROL_ALUMNO,
+    ROL_PROFESOR,
+    ROL_ADMIN,
+    DB_HOST,
+    DB_USER,
+    DB_PASSWORD,
+    DB_NAME,
+)
 from .registrar import Registrar
 from .db_manager import DBManager
 
 
 class CentroEducativo:
-    CONTRASENA_POR_DEFECTO = "1234"
-    ROL_ALUMNO = "alumno"
-    ROL_PROFESOR = "profesor"
-    ROL_ADMIN = "admin"
-
     def __init__(self):
-        self.host = "127.0.0.1"
-        self.user = "root"
-        self.password = "admin"
-        self.nombre_bd = "db_escuela"
-        self.db = DBManager(self.host, self.user, self.password, self.nombre_bd)
+        self.db = DBManager(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
 
     def validar_login(self, dni, contrasena):
         datos_usuario = self.db.validar_credenciales(dni, contrasena)
@@ -37,8 +38,8 @@ class CentroEducativo:
         return lista_usuarios
 
     def crear_alumno(self, dni: str, nombre: str, email: str):
-        contrasena = self.CONTRASENA_POR_DEFECTO
-        rol = self.ROL_ALUMNO
+        contrasena = CONTRASENA_POR_DEFECTO
+        rol = ROL_ALUMNO
         # instanciamos objeto para verificar y estandarizar datos
         alumno = Alumno(None, dni, nombre, email, rol, contrasena)
         self.verificar_dni_no_registrado(alumno.get_dni())
@@ -49,8 +50,8 @@ class CentroEducativo:
     def crear_profesor(
         self, dni: str, nombre: str, email: str, especialidad: str, salario: float
     ):
-        contrasena = self.CONTRASENA_POR_DEFECTO
-        rol = self.ROL_PROFESOR
+        contrasena = CONTRASENA_POR_DEFECTO
+        rol = ROL_PROFESOR
         # instanciamos objeto para verificar y estandarizar datos
         profesor = Profesor(
             None, dni, nombre, email, especialidad, salario, rol, contrasena
@@ -105,13 +106,13 @@ class CentroEducativo:
         Validator.validar_dni(dni_usuario)
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
-        if usuario and usuario["rol"] == self.ROL_ALUMNO:
+        if usuario and usuario["rol"] == ROL_ALUMNO:
             encontrado = True
             usuario = self.instanciar_datos_db_alumno(usuario)
-        elif usuario and usuario["rol"] == self.ROL_PROFESOR:
+        elif usuario and usuario["rol"] == ROL_PROFESOR:
             encontrado = True
             usuario = self.instanciar_datos_db_profesor(usuario)
-        elif usuario and usuario["rol"] == self.ROL_ADMIN:
+        elif usuario and usuario["rol"] == ROL_ADMIN:
             encontrado = True
             usuario = self.instanciar_datos_db_admin(usuario)
 
@@ -121,20 +122,21 @@ class CentroEducativo:
             )
         return usuario
 
-    def obtener_usuario_por_id(self, id: int) -> Persona:
+    def obtener_usuario_por_id(self, id: int, rol: str) -> Persona:
         encontrado = False
         usuario = self.db.obtener_usuario_id(id)
-        if usuario and usuario["rol"] == self.ROL_ALUMNO:
-            return self.instanciar_datos_db_alumno(usuario)
-        if usuario and usuario["rol"] == self.ROL_PROFESOR:
-            return self.instanciar_datos_db_profesor(usuario)
-        if usuario and usuario["rol"] == self.ROL_ADMIN:
-            return self.instanciar_datos_db_admin(usuario)
+        if usuario and usuario["rol"] == ROL_ALUMNO:
+            usuario = self.instanciar_datos_db_alumno(usuario)
+        if usuario and usuario["rol"] == ROL_PROFESOR:
+            usuario = self.instanciar_datos_db_profesor(usuario)
+        if usuario and usuario["rol"] == ROL_ADMIN:
+            usuario = self.instanciar_datos_db_admin(usuario)
 
-        if not encontrado:
+        if not encontrado or usuario.get_rol() != rol:
             raise DatoInvalido(
-                f"Usuario con id: {id!r}-> No existe el usuario en el centro"
+                f"Usuario con id: {id!r}-> No existe el {rol} en el centro"
             )
+        return usuario
 
     def verificar_dni_no_registrado(self, dni_usuario: str):
         # Formateamos el dni

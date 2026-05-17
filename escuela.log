@@ -21,3 +21,8 @@
 [2026-05-13 17:07:19] TAREA: Salir de la aplicacion | ESTADO: Salir de la aplicacion exitosa
 [2026-05-14 17:36:58] TAREA: Salir de la aplicacion | ESTADO: Salir de la aplicacion exitosa
 [2026-05-14 17:41:58] TAREA: Admin: SQL Libre | ESTADO: Ejecucion SQL libre exitosa
+[2026-05-18 00:31:54] TAREA: Logout | ESTADO: Logout dni: '00000000X'
+[2026-05-18 00:32:01] TAREA: Error no controlado | ESTADO: {"Usuario con dni: '00000000X'-> No existe el usuario en el centro"}
+[2026-05-18 00:34:29] TAREA: Login | ESTADO:  Login ok - '00000000X': 'admin'
+[2026-05-18 00:34:51] TAREA: Error no controlado | ESTADO: {"'escuela.modelos.Alumno object' has no attribute 'get_especialidad'"}
+[2026-05-18 00:48:49] TAREA: Buscar usuario | ESTADO: Operación exitosa dni: '00000000X'

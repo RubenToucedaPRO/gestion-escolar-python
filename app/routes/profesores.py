@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from app.routes.auth import login_required
 from app.extensions import sistema
-from escuela import Registrar
+from escuela import Registrar, ROL_PROFESOR
 
 profesores_bp = Blueprint("profesores", __name__)
 
@@ -56,7 +56,7 @@ def actualizar():
     salario = request.form.get("salario")
 
     try:
-        usuario = sistema.obtener_usuario_por_id(id)
+        usuario = sistema.obtener_usuario_por_id(id, ROL_PROFESOR)
         sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
         sistema.actualizar_profesor(usuario, especialidad=especialidad, salario=salario)
         flash("Profesor actualizado con éxito", "success")

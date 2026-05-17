@@ -3,6 +3,7 @@ from .modelos import Persona, Asignatura, Alumno, Profesor
 from .gestion import CentroEducativo
 from .db_manager import DBManager
 from .registrar import Registrar
+from .config import ROL_ALUMNO, ROL_PROFESOR, ROL_ADMIN
 
 __all__ = [
     "DatoInvalido",
@@ -16,4 +17,7 @@ __all__ = [
     "CentroEducativo",
     "DBManager",
     "Registrar",
+    "ROL_ALUMNO",
+    "ROL_PROFESOR",
+    "ROL_ADMIN",
 ]
