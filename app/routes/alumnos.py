@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from app.routes.auth import login_required
 from app.extensions import sistema
+from escuela import Registrar
 
 alumnos_bp = Blueprint("alumnos", __name__)
 
@@ -21,23 +22,22 @@ def crear():
     email = request.form.get("email")
 
     try:
-        sistema.crear_alumno(dni, nombre, email)
+        alumno = sistema.crear_alumno(dni, nombre, email)
         flash(f"Alumno con dni {dni} creado con éxito")
-        return redirect(url_for("main.listar_usuarios"))
+        Registrar.registrar_log(
+            "Alta alumno", f"Operación exitosa dni: {alumno.get_dni()!r}"
+        )
     except Exception as e:
-        flash(f"Error al guardar - {e}", "danger")
-        return redirect(url_for("main.listar_usuarios"))
+        flash(f"{e}", "danger")
+        Registrar.registrar_log("Alta alumno", f"{e}")
+    return redirect(url_for("main.listar_usuarios"))
 
 
 @alumnos_bp.route("/editar/<dni>")
 @login_required(role="admin")
 def editar(dni):
-    # Buscamos al usuario existente
-    usuario = sistema.obtener_usuario(dni)
-    if not usuario:
-        flash("Alumno no encontrado", "danger")
-        return redirect(url_for("listar_usuarios"))
 
+    usuario = sistema.obtener_usuario(dni)
     return render_template("editar_alumno.html", usuario=usuario)
 
 
@@ -53,10 +53,13 @@ def actualizar():
         usuario = sistema.obtener_usuario_por_id(id)
         sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
         flash("Alumno actualizado con éxito", "success")
-        return redirect(url_for("main.detalle_usuario", dni=dni))
+        Registrar.registrar_log(
+            "Actualizar alumno", f"Operación exitosa dni: {usuario.get_dni()!r}"
+        )
     except Exception as e:
         flash(f"{e}", "danger")
-        return render_template("detalle_usuario.html", usuario=usuario)
+        Registrar.registrar_log("Actualizar alumno", f"{e}")
+    return redirect(url_for("main.detalle_usuario", dni=dni))
 
 
 @alumnos_bp.route("/matricular", methods=["POST"])
@@ -65,19 +68,17 @@ def matricular():
     dni = request.form.get("dni")
     nombre_asig = request.form.get("nombre_asignatura")
 
-    # 1. Recuperamos el objeto alumno completo
-    alumno = sistema.obtener_usuario(dni)
-
-    if not alumno:
-        flash("Error: Alumno no encontrado", "danger")
-        return redirect(url_for("main.listar_usuarios"))
-
     try:
-        sistema.matricular_alumno(alumno, nombre_asig)
+        alumno = sistema.obtener_usuario(dni)
+        nombre_asig = sistema.matricular_alumno(alumno, nombre_asig)
         flash(f"Matriculado con éxito en {nombre_asig}", "success")
+        Registrar.registrar_log(
+            "Matricular alumno",
+            f"Operación exitosa dni: {alumno.get_dni()!r}, asignatura:{nombre_asig!r}",
+        )
     except Exception as e:
         flash(f"{e}", "danger")
-
+        Registrar.registrar_log("Matricular alumno", f"{e}")
     return redirect(url_for("main.detalle_usuario", dni=dni))
 
 
@@ -88,17 +89,18 @@ def calificar():
     nota = float(request.form.get("nota"))
     nombre_asig = request.form.get("nombre_asignatura")
 
-    # 1. Recuperamos el objeto alumno completo
-    alumno = sistema.obtener_usuario(dni)
-
-    if not alumno:
-        flash("Error: Alumno no encontrado", "danger")
-        return redirect(url_for("main.listar_usuarios"))
-
     try:
-        sistema.calificar_alumno(alumno, nombre_asig, nota)
-        flash(f"Matriculado con éxito en {nombre_asig}", "success")
+        alumno = sistema.obtener_usuario(dni)
+        asignatura = sistema.calificar_alumno(alumno, nombre_asig, nota)
+        flash(
+            f"Calficado con éxito en {asignatura.get_nombre()!r} - nota: {str(asignatura.get_nota())!r} - nota: {str(asignatura.get_nota())!r}",
+            "success",
+        )
+        Registrar.registrar_log(
+            "Calificar alumno",
+            f"Operación exitosa dni: {alumno.get_dni()!r}, asignatura: {asignatura.get_nombre()!r} - nota: {str(asignatura.get_nota())!r}",
+        )
     except Exception as e:
         flash(f"{e}", "danger")
-
+        Registrar.registrar_log("Calificar alumno", f"{e}")
     return redirect(url_for("main.detalle_usuario", dni=dni))

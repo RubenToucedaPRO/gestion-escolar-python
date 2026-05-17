@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from app.routes.auth import login_required
 from app.extensions import sistema
+from escuela import Registrar
 
 profesores_bp = Blueprint("profesores", __name__)
 
@@ -26,22 +27,19 @@ def crear():
     try:
         sistema.crear_profesor(dni, nombre, email, especialidad, salario)
         flash(f"Profesor con dni {dni} creado con éxito")
-        return redirect(url_for("main.listar_usuarios"))
+        Registrar.registrar_log("Alta profesor", f"Operación exitosa dni: {dni!r}")
     except Exception as e:
-        flash(f"Error al guardar - {e}", "danger")
-        return redirect(url_for("main.listar_usuarios"))
+        flash(f"{e}", "danger")
+        Registrar.registrar_log("Alta profesor", f"{e}")
+    return redirect(url_for("main.listar_usuarios"))
 
 
 @profesores_bp.route("/editar/<dni>")
 @login_required(role="admin")
 def editar(dni):
-    # Buscamos al usuario existente
+
     usuario = sistema.obtener_usuario(dni)
     asignaturas = sistema.obtener_todas_las_asignaturas()
-    if not usuario:
-        flash("Profesor no encontrado", "danger")
-        return redirect(url_for("listar_usuarios"))
-
     return render_template(
         "editar_profesor.html", usuario=usuario, asignaturas_sistema=asignaturas
     )
@@ -62,7 +60,10 @@ def actualizar():
         sistema.actualizar_persona(usuario, dni=dni, nombre=nombre, email=email)
         sistema.actualizar_profesor(usuario, especialidad=especialidad, salario=salario)
         flash("Profesor actualizado con éxito", "success")
-        return redirect(url_for("main.detalle_usuario", dni=dni))
+        Registrar.registrar_log(
+            "Actualizar profesor", f"Operación exitosa dni: {usuario.get_dni()!r}"
+        )
     except Exception as e:
         flash(f"{e}", "danger")
-        return render_template("detalle_usuario.html", usuario=usuario)
+        Registrar.registrar_log("Actualizar profesor", f"{e}")
+    return redirect(url_for("main.detalle_usuario", dni=dni))

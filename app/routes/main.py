@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from app.routes.auth import login_required
 from app.extensions import sistema
+from escuela import Registrar
 
 main_bp = Blueprint("main", __name__)
 
@@ -49,8 +50,12 @@ def buscar_usuario():
             return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
         flash(f"{e}", "danger")
+        Registrar.registrar_log("Buscar usuario", f"{e!r}")
         return redirect(url_for("main.listar_usuarios"))
 
+    Registrar.registrar_log(
+        "Buscar usuario", f"Operación exitosa dni: {usuario.get_dni()!r}"
+    )
     return render_template("detalle_usuario.html", usuario=usuario)
 
 
@@ -58,9 +63,10 @@ def buscar_usuario():
 @login_required(role="admin")
 def eliminar_usuario(dni):
 
-    sistema.eliminar_usuario(dni)
+    dni = sistema.eliminar_usuario(dni)
 
     flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
+    Registrar.registrar_log("Eliminar usuario", f"Operación exitosa dni: {dni!r}")
     return redirect(url_for("main.listar_usuarios"))
 
 
@@ -77,6 +83,7 @@ def listar_estadisticas():
 @login_required(role="admin")
 def sql_libre():
     lista = []
+
     return render_template("sql_libre.html", lista=lista)
 
 
@@ -90,6 +97,8 @@ def ejecutar_sql_libre():
 
     except Exception as e:
         flash(f"{e}", "danger")
+        Registrar.registrar_log("Ejecutar SQL libre", f"{e!r}")
         return redirect(url_for("main.sql_libre"))
 
+    Registrar.registrar_log("Eejcutar SQL libre", f"Operación exitosa: {query!r}")
     return render_template("sql_libre.html", lista=resultado)

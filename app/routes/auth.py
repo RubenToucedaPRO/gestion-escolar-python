@@ -10,6 +10,7 @@ from flask import (
 )
 from functools import wraps
 from app.extensions import sistema
+from escuela import Registrar
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -28,6 +29,9 @@ def login_required(role=None):
 
             if user_role not in roles_permitidos:
                 flash("No tienes permiso para acceder aquí.", "danger")
+                Registrar.registrar_log(
+                    "Login", f"No tienes permiso para acceder aquí {user_role!r}"
+                )
                 return redirect(url_for("main.home"))
 
             return view(**kwargs)
@@ -50,13 +54,18 @@ def login():
             session["nombre"] = usuario.get_nombre()
             session["dni"] = usuario.get_dni()
             session["role"] = usuario.get_rol()
+            Registrar.registrar_log(
+                "Login", f" Login ok - {usuario.get_dni()!r}: {usuario.get_rol()!r}"
+            )
             return redirect(url_for("main.home"))
 
+        Registrar.registrar_log("Login", f"DNI o contraseña incorrectos, dni: {dni!r} ")
         flash("DNI o contraseña incorrectos.", "danger")
     return render_template("login.html")
 
 
 @auth_bp.route("/logout")
 def logout():
+    Registrar.registrar_log("Logout", f"Logout dni: {session['dni']!r}")
     session.clear()
     return redirect(url_for("auth.login"))

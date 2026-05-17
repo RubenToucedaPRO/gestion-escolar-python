@@ -1,5 +1,5 @@
 from .common import Duplicado, DatoInvalido, Validator
-from .modelos import Alumno, Profesor, Persona, Administrador
+from .modelos import Alumno, Profesor, Persona, Administrador, Asignatura
 from .registrar import Registrar
 from .db_manager import DBManager
 
@@ -29,11 +29,14 @@ class CentroEducativo:
         return lista_usuarios
 
     def crear_alumno(self, dni: str, nombre: str, email: str):
-        contrasena = dni
+        contrasena = "1234"
         rol = "alumno"
         # instanciamos objeto para verificar y estandarizar datos
         alumno = Alumno(None, dni, nombre, email, rol, contrasena)
+        self.verificar_dni_no_registrado(alumno.get_dni())
+        self.verificar_email_no_registrado(alumno.get_email())
         self.db.crear_alumno(**alumno.to_dict())
+        return alumno
 
     def crear_profesor(
         self, dni: str, nombre: str, email: str, especialidad: str, salario: float
@@ -44,6 +47,8 @@ class CentroEducativo:
         profesor = Profesor(
             None, dni, nombre, email, especialidad, salario, rol, contrasena
         )
+        self.verificar_dni_no_registrado(profesor.get_dni())
+        self.verificar_email_no_registrado(profesor.get_email())
         self.db.crear_profesor(**profesor.to_dict())
 
     def actualizar_persona(self, usuario: Persona, **datos):
@@ -51,12 +56,14 @@ class CentroEducativo:
         han sido modificados"""
         modificado = False
         if datos.get("dni") and datos["dni"] != usuario.get_dni():
+            self.verificar_dni_no_registrado(datos.get("dni"))
             usuario.set_dni(datos["dni"])
             modificado = True
         if datos.get("nombre") and datos["nombre"] != usuario.get_nombre():
             usuario.set_nombre(datos["nombre"])
             modificado = True
         if datos.get("email") and datos["email"] != usuario.get_email():
+            self.verificar_email_no_registrado(datos["email"])
             usuario.set_email(datos["email"])
             modificado = True
         if modificado:
@@ -91,16 +98,20 @@ class CentroEducativo:
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
         if usuario and usuario["rol"] == "alumno":
-            return self.instanciar_datos_db_alumno(usuario)
+            encontrado = True
+            usuario = self.instanciar_datos_db_alumno(usuario)
         elif usuario and usuario["rol"] == "profesor":
-            return self.instanciar_datos_db_profesor(usuario)
+            encontrado = True
+            usuario = self.instanciar_datos_db_profesor(usuario)
         elif usuario and usuario["rol"] == "admin":
-            return self.instanciar_datos_db_admin(usuario)
+            encontrado = True
+            usuario = self.instanciar_datos_db_admin(usuario)
 
         if not encontrado:
             raise DatoInvalido(
                 f"Usuario con dni: {dni_usuario!r}-> No existe el usuario en el centro"
             )
+        return usuario
 
     def obtener_usuario_por_id(self, id: int) -> Persona:
         encontrado = False
@@ -156,8 +167,9 @@ class CentroEducativo:
         return Profesor(**dato)
 
     def eliminar_usuario(self, dni_usuario: str):
-        Validator.validar_dni(dni_usuario)
+        dni_usuario = Validator.validar_dni(dni_usuario)
         self.db.eliminar_usuario(dni_usuario)
+        return dni_usuario
 
     def media_global_centro(self, numero_alumnos) -> float:
         medias = [dato["media"] for dato in self.db.obtener_notas_medias()]
@@ -180,30 +192,36 @@ class CentroEducativo:
         return estadisticas
 
     def matricular_alumno(self, alumno: Alumno, nombre_asignatura: str):
-        nombre_asignatura = Validator.formatear_nombre(nombre_asignatura)
+        asignatura = Asignatura(None, nombre_asignatura, 0.0)
         ya_matriculado = any(
-            asignatura.get_nombre() == nombre_asignatura
-            for asignatura in alumno.get_asignaturas()
+            asignatura_alumno.get_nombre() == asignatura.get_nombre()
+            for asignatura_alumno in alumno.get_asignaturas()
         )
         if ya_matriculado:
-            raise Duplicado(f"Alumno ya matriculado en {nombre_asignatura}")
-        existe_asignatura = self.db.existe_asignatura(nombre_asignatura)
+            raise Duplicado(f"Alumno ya matriculado en {asignatura.get_nombre()}")
+        existe_asignatura = self.db.existe_asignatura(asignatura.get_nombre())
         if not existe_asignatura:
-            id_asignatura = self.db.crear_asignatura(nombre_asignatura)
+            id_asignatura = self.db.crear_asignatura(asignatura.get_nombre())
         else:
             id_asignatura = existe_asignatura[0]
         id_alumno = alumno.get_id()
         self.db.matricular_alumno(id_alumno, id_asignatura)
+        return asignatura.get_nombre()
 
     def calificar_alumno(self, alumno: Alumno, nombre_asignatura: str, nota: float):
         """Se reciben los datos del alumno si ha sido matriculado y se procede
         a calificarlo"""
-        nombre_asignatura = Validator.formatear_nombre(nombre_asignatura)
+        asignatura = Asignatura(None, nombre_asignatura, nota)
         # Obtenemos el profesor con la especialidad de la asignatura para calificar al alumno
-        profesor = self.obtener_profesor_asignatura(nombre_asignatura)
+        profesor = self.obtener_profesor_asignatura(asignatura.get_nombre())
         # Calificar el alumno desde el profesor
-        id_asignatura = profesor.calificar(alumno, nombre_asignatura, nota)
-        self.db.asignar_nota_asignatura_alumno(nota, alumno.get_id(), id_asignatura)
+        id_asignatura = profesor.calificar(
+            alumno, asignatura.get_nombre(), asignatura.get_nota()
+        )
+        self.db.asignar_nota_asignatura_alumno(
+            asignatura.get_nota(), alumno.get_id(), id_asignatura
+        )
+        return asignatura
 
     def ejecutar_sql_libre(self, query: str):
         # Limipamos la consulta y la pasamos a minusculas para que reconozca las entidades
