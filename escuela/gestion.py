@@ -5,6 +5,11 @@ from .db_manager import DBManager
 
 
 class CentroEducativo:
+    CONTRASENA_POR_DEFECTO = "1234"
+    ROL_ALUMNO = "alumno"
+    ROL_PROFESOR = "profesor"
+    ROL_ADMIN = "admin"
+
     def __init__(self):
         self.host = "127.0.0.1"
         self.user = "root"
@@ -19,18 +24,21 @@ class CentroEducativo:
             return self.obtener_usuario(dni)
         return None
 
-    def get_usuarios(self):
+    def get_alumnos(self):
         lista_usuarios = []
         datos_bd = self.db.leer_alumnos()
         [lista_usuarios.append(Alumno(**d)) for d in datos_bd]
+        return lista_usuarios
+
+    def get_profesores(self):
+        lista_usuarios = []
         datos_bd = self.db.leer_profesores()
         [lista_usuarios.append(Profesor(**d)) for d in datos_bd]
-
         return lista_usuarios
 
     def crear_alumno(self, dni: str, nombre: str, email: str):
-        contrasena = "1234"
-        rol = "alumno"
+        contrasena = self.CONTRASENA_POR_DEFECTO
+        rol = self.ROL_ALUMNO
         # instanciamos objeto para verificar y estandarizar datos
         alumno = Alumno(None, dni, nombre, email, rol, contrasena)
         self.verificar_dni_no_registrado(alumno.get_dni())
@@ -41,8 +49,8 @@ class CentroEducativo:
     def crear_profesor(
         self, dni: str, nombre: str, email: str, especialidad: str, salario: float
     ):
-        contrasena = dni
-        rol = "profesor"
+        contrasena = self.CONTRASENA_POR_DEFECTO
+        rol = self.ROL_PROFESOR
         # instanciamos objeto para verificar y estandarizar datos
         profesor = Profesor(
             None, dni, nombre, email, especialidad, salario, rol, contrasena
@@ -97,13 +105,13 @@ class CentroEducativo:
         Validator.validar_dni(dni_usuario)
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
-        if usuario and usuario["rol"] == "alumno":
+        if usuario and usuario["rol"] == self.ROL_ALUMNO:
             encontrado = True
             usuario = self.instanciar_datos_db_alumno(usuario)
-        elif usuario and usuario["rol"] == "profesor":
+        elif usuario and usuario["rol"] == self.ROL_PROFESOR:
             encontrado = True
             usuario = self.instanciar_datos_db_profesor(usuario)
-        elif usuario and usuario["rol"] == "admin":
+        elif usuario and usuario["rol"] == self.ROL_ADMIN:
             encontrado = True
             usuario = self.instanciar_datos_db_admin(usuario)
 
@@ -116,11 +124,11 @@ class CentroEducativo:
     def obtener_usuario_por_id(self, id: int) -> Persona:
         encontrado = False
         usuario = self.db.obtener_usuario_id(id)
-        if usuario and usuario["rol"] == "alumno":
+        if usuario and usuario["rol"] == self.ROL_ALUMNO:
             return self.instanciar_datos_db_alumno(usuario)
-        if usuario and usuario["rol"] == "profesor":
+        if usuario and usuario["rol"] == self.ROL_PROFESOR:
             return self.instanciar_datos_db_profesor(usuario)
-        if usuario and usuario["rol"] == "admin":
+        if usuario and usuario["rol"] == self.ROL_ADMIN:
             return self.instanciar_datos_db_admin(usuario)
 
         if not encontrado:
@@ -182,10 +190,11 @@ class CentroEducativo:
         lista_profesores = self.db.leer_profesores()
         lista_alumnos = self.db.leer_alumnos()
         numero_alumnos = len(lista_alumnos)
+        numero_profesores = len(lista_profesores)
         estadisticas = {}
-        estadisticas["Total Profesores"] = len(lista_profesores)
+        estadisticas["Total Profesores"] = numero_profesores
         estadisticas["Total Alumnos"] = numero_alumnos
-        estadisticas["Total usuarios"] = len(self.get_usuarios())
+        estadisticas["Total usuarios"] = numero_profesores + numero_alumnos
         estadisticas["Nota media global del centro"] = self.media_global_centro(
             numero_alumnos
         )

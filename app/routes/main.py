@@ -15,9 +15,10 @@ def home():
 @login_required(role="admin")
 def listar_usuarios():
 
-    usuarios = sistema.get_usuarios()
+    alumnos = sistema.get_alumnos()
+    profesores = sistema.get_profesores()
 
-    return render_template("usuarios.html", lista=usuarios)
+    return render_template("usuarios.html", alumnos=alumnos, profesores=profesores)
 
 
 @main_bp.route("/usuario/<dni>")
