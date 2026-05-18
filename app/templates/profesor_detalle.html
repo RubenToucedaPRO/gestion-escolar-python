@@ -3,29 +3,45 @@
 {% block title %}Detalle profesor{% endblock %}
 
 {% block content %}
-<h2>Información Detallada</h2>
-
-<div class="card">
-
-    <p><strong>Profesor:</strong></p>
-    <div>
-        <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}">
-            &#9999; Modificar
+<div class="row my-4 align-items-center">
+    <div class="col-6">
+        <h2>Información Detallada</h2>
+    </div>
+    <div class="col-6 text-end">
+        <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}" class="btn btn-warning btn-sm">
+            ✏️ Modificar
         </a>
     </div>
-    <p><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
-    <p><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
-    <p><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
-
-
-    <p><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
-    <p><strong>Salario:</strong> {{ usuario.get_salario() }}</p>
-
 </div>
 
-<br>
-<form action="{{ url_for('profesores.eliminar', dni=usuario.get_dni()) }}" method="POST"
-    onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
-    <button type="submit">🗑️</button>
-</form>
+<div class="row g-4">
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title border-bottom pb-2 mb-3 text-primary">Datos del profesor</h5>
+                <p class="mb-2"><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
+                <p class="mb-2"><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
+                <p class="mb-2"><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
+                <p class="mb-2"><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
+                <p class="mb-0"><strong>Salario:</strong> {{ usuario.get_salario() }}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
+    <a href="{{ url_for('profesores.listar', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
+        class="btn btn-secondary btn-sm">
+        Volver al listado
+    </a>
+
+    <form action="{{ url_for('profesores.eliminar', dni=usuario.get_dni()) }}" method="POST"
+        onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');" class="m-0">
+        <input type="hidden" name="rol" value="profesor">
+        <button type="submit" class="btn btn-outline-danger btn-sm">
+            🗑️ Eliminar
+        </button>
+    </form>
+</div>
 {% endblock %}

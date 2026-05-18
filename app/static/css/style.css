@@ -46,23 +46,6 @@ main {
 	margin-top: 150px;
 }
 
-/* Tarjeta de formulario login */
-.form-container-login {
-	background-color: rgb(210, 166, 121);
-	border-radius: 10px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-	padding: 2px;
-	width: 100%;
-	max-width: 500px;
-}
-
-/* Contenido del formulario login */
-.card-body-login {
-	background-color: rgb(255, 255, 255);
-	border-radius: 8px;
-	padding: 30px;
-}
-
 /* Título de formulario login*/
 .form-title {
 	text-align: center;

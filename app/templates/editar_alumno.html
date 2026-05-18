@@ -3,25 +3,43 @@
 {% block title %}Editar Alumno{% endblock %}
 
 {% block content %}
-<h2>Editar Alumno</h2>
 
-<form action="{{ url_for('alumnos.actualizar') }}" method="POST">
-    <input type="number" name="id" value="{{usuario.get_id()}}" hidden>
-    <div style="margin-bottom: 10px;">
-        <label>DNI:</label><br>
-        <input type="text" name="dni" value="{{ usuario.get_dni() if usuario else '' }}" required>
+<div class="row">
+    <div class="col-md-5">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3 text-primary">Editar Alumno</h5>
+                <form action="{{ url_for('alumnos.actualizar') }}" method="POST">
+                    <input type="number" name="id" value="{{usuario.get_id()}}" hidden>
+
+                    <div class="mb-3">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" id="dni" name="dni" class="form-control"
+                            value="{{ usuario.get_dni() if usuario else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control"
+                            value="{{ usuario.get_nombre() if usuario else '' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-control"
+                            value="{{ usuario.get_email() if usuario else '' }}" required>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-sm me-2">Guardar</button>
+                        <a href="{{ url_for('alumnos.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
+                            class="btn btn-secondary btn-sm">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div style="margin-bottom: 10px;">
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" value="{{ usuario.get_nombre() if usuario else '' }}" required>
-    </div>
-    <div style="margin-bottom: 10px;">
-        <label>Email:</label><br>
-        <input type="email" name="email" value="{{ usuario.get_email() if usuario else '' }}" required>
-    </div>
-    <button type="submit">
-        Guardar
-    </button>
-    <a href="{{ url_for('alumnos.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">Cancelar</a>
-</form>
+</div>
 {% endblock %}

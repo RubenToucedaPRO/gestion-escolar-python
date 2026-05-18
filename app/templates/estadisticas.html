@@ -3,13 +3,30 @@
 {% block title %}Estadísticas{% endblock %}
 
 {% block content %}
-    <h2>Estadísticas del centro</h2>
-    <table>
-        {% for clave,valor in lista.items() %}
-        <tr>
-            <td>{{ clave }}</td>
-            <td>{{ valor }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+
+<div class="row">
+    <div class="col-md-8 col-lg-6 mx-auto">
+        <div class="row my-4">
+            <h2>Estadísticas del Centro</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Concepto</th>
+                        <th style="width: 120px;" class="text-end">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for clave, valor in lista.items() %}
+                    <tr>
+                        <td class="fw-bold text-secondary">{{ clave }}</td>
+                        <td class="text-end text-dark font-monospace">{{ valor }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}
