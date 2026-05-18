@@ -1,6 +1,5 @@
 from flask import Flask, flash, redirect, url_for
-from werkzeug.exceptions import HTTPException
-from app.routes import alumnos_bp, profesores_bp,asignaturas_bp, main_bp, auth_bp
+from app.routes import alumnos_bp, profesores_bp, asignaturas_bp, main_bp, auth_bp
 import os
 from escuela import Registrar
 
