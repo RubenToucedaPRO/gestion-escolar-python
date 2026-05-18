@@ -1,6 +1,6 @@
 from flask import Flask, flash, redirect, url_for
 from werkzeug.exceptions import HTTPException
-from app.routes import alumnos_bp, profesores_bp, main_bp, auth_bp
+from app.routes import alumnos_bp, profesores_bp,asignaturas_bp, main_bp, auth_bp
 import os
 from escuela import Registrar
 
@@ -17,6 +17,7 @@ app.secret_key = "clave_super_secreta_para_sesiones"
 app.register_blueprint(main_bp)
 app.register_blueprint(alumnos_bp, url_prefix="/alumnos")
 app.register_blueprint(profesores_bp, url_prefix="/profesores")
+app.register_blueprint(asignaturas_bp, url_prefix="/asignaturas")
 app.register_blueprint(auth_bp, url_prefix="/auth")
 
 

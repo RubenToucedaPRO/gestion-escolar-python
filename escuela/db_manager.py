@@ -190,6 +190,15 @@ class DBManager:
         self.con.commit()
         return cursor.lastrowid
 
+    def eliminar_asignatura(self, nombre: str):
+        cursor = self.con.cursor()
+        query = "DELETE FROM asignaturas where nombre=%s"
+        cursor.execute(
+            query,
+            (nombre,),
+        )
+        self.con.commit()
+
     def matricular_alumno(self, id_alumno: int, id_asignatura: int):
         cursor = self.con.cursor()
         query = "INSERT INTO matriculas (id_alumno,id_asignatura,nota) VALUES(%s,%s,%s)"

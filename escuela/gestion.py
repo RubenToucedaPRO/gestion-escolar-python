@@ -215,10 +215,7 @@ class CentroEducativo:
         if ya_matriculado:
             raise Duplicado(f"Alumno ya matriculado en {asignatura.get_nombre()}")
         existe_asignatura = self.db.existe_asignatura(asignatura.get_nombre())
-        if not existe_asignatura:
-            id_asignatura = self.db.crear_asignatura(asignatura.get_nombre())
-        else:
-            id_asignatura = existe_asignatura[0]
+        id_asignatura = existe_asignatura[0]
         id_alumno = alumno.get_id()
         self.db.matricular_alumno(id_alumno, id_asignatura)
         return asignatura.get_nombre()
@@ -252,6 +249,20 @@ class CentroEducativo:
     def obtener_todas_las_asignaturas(self):
         lista = [dato[0] for dato in self.db.obtener_todas_las_asignaturas()]
         return lista
+
+    def crear_asignatura(self, nombre: str):
+        asignatura = Asignatura(None, nombre, 0.0)
+        existe_asignatura = self.db.existe_asignatura(asignatura.get_nombre())
+        if not existe_asignatura:
+            self.db.crear_asignatura(asignatura.get_nombre())
+        else:
+            raise Duplicado(
+                f"Asignatura {asignatura.get_nombre() | r} ya existe en el centro"
+            )
+
+    def eliminar_asignatura(self, nombre: str):
+        self.db.eliminar_asignatura(nombre)
+        return nombre
 
     def instanciar_datos_db_alumno(self, usuario: Alumno):
         usuario.pop("especialidad")

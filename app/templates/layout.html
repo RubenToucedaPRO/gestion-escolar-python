@@ -14,6 +14,7 @@
 <a href="{{ url_for('main.home') }}">Inicio</a> |
 {% if session.get('role') == 'admin' %}
 <a href="{{ url_for('main.listar_usuarios') }}">Usuarios</a>
+<a href="{{ url_for('asignaturas.listar_asignaturas') }}">Asignaturas</a>
 <a href="{{ url_for('main.sql_libre') }}">SQL Libre</a>
 {% endif %}
 {% if session.get('dni') %}

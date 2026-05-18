@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de usuarios{% endblock %}
+
+{% block content %}
+    <h2>Listado de usuarios</h2>
+    <div class="card">
+        <h4>Añadir asignatura</h4>
+        <form action="{{ url_for('asignaturas.crear') }}" method="POST">
+
+            <input type="text" name="nombre" required>
+            
+            <button type="submit">
+                Añadir
+            </button>
+        </form>
+    </div>
+    <table>
+        <caption>Asignaturas del centro</caption>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+        </tr>
+        {% for asignatura in asignaturas %}
+        <tr>
+            <td>{{ asignatura }}</td>
+            <td>
+                <form action="{{ url_for('asignaturas.eliminar_asignatura', nombre=asignatura) }}" method="POST"
+                    onsubmit="return confirm('¿Seguro que quieres eliminar esta asignatura?');">
+                    <button type="submit">🗑️</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
