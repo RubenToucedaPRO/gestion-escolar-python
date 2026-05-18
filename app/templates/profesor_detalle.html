@@ -14,19 +14,16 @@
     </div>
 </div>
 
-<div class="row g-4">
-    <div class="col-md-7">
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="card-title border-bottom pb-2 mb-3 text-primary">Datos del profesor</h5>
-                <p class="mb-2"><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
-                <p class="mb-2"><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
-                <p class="mb-2"><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
-                <p class="mb-2"><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
-                <p class="mb-0"><strong>Salario:</strong> {{ usuario.get_salario() }}</p>
-            </div>
+<div class="row g-4 mx-auto">
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title border-bottom pb-2 mb-3 text-primary">Datos del profesor</h5>
+            <p class="mb-2"><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
+            <p class="mb-2"><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
+            <p class="mb-2"><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
+            <p class="mb-2"><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
+            <p class="mb-0"><strong>Salario:</strong> {{ usuario.get_salario() }}</p>
         </div>
-
     </div>
 </div>
 

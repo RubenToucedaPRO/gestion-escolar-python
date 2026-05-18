@@ -1,4 +1,13 @@
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import (
+    session,
+    abort,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    Blueprint,
+)
 from app.routes.auth import login_required
 from app.extensions import sistema
 from escuela import Registrar, ROL_ALUMNO
@@ -7,7 +16,7 @@ alumnos_bp = Blueprint("alumnos", __name__)
 
 
 @alumnos_bp.route("/alumnos")
-@login_required(role="admin")
+@login_required(role=["admin", "profesor"])
 def listar():
 
     alumnos = sistema.get_alumnos()
@@ -26,8 +35,10 @@ def formulario():
 
 
 @alumnos_bp.route("/usuario/<dni>/<rol>")
-@login_required(role="admin")
+@login_required(role=["admin", "profesor", "alumno"])
 def detalle(dni, rol):
+    if session.get("role") == "alumno" and session.get("dni") != dni:
+        abort(403)
     usuario = sistema.obtener_usuario(dni, rol)
 
     if not usuario:
@@ -43,7 +54,7 @@ def detalle(dni, rol):
 
 
 @alumnos_bp.route("/usuario", methods=["POST"])
-@login_required(role="admin")
+@login_required(role=["admin", "profesor"])
 def buscar():
     dni = request.form.get("dni")
 

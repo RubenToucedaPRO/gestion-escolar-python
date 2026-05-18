@@ -7,11 +7,13 @@
     <div class="col-6">
         <h2>Información Detallada</h2>
     </div>
+    {% if session.get('role') == 'admin' %}
     <div class="col-6 text-end">
         <a href="{{ url_for('alumnos.editar', dni=usuario.get_dni()) }}" class="btn btn-warning btn-sm">
             ✏️ Modificar
         </a>
     </div>
+    {% endif %}
 </div>
 
 <div class="row g-4">
@@ -56,13 +58,14 @@
 
     <div class="col-md-5">
         {% if usuario.get_asignaturas()|length > 0 %}
+        {% if session.get('role') == 'admin' or session.get('role') =='profesor' %}
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <h5 class="card-title mb-3 text-primary">Calificar</h5>
+                <h5 class="card-title mb-2 text-primary">Calificar</h5>
                 <form action="{{ url_for('alumnos.calificar') }}" method="POST">
                     <input type="hidden" name="dni" value="{{ usuario.get_dni() }}">
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label">Seleccionar Asignatura</label>
                         <select name="nombre_asignatura" class="form-select form-select-sm" required>
                             <option value="" disabled selected>Selecciona una asignatura...</option>
@@ -72,7 +75,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <label class="form-label">Nota</label>
                         <input type="number" step="0.01" name="nota" class="form-control form-control-sm"
                             placeholder="ej: 8.50" required>
@@ -85,10 +88,12 @@
             </div>
         </div>
         {% endif %}
+        {% endif %}
 
+        {% if session.get('role') == 'admin' or session.get('role')=='alumno' %}
         <div class="card shadow-sm">
             <div class="card-body">
-                <h5 class="card-title mb-3 text-primary">Matricular en Nueva Asignatura</h5>
+                <h5 class="card-title mb-2 text-primary">Matricular en Nueva Asignatura</h5>
                 <form action="{{ url_for('alumnos.matricular') }}" method="POST">
                     <input type="hidden" name="dni" value="{{ usuario.get_dni() }}">
 
@@ -108,15 +113,23 @@
                 </form>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 
 <div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
+    {% if session.get('role') == 'admin' or session.get('role') == 'profesor' %}
     <a href="{{ url_for('alumnos.listar', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
         class="btn btn-secondary btn-sm">
-        Volver al listado
+        Volver
     </a>
-
+    {% endif %}
+    {% if session.get('role') == 'alumno' %}
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary btn-sm">
+        Volver
+    </a>
+    {% endif %}
+    {% if session.get('role') == 'admin' %}
     <form action="{{ url_for('alumnos.eliminar', dni=usuario.get_dni()) }}" method="POST"
         onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');" class="m-0">
         <input type="hidden" name="rol" value="alumno">
@@ -124,5 +137,6 @@
             🗑️ Eliminar Alumno
         </button>
     </form>
+    {% endif %}
 </div>
 {% endblock %}

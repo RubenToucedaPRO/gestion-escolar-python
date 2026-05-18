@@ -104,9 +104,6 @@ footer {
 		padding: 5px; /* Reduce el padding */
 		font-size: 14px; /* Reduce el tamaño del texto */
 	}
-	.pagination {
-		display: none;
-	}
 	
 	.container-principal {
 	margin-top: 10px;

@@ -7,11 +7,13 @@
     <div class="col-sm-6">
         <h2 class="mb-0">Listado de Alumnos</h2>
     </div>
+    {% if session.get('role') == 'admin' %}
     <div class="col-sm-6 text-sm-end mt-2 mt-sm-0">
         <a href="{{ url_for('alumnos.formulario') }}" class="btn btn-success btn-sm">
             ➕ Alta Alumno
         </a>
     </div>
+    {% endif %}
 </div>
 <div class="row mb-4">
     <div class="col-md-4">
@@ -30,7 +32,9 @@
                 <th>DNI</th>
                 <th>Nombre</th>
                 <th>Email</th>
+                {% if session.get('role') == 'admin' %}
                 <th class="text-center">Acciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -44,6 +48,7 @@
                 </td>
                 <td>{{ usuario.get_nombre() }}</td>
                 <td>{{ usuario.get_email() }}</td>
+                {% if session.get('role') == 'admin' %}
                 <td class="text-center">
                     <form action="{{ url_for('alumnos.eliminar', dni=usuario.get_dni()) }}" method="POST"
                         onsubmit="return confirm('¿Seguro que quieres eliminar este alumno?');" class="d-inline">
@@ -52,6 +57,7 @@
                         </button>
                     </form>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

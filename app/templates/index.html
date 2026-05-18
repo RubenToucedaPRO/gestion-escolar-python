@@ -6,14 +6,12 @@
 <div class="row mb-4">
     <div class="col-12">
         <h2 class="display-5 fw-bold text-dark">Bienvenido a CentroEdu</h2>
-        <p class="lead text-muted">Selecciona una opción en el menú superior o utiliza los accesos rápidos para
-            gestionar el centro educativo.</p>
         <hr class="my-4">
     </div>
 </div>
 
 <div class="row g-4 mb-4">
-    {% if session.get('role') == 'admin' %}
+    {% if session.get('role') == 'admin' or session.get('role') == 'profesor' %}
     <div class="col-md-4">
         <div class="card h-100 border-start border-primary border-4 shadow-sm">
             <div class="card-body d-flex align-items-center">
@@ -30,7 +28,9 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
+    {% if session.get('role') == 'admin' %}
     <div class="col-md-4">
         <div class="card h-100 border-start border-success border-4 shadow-sm">
             <div class="card-body d-flex align-items-center">
@@ -45,6 +45,27 @@
             <div class="card-footer bg-transparent border-0 pb-3">
                 <a href="{{ url_for('profesores.listar') }}" class="btn btn-sm btn-outline-success">Ver
                     listado</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if session.get('role') == 'alumno' %}
+    <div class="col-md-4">
+        <div class="card h-100 border-start border-primary border-4 shadow-sm">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted text-uppercase fs-7 mb-1">Alumno</h6>
+                    <h5 class="card-title mb-0">Perfil</h5>
+                </div>
+                <div class="fs-1 text-success">
+                    <i class="bi bi-mortarboard"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3">
+                <a href="{{ url_for('alumnos.detalle', dni=session.get('dni'), rol=session.get('role')) }}"
+                    class="btn btn-sm btn-outline-primary"> Ver
+                </a>
             </div>
         </div>
     </div>
