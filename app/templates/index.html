@@ -1,12 +1,92 @@
 {% extends "layout.html" %}
 
-{% block title %}Inicio - Gestión Escolar{% endblock %}
+{% block title %}Inicio - Panel de Control{% endblock %}
 
 {% block content %}
-    <h2>Bienvenido al Panel de Control</h2>
-    <p>Seleccione una opción en el menú superior para comenzar a gestionar el centro.</p>
-    
-    <div class="stats-box">
-        <p>El sistema está conectado correctamente a la base de datos MySQL en Docker.</p>
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="display-5 fw-bold text-dark">Bienvenido a CentroEdu</h2>
+        <p class="lead text-muted">Selecciona una opción en el menú superior o utiliza los accesos rápidos para
+            gestionar el centro educativo.</p>
+        <hr class="my-4">
     </div>
+</div>
+
+<div class="row g-4 mb-4">
+    {% if session.get('role') == 'admin' %}
+    <div class="col-md-4">
+        <div class="card h-100 border-start border-primary border-4 shadow-sm">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted text-uppercase fs-7 mb-1">Gestión</h6>
+                    <h5 class="card-title mb-0">Alumnos</h5>
+                </div>
+                <div class="fs-1 text-primary">
+                    <i class="bi bi-mortarboard"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3">
+                <a href="{{ url_for('alumnos.listar') }}" class="btn btn-sm btn-outline-primary">Ver listado</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 border-start border-success border-4 shadow-sm">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted text-uppercase fs-7 mb-1">Docencia</h6>
+                    <h5 class="card-title mb-0">Profesores</h5>
+                </div>
+                <div class="fs-1 text-success">
+                    <i class="bi bi-person-workspace"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3">
+                <a href="{{ url_for('profesores.listar') }}" class="btn btn-sm btn-outline-success">Ver
+                    listado</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="col-md-4">
+        <div class="card h-100 border-start border-warning border-4 shadow-sm">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted text-uppercase fs-7 mb-1">Plan de Estudios</h6>
+                    <h5 class="card-title mb-0">Asignaturas</h5>
+                </div>
+                <div class="fs-1 text-warning">
+                    <i class="bi bi-book"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3">
+                {% if session.get('role') == 'admin' %}
+                <a href="{{ url_for('asignaturas.listar_asignaturas') }}"
+                    class="btn btn-sm btn-outline-warning">Configurar</a>
+                {% else %}
+                <a href="{{ url_for('asignaturas.listar_asignaturas') }}" class="btn btn-sm btn-outline-warning">Ver</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-start border-info border-4 shadow-sm">
+            <div class="card-body d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h6 class="text-muted text-uppercase fs-7 mb-1">Estadisticas</h6>
+                    <h5 class="card-title mb-0">Datos del centro</h5>
+                </div>
+                <div class="fs-1 text-info">
+                    <i class="bi bi-bar-chart-line"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pb-3">
+                <a href="{{ url_for('main.listar_estadisticas') }}" class="btn btn-sm btn-outline-info">Ver</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

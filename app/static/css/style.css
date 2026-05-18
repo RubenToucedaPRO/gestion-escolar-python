@@ -1,0 +1,131 @@
+/* Fonts */
+:root {
+	--default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto,
+		"Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+		"Noto Color Emoji";
+	--heading-font: "Raleway", sans-serif;
+}
+
+/* Global */
+:root {
+	--background-color: #c9c9c9;
+	--default-color: #444444;
+	--accent-color: #A4A5A5;
+}
+
+a {
+	color: var(--accent-color);
+	text-decoration: none;
+	transition: 0.3s;
+}
+
+a:hover {
+	text-shadow: 0.5px 0px 0px rgb(192, 192, 192)
+}
+
+/* Estilos generales */
+body {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--background-color);
+	min-height: 100dvh;
+	margin: 0;
+}
+
+main {
+	flex: 1;
+	padding-bottom: 100px; /* espacio para el footer fijo */
+}
+
+.container-principal {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 10px;
+	margin-top: 150px;
+}
+
+/* Tarjeta de formulario login */
+.form-container-login {
+	background-color: rgb(210, 166, 121);
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	padding: 2px;
+	width: 100%;
+	max-width: 500px;
+}
+
+/* Contenido del formulario login */
+.card-body-login {
+	background-color: rgb(255, 255, 255);
+	border-radius: 8px;
+	padding: 30px;
+}
+
+/* Título de formulario login*/
+.form-title {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* Input fields */
+.form-control {
+	border-radius: 5px;
+	border: 1px solid rgb(204, 204, 204);
+}
+
+input:invalid, select:invalid, textarea:invalid {
+	border-color: #2F65FE;
+}
+
+.buttons-top-right {
+	display: flex;
+	justify-content: right;
+	margin-bottom: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+/* Centrado de botones */
+.text-center {
+	text-align: center;
+}
+
+.fixed-size-img {
+	width: auto; /* Mantiene el ancho original */
+	height: auto; /* Mantiene la altura original */
+	max-width: 250px; /* Evita que se desborde en pantallas pequeñas */
+}
+
+.icon {
+	font-size: 50px;
+	color: rgb(0, 123, 255);
+}
+
+.alert {
+	width: auto;
+	max-width: 400px;
+}
+
+footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+}
+
+@media ( max-width : 768px) {
+	.table td, .table th {
+		padding: 5px; /* Reduce el padding */
+		font-size: 14px; /* Reduce el tamaño del texto */
+	}
+	.pagination {
+		display: none;
+	}
+	
+	.container-principal {
+	margin-top: 10px;
+}
+}

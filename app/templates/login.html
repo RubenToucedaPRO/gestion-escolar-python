@@ -1,13 +1,35 @@
 {% extends "layout.html" %}
+
+{% block title %}Inicio de Sesión - CentroEdu{% endblock %}
+
 {% block content %}
-<h2>Iniciar Sesión</h2>
-<form method="POST">
-    <label>DNI:</label><br>
-    <input type="text" name="dni" required><br><br>
-    
-    <label>Contraseña:</label><br>
-    <input type="password" name="contrasena" required><br><br>
-    
-    <button type="submit">Entrar</button>
-</form>
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5 col-lg-4">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4">Inicio de Sesión</h3>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" id="dni" name="dni" class="form-control" placeholder="12345678A" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contrasena" class="form-label">Contraseña</label>
+                        <input type="password" id="contrasena" name="contrasena" class="form-control"
+                            placeholder="Contraseña" required>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary">Acceder</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

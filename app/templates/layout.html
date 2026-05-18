@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<!-- Título que aparece en la pestaña del navegador -->
-<title>{% block title %}Mi centro escolar web{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}Mi centro escolar web{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-icons.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
 </head>
+
 <body>
-<header>
-<h1>🌐 Mi Centro Escolar</h1>
-<nav>
-<a href="{{ url_for('main.home') }}">Inicio</a> |
-{% if session.get('role') == 'admin' %}
-<a href="{{ url_for('main.listar_usuarios') }}">Usuarios</a>
-<a href="{{ url_for('asignaturas.listar_asignaturas') }}">Asignaturas</a>
-<a href="{{ url_for('main.sql_libre') }}">SQL Libre</a>
-{% endif %}
-{% if session.get('dni') %}
-    <a href="{{ url_for('main.listar_estadisticas') }}">Estadísticas</a>
-    <span>Hola, {{ session['nombre'] }} ({{ session['role'] }})</span>
-    <a href="{{ url_for('auth.logout') }}">Cerrar Sesión</a>
-{% else %}
-        <a href="{{ url_for('auth.login') }}">Login</a>
-{% endif %}
-</nav>
-</header>
-<main>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <header>
+        {% include '_navbar.html' %}
+    </header>
+
+    <main class="container mt-4">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <div class="flashes">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                {{ message }}
+        <div class="row">
+            <div class="col-12">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            {% endfor %}
+                {% endfor %}
             </div>
+        </div>
         {% endif %}
-    {% endwith %}
-    {% block content %}
-    <!-- Contenido específico de cada página -->
-    {% endblock %}
-</main>
-<footer>
-<p>© 2026 Mi Sitio Web</p>
-</footer>
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    <footer>
+        {% include '_footer.html' %}
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 </body>
+
 </html>
