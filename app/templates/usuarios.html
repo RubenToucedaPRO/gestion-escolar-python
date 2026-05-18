@@ -28,7 +28,7 @@
         {% for usuario in alumnos %}
         <tr>
             <td>
-                <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni()) }}">
+                <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">
                 {{ usuario.get_dni() }}
                 </a>
             </td>
@@ -54,7 +54,7 @@
         {% for usuario in profesores %}
         <tr>
             <td>
-                <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni()) }}">
+                <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">
                 {{ usuario.get_dni() }}
                 </a>
             </td>

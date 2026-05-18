@@ -22,7 +22,7 @@ class CentroEducativo:
         datos_usuario = self.db.validar_credenciales(dni, contrasena)
 
         if datos_usuario:
-            return self.obtener_usuario(dni)
+            return self.obtener_usuario(dni, datos_usuario["rol"])
         return None
 
     def get_alumnos(self):
@@ -102,7 +102,7 @@ class CentroEducativo:
                 usuario.get_salario(),
             )
 
-    def obtener_usuario(self, dni_usuario: str) -> Persona:
+    def obtener_usuario(self, dni_usuario: str, rol: str) -> Persona:
         Validator.validar_dni(dni_usuario)
         encontrado = False
         usuario = self.db.obtener_usuario_dni(dni_usuario)
@@ -116,9 +116,9 @@ class CentroEducativo:
             encontrado = True
             usuario = self.instanciar_datos_db_admin(usuario)
 
-        if not encontrado:
+        if not encontrado or usuario.get_rol() != rol:
             raise DatoInvalido(
-                f"Usuario con dni: {dni_usuario!r}-> No existe el usuario en el centro"
+                f"Usuario con dni: {dni_usuario!r}-> No existe el {rol} en el centro"
             )
         return usuario
 
@@ -126,17 +126,21 @@ class CentroEducativo:
         encontrado = False
         usuario = self.db.obtener_usuario_id(id)
         if usuario and usuario["rol"] == ROL_ALUMNO:
-            usuario = self.instanciar_datos_db_alumno(usuario)
+            encontrado = True
+            usuario_instanciado = self.instanciar_datos_db_alumno(usuario)
         if usuario and usuario["rol"] == ROL_PROFESOR:
-            usuario = self.instanciar_datos_db_profesor(usuario)
+            encontrado = True
+            usuario_instanciado = self.instanciar_datos_db_profesor(usuario)
         if usuario and usuario["rol"] == ROL_ADMIN:
-            usuario = self.instanciar_datos_db_admin(usuario)
+            encontrado = True
+            usuario_instanciado = self.instanciar_datos_db_admin(usuario)
 
-        if not encontrado or usuario.get_rol() != rol:
+        if not encontrado or usuario_instanciado.get_rol() != rol:
             raise DatoInvalido(
                 f"Usuario con id: {id!r}-> No existe el {rol} en el centro"
             )
-        return usuario
+
+        return usuario_instanciado
 
     def verificar_dni_no_registrado(self, dni_usuario: str):
         # Formateamos el dni
@@ -160,7 +164,7 @@ class CentroEducativo:
 
     def obtener_alumno(self, dni_alumno: str) -> Alumno:
         Validator.validar_dni(dni_alumno)
-        usuario = self.obtener_usuario(dni_alumno)
+        usuario = self.obtener_usuario(dni_alumno, ROL_ALUMNO)
         if not usuario or not isinstance(usuario, Alumno):
             raise DatoInvalido(
                 f"Alumno con dni: {dni_alumno!r}-> No existe en el centro"

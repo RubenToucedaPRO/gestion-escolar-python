@@ -38,7 +38,7 @@ def crear():
 @login_required(role="admin")
 def editar(dni):
 
-    usuario = sistema.obtener_usuario(dni)
+    usuario = sistema.obtener_usuario(dni, ROL_PROFESOR)
     asignaturas = sistema.obtener_todas_las_asignaturas()
     return render_template(
         "editar_profesor.html", usuario=usuario, asignaturas_sistema=asignaturas
@@ -66,4 +66,4 @@ def actualizar():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Actualizar profesor", f"{e}")
-    return redirect(url_for("main.detalle_usuario", dni=dni))
+    return redirect(url_for("main.detalle_usuario", dni=dni, rol=ROL_PROFESOR))

@@ -21,11 +21,10 @@ def listar_usuarios():
     return render_template("usuarios.html", alumnos=alumnos, profesores=profesores)
 
 
-@main_bp.route("/usuario/<dni>")
+@main_bp.route("/usuario/<dni>/<rol>")
 @login_required(role="admin")
-def detalle_usuario(dni):
-
-    usuario = sistema.obtener_usuario(dni)
+def detalle_usuario(dni, rol):
+    usuario = sistema.obtener_usuario(dni, rol)
 
     if not usuario:
         flash("Usuario no encontrado", "danger")
@@ -45,7 +44,7 @@ def buscar_usuario():
     dni = request.form.get("dni")
 
     try:
-        usuario = sistema.obtener_usuario(dni)
+        usuario = sistema.obtener_usuario(dni, "alumno")
         if not usuario:
             flash("Usuario no encontrado", "danger")
             return redirect(url_for("main.listar_usuarios"))

@@ -14,9 +14,9 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 
 @app.errorhandler(Exception)
 def manejador_global_errores(error):
-    Registrar.registrar_log("Error no controlado", {str(error)})
+    Registrar.registrar_log("Error no controlado", error)
 
-    flash("Ha ocurrido un error interno en el servidor. Operación cancelada.", "danger")
+    flash(f"{error}", "danger")
 
     return redirect(url_for("main.home"))
 

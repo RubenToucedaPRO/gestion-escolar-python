@@ -36,8 +36,7 @@ def crear():
 @alumnos_bp.route("/editar/<dni>")
 @login_required(role="admin")
 def editar(dni):
-
-    usuario = sistema.obtener_usuario(dni)
+    usuario = sistema.obtener_usuario(dni, ROL_ALUMNO)
     return render_template("editar_alumno.html", usuario=usuario)
 
 
@@ -59,7 +58,7 @@ def actualizar():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Actualizar alumno", f"{e}")
-    return redirect(url_for("main.detalle_usuario", dni=dni))
+    return redirect(url_for("main.detalle_usuario", dni=dni, rol=ROL_ALUMNO))
 
 
 @alumnos_bp.route("/matricular", methods=["POST"])
@@ -69,7 +68,7 @@ def matricular():
     nombre_asig = request.form.get("nombre_asignatura")
 
     try:
-        alumno = sistema.obtener_usuario(dni)
+        alumno = sistema.obtener_usuario(dni, ROL_ALUMNO)
         nombre_asig = sistema.matricular_alumno(alumno, nombre_asig)
         flash(f"Matriculado con éxito en {nombre_asig}", "success")
         Registrar.registrar_log(
@@ -79,7 +78,7 @@ def matricular():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Matricular alumno", f"{e}")
-    return redirect(url_for("main.detalle_usuario", dni=dni))
+    return redirect(url_for("main.detalle_usuario", dni=dni, rol=ROL_ALUMNO))
 
 
 @alumnos_bp.route("/calificar", methods=["POST"])
@@ -90,7 +89,7 @@ def calificar():
     nombre_asig = request.form.get("nombre_asignatura")
 
     try:
-        alumno = sistema.obtener_usuario(dni)
+        alumno = sistema.obtener_usuario(dni, ROL_ALUMNO)
         asignatura = sistema.calificar_alumno(alumno, nombre_asig, nota)
         flash(
             f"Calficado con éxito en {asignatura.get_nombre()!r} - nota: {str(asignatura.get_nota())!r} - nota: {str(asignatura.get_nota())!r}",
@@ -103,4 +102,4 @@ def calificar():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Calificar alumno", f"{e}")
-    return redirect(url_for("main.detalle_usuario", dni=dni))
+    return redirect(url_for("main.detalle_usuario", dni=dni, rol=ROL_ALUMNO))

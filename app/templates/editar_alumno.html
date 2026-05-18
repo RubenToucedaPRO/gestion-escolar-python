@@ -22,6 +22,6 @@
         <button type="submit">
             Guardar
         </button>
-        <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni()) }}">Cancelar</a>
+        <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">Cancelar</a>
     </form>
 {% endblock %}
