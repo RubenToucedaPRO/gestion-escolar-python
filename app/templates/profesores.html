@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de usuarios{% endblock %}
+
+{% block content %}
+<h2>Listado de profesores</h2>
+<div>
+    <a href="{{ url_for('profesores.formulario') }}">
+        ➕ Alta Profesor
+    </a>
+</div>
+<form action="{{ url_for('profesores.buscar') }}" method="POST">
+    <input type="text" name="dni">
+    <button type="submit">🔍</button>
+</form>
+<table>
+    <tr>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Especialidad</th>
+    </tr>
+    {% for usuario in profesores %}
+    <tr>
+        <td>
+            <a href="{{ url_for('profesores.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">
+                {{ usuario.get_dni() }}
+            </a>
+        </td>
+        <td>{{ usuario.get_nombre() }}</td>
+        <td>{{ usuario.get_email() }}</td>
+        <td>{{ usuario.get_especialidad() }}</td>
+        <td>
+            <form action="{{ url_for('profesores.eliminar', dni=usuario.get_dni()) }}" method="POST"
+                onsubmit="return confirm('¿Seguro que quieres eliminar este profesor?');">
+                <button type="submit">🗑️</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

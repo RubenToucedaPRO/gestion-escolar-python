@@ -11,67 +11,7 @@ def home():
     return render_template("index.html")
 
 
-@main_bp.route("/usuarios")
-@login_required(role="admin")
-def listar_usuarios():
-
-    alumnos = sistema.get_alumnos()
-    profesores = sistema.get_profesores()
-
-    return render_template("usuarios.html", alumnos=alumnos, profesores=profesores)
-
-
-@main_bp.route("/usuario/<dni>/<rol>")
-@login_required(role="admin")
-def detalle_usuario(dni, rol):
-    usuario = sistema.obtener_usuario(dni, rol)
-
-    if not usuario:
-        flash("Usuario no encontrado", "danger")
-        return redirect(url_for("main.listar_usuarios"))
-    todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
-
-    return render_template(
-        "detalle_usuario.html",
-        usuario=usuario,
-        asignaturas_sistema=todas_las_asignaturas,
-    )
-
-
-@main_bp.route("/usuario", methods=["POST"])
-@login_required(role="admin")
-def buscar_usuario():
-    dni = request.form.get("dni")
-
-    try:
-        usuario = sistema.obtener_usuario(dni, "alumno")
-        if not usuario:
-            flash("Usuario no encontrado", "danger")
-            return redirect(url_for("main.listar_usuarios"))
-    except Exception as e:
-        flash(f"{e}", "danger")
-        Registrar.registrar_log("Buscar usuario", f"{e}")
-        return redirect(url_for("main.listar_usuarios"))
-
-    Registrar.registrar_log(
-        "Buscar usuario", f"Operación exitosa dni: {usuario.get_dni()!r}"
-    )
-    return render_template("detalle_usuario.html", usuario=usuario)
-
-
-@main_bp.route("/eliminar_usuario/<dni>", methods=["POST"])
-@login_required(role="admin")
-def eliminar_usuario(dni):
-
-    dni = sistema.eliminar_usuario(dni)
-
-    flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
-    Registrar.registrar_log("Eliminar usuario", f"Operación exitosa dni: {dni!r}")
-    return redirect(url_for("main.listar_usuarios"))
-
-
 @main_bp.route("/estadisticas")
-@login_required(role=["admin", "profesor", "alumno"])
 def listar_estadisticas():
 
     estadisticas = sistema.obtener_estadisticas()

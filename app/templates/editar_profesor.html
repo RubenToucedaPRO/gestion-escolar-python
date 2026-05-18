@@ -3,40 +3,41 @@
 {% block title %}Editar Alumno{% endblock %}
 
 {% block content %}
-    <h2>Editar Alumno</h2>
-    
-    <form action="{{ url_for('profesores.actualizar') }}" method="POST">
-        <input type="number" name="id" value="{{usuario.get_id()}}" hidden>
-        <div style="margin-bottom: 10px;">
-            <label>DNI:</label><br>
-            <input type="text" name="dni" value="{{ usuario.get_dni() if usuario else '' }}" required>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label>Nombre:</label><br>
-            <input type="text" name="nombre" value="{{ usuario.get_nombre() if usuario else '' }}" required>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label>Email:</label><br>
-            <input type="email" name="email" value="{{ usuario.get_email() if usuario else '' }}" required>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label>Especialidad:</label><br>
-            <input type="text" name="especialidad" list="lista-asignaturas" value="{{ usuario.get_especialidad() if usuario else '' }}" required
-                   placeholder="Escribe o selecciona..." required style="flex-grow: 1; padding: 5px;">
-            
-            <datalist id="lista-asignaturas">
-                {% for asignatura in asignaturas_sistema %}
-                    <option value="{{ asignatura }}">
+<h2>Editar Alumno</h2>
+
+<form action="{{ url_for('profesores.actualizar') }}" method="POST">
+    <input type="number" name="id" value="{{usuario.get_id()}}" hidden>
+    <div style="margin-bottom: 10px;">
+        <label>DNI:</label><br>
+        <input type="text" name="dni" value="{{ usuario.get_dni() if usuario else '' }}" required>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label>Nombre:</label><br>
+        <input type="text" name="nombre" value="{{ usuario.get_nombre() if usuario else '' }}" required>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label>Email:</label><br>
+        <input type="email" name="email" value="{{ usuario.get_email() if usuario else '' }}" required>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label>Especialidad:</label><br>
+        <input type="text" name="especialidad" list="lista-asignaturas"
+            value="{{ usuario.get_especialidad() if usuario else '' }}" required placeholder="Escribe o selecciona..."
+            required style="flex-grow: 1; padding: 5px;">
+
+        <datalist id="lista-asignaturas">
+            {% for asignatura in asignaturas_sistema %}
+            <option value="{{ asignatura }}">
                 {% endfor %}
-            </datalist>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label>Salario:</label><br>
-            <input type="number" name="salario" step="0.01" value="{{ usuario.get_salario() if usuario else '' }}" required>
-        </div>
-        <button type="submit">
-            Guardar
-        </button>
-        <a href="{{ url_for('main.detalle_usuario', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">Cancelar</a>
-    </form>
+        </datalist>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <label>Salario:</label><br>
+        <input type="number" name="salario" step="0.01" value="{{ usuario.get_salario() if usuario else '' }}" required>
+    </div>
+    <button type="submit">
+        Guardar
+    </button>
+    <a href="{{ url_for('profesores.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">Cancelar</a>
+</form>
 {% endblock %}

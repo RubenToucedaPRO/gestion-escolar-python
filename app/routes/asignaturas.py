@@ -7,7 +7,6 @@ asignaturas_bp = Blueprint("asignaturas", __name__)
 
 
 @asignaturas_bp.route("/asignaturas")
-@login_required(role="admin")
 def listar_asignaturas():
 
     asignaturas = sistema.obtener_todas_las_asignaturas()

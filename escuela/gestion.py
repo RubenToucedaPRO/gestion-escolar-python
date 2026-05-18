@@ -118,7 +118,7 @@ class CentroEducativo:
 
         if not encontrado or usuario.get_rol() != rol:
             raise DatoInvalido(
-                f"Usuario con dni: {dni_usuario!r}-> No existe el {rol} en el centro"
+                f"Dni: {dni_usuario!r}-> No existe el {rol} en el centro"
             )
         return usuario
 

@@ -6,12 +6,62 @@ from escuela import Registrar, ROL_PROFESOR
 profesores_bp = Blueprint("profesores", __name__)
 
 
+@profesores_bp.route("/profesores")
+@login_required(role="admin")
+def listar():
+
+    profesores = sistema.get_profesores()
+
+    return render_template(
+        "profesores.html",
+        profesores=profesores,
+    )
+
+
 @profesores_bp.route("/crear")
 @login_required(role="admin")
 def formulario():
     """Muestra el formulario vacío"""
     asignaturas = sistema.obtener_todas_las_asignaturas()
     return render_template("nuevo_profesor.html", asignaturas_sistema=asignaturas)
+
+
+@profesores_bp.route("/usuario/<dni>/<rol>")
+@login_required(role="admin")
+def detalle(dni, rol):
+    usuario = sistema.obtener_usuario(dni, rol)
+
+    if not usuario:
+        flash("Usuario no encontrado", "danger")
+        return redirect(url_for("profesores.listar"))
+    todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
+
+    return render_template(
+        "profesor_detalle.html",
+        usuario=usuario,
+        asignaturas_sistema=todas_las_asignaturas,
+    )
+
+
+@profesores_bp.route("/usuario", methods=["POST"])
+@login_required(role="admin")
+def buscar():
+    dni = request.form.get("dni")
+
+    try:
+        usuario = sistema.obtener_usuario(dni, "profesor")
+        if not usuario:
+            flash("Usuario no encontrado", "danger")
+            return redirect(url_for("profesores.listar"))
+    except Exception as e:
+        flash(f"{e}", "danger")
+        Registrar.registrar_log("Buscar usuario", f"{e}")
+        return redirect(url_for("profesores.listar"))
+
+    Registrar.registrar_log(
+        "Buscar usuario", f"Operación exitosa dni: {usuario.get_dni()!r}"
+    )
+    return render_template("profesor_detalle.html", usuario=usuario)
 
 
 @profesores_bp.route("/crear", methods=["POST"])
@@ -31,7 +81,7 @@ def crear():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Alta profesor", f"{e}")
-    return redirect(url_for("main.listar_usuarios"))
+    return redirect(url_for("profesores.listar"))
 
 
 @profesores_bp.route("/editar/<dni>")
@@ -66,4 +116,15 @@ def actualizar():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Actualizar profesor", f"{e}")
-    return redirect(url_for("main.detalle_usuario", dni=dni, rol=ROL_PROFESOR))
+    return redirect(url_for("profesores.detalle", dni=dni, rol=ROL_PROFESOR))
+
+
+@profesores_bp.route("/eliminar/<dni>", methods=["POST"])
+@login_required(role="admin")
+def eliminar(dni):
+
+    dni = sistema.eliminar_usuario(dni)
+
+    flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
+    Registrar.registrar_log("Eliminar usuario", f"Operación exitosa dni: {dni!r}")
+    return redirect(url_for("profesores.listar"))

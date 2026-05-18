@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}Detalle profesor{% endblock %}
+
+{% block content %}
+<h2>Información Detallada</h2>
+
+<div class="card">
+
+    <p><strong>Profesor:</strong></p>
+    <div>
+        <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}">
+            &#9999; Modificar
+        </a>
+    </div>
+    <p><strong>DNI:</strong> {{ usuario.get_dni() }}</p>
+    <p><strong>Nombre Completo:</strong> {{ usuario.get_nombre() }}</p>
+    <p><strong>Correo Electrónico:</strong> {{ usuario.get_email() }}</p>
+
+
+    <p><strong>Especialidad:</strong> {{ usuario.get_especialidad() }}</p>
+    <p><strong>Salario:</strong> {{ usuario.get_salario() }}</p>
+
+</div>
+
+<br>
+<form action="{{ url_for('profesores.eliminar', dni=usuario.get_dni()) }}" method="POST"
+    onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');">
+    <button type="submit">🗑️</button>
+</form>
+{% endblock %}

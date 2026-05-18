@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}Lista de usuarios{% endblock %}
+
+{% block content %}
+<h2>Listado de alumnos</h2>
+<div>
+    <a href="{{ url_for('alumnos.formulario') }}">
+        ➕ Alta Alumno
+    </a>
+</div>
+<form action="{{ url_for('alumnos.buscar') }}" method="POST">
+    <input type="text" name="dni">
+    <button type="submit">🔍</button>
+</form>
+<table>
+    <tr>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Email</th>
+    </tr>
+    {% for usuario in alumnos %}
+    <tr>
+        <td>
+            <a href="{{ url_for('alumnos.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}">
+                {{ usuario.get_dni() }}
+            </a>
+        </td>
+        <td>{{ usuario.get_nombre() }}</td>
+        <td>{{ usuario.get_email() }}</td>
+        <td>
+            <form action="{{ url_for('alumnos.eliminar', dni=usuario.get_dni()) }}" method="POST"
+                onsubmit="return confirm('¿Seguro que quieres eliminar este alumno?');">
+                <button type="submit">🗑️</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
