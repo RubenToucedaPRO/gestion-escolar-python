@@ -185,6 +185,9 @@ class CentroEducativo:
         self.db.eliminar_usuario(dni_usuario)
         return dni_usuario
 
+    def eliminar_asignatura_usuario(self, id_alumno: int, id_asignatura: int):
+        self.db.eliminar_asignatura_usuario(id_alumno, id_asignatura)
+
     def media_global_centro(self, numero_alumnos) -> float:
         medias = [dato["media"] for dato in self.db.obtener_notas_medias()]
         if numero_alumnos < 1:

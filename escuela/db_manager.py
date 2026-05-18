@@ -169,6 +169,18 @@ class DBManager:
         )
         self.con.commit()
 
+    def eliminar_asignatura_usuario(self, id_alumno: int, id_asignatura: int):
+        cursor = self.con.cursor()
+        query = "DELETE FROM matriculas where id_alumno=%s and id_asignatura=%s"
+        cursor.execute(
+            query,
+            (
+                id_alumno,
+                id_asignatura,
+            ),
+        )
+        self.con.commit()
+
     def existe_asignatura(self, nombre: str) -> dict:
         cursor = self.con.cursor()
         query = "SELECT id_asignatura FROM asignaturas where nombre=%s"

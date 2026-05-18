@@ -175,3 +175,16 @@ def eliminar(dni):
     flash(f"Usuario con dni {dni!r} elimnado con éxito", "success")
     Registrar.registrar_log("Eliminar usuario", f"Operación exitosa dni: {dni!r}")
     return redirect(url_for("alumnos.listar"))
+
+
+@alumnos_bp.route(
+    "/eliminar_asignatura/<dni>/<id_alumno>/<id_asignatura>", methods=["POST"]
+)
+@login_required(role="admin")
+def eliminar_asignatura(dni, id_alumno, id_asignatura):
+
+    sistema.eliminar_asignatura_usuario(id_alumno, id_asignatura)
+
+    flash(f"Asignatura elimnada con éxito", "success")
+    Registrar.registrar_log("Eliminar asignatura usuario", f"Operación exitosa")
+    return redirect(url_for("alumnos.detalle", dni=dni, rol=ROL_ALUMNO))

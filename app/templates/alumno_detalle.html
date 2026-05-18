@@ -37,6 +37,9 @@
                             <tr>
                                 <th>Asignatura</th>
                                 <th style="width: 80px;" class="text-center">Nota</th>
+                                {% if session.get('role') == 'admin' %}
+                                <th class="text-center">Acciones</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -44,6 +47,20 @@
                             <tr>
                                 <td>{{ asignatura.get_nombre() }}</td>
                                 <td class="text-center fw-bold">{{ asignatura.get_nota() }}</td>
+                                {% if session.get('role') == 'admin' %}
+                                <td class="text-center">
+                                    <form
+                                        action="{{ url_for('alumnos.eliminar_asignatura',  dni=usuario.get_dni(), id_alumno=usuario.get_id(),id_asignatura=asignatura.get_id()) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Seguro que quieres eliminar esta asignatura?');"
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 fs-5"
+                                            title="Eliminar">
+                                            🗑️
+                                        </button>
+                                    </form>
+                                </td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>
