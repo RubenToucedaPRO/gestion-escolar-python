@@ -50,7 +50,7 @@ def buscar_usuario():
             return redirect(url_for("main.listar_usuarios"))
     except Exception as e:
         flash(f"{e}", "danger")
-        Registrar.registrar_log("Buscar usuario", f"{e!r}")
+        Registrar.registrar_log("Buscar usuario", f"{e}")
         return redirect(url_for("main.listar_usuarios"))
 
     Registrar.registrar_log(
@@ -97,7 +97,7 @@ def ejecutar_sql_libre():
 
     except Exception as e:
         flash(f"{e}", "danger")
-        Registrar.registrar_log("Ejecutar SQL libre", f"{e!r}")
+        Registrar.registrar_log("Ejecutar SQL libre", f"{e}")
         return redirect(url_for("main.sql_libre"))
 
     Registrar.registrar_log("Eejcutar SQL libre", f"Operación exitosa: {query!r}")

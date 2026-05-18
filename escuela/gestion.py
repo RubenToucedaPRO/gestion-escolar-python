@@ -243,7 +243,7 @@ class CentroEducativo:
         # dado que estas están en minusculas
         query = query.strip().lower()
         if query.count(";") > 1:
-            raise ValueError("Error: Solo se permite una sentencia SQL de cada vez")
+            raise DatoInvalido("Error: Solo se permite una sentencia SQL de cada vez")
         return self.db.ejecutar_consulta(query)
 
     def cerrar_sistema(self):

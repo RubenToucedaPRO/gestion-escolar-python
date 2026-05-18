@@ -1,8 +1,16 @@
 from flask import Flask, flash, redirect, url_for
+from werkzeug.exceptions import HTTPException
 from app.routes import alumnos_bp, profesores_bp, main_bp, auth_bp
+import os
 from escuela import Registrar
 
-app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(base_dir, "app", "templates"),
+    static_folder=os.path.join(base_dir, "app", "static"),
+)
 app.secret_key = "clave_super_secreta_para_sesiones"
 
 # Registras los Blueprints
