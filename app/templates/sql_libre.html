@@ -3,30 +3,56 @@
 {% block title %}SQL Libre{% endblock %}
 
 {% block content %}
-    <h2>Consultas SQL libre a la base de datos</h2>
-    
-    <form action="{{ url_for('main.ejecutar_sql_libre') }}" method="POST" style="max-width: 400px;">
-        <div style="margin-bottom: 10px;">
-            <label>Consulta:</label><br>
-            <input type="text" name="query" required>
-        </div>        
-        <button type="submit">
-            Ejecutar consulta
-        </button>
-    </form>
+<div class="row my-4">
+    <div class="col-12">
+        <h2>Consultas SQL Libre a la Base de Datos</h2>
+    </div>
+</div>
 
-    <table>
-        <tr>
-            {% for dato in lista[0] %}
-                <td>{{ dato }}</td>
-            {% endfor %}
-        </tr>
-        {% for dato in lista[1] %}
-            <tr>
-                {% for celda in dato %}
-                    <td>{{ celda }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
+<div class="row mb-4">
+    <div class="col-md-8 mx-auto">
+        <form action="{{ url_for('main.ejecutar_sql_libre') }}" method="POST">
+            <div class="mb-3">
+                <label for="query" class="form-label fw-bold text-secondary">Sentencia SQL</label>
+                <textarea id="query" name="query" class="form-control font-monospace" rows="3"
+                    placeholder="SELECT * FROM personas;" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">
+                Ejecutar consulta
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if lista and lista|length > 1 %}
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive rounded overflow-hidden border shadow-sm">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        {% for columna in lista[0] %}
+                        <th>{{ columna }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in lista[1] %}
+                    <tr>
+                        {% for celda in fila %}
+                        <td>{{ celda }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary">
+        Volver
+    </a>
+</div>
 {% endblock %}
