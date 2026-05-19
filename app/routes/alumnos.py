@@ -63,6 +63,7 @@ def buscar():
         if not usuario:
             flash("Usuario no encontrado", "danger")
             return redirect(url_for("alumnos.listar"))
+        todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Buscar usuario", f"{e}")
@@ -71,7 +72,7 @@ def buscar():
     Registrar.registrar_log(
         "Buscar usuario", f"Operación exitosa dni: {usuario.get_dni()!r}"
     )
-    return render_template("alumno_detalle.html", usuario=usuario)
+    return render_template("alumno_detalle.html", usuario=usuario,asignaturas_sistema=todas_las_asignaturas)
 
 
 @alumnos_bp.route("/crear", methods=["POST"])
