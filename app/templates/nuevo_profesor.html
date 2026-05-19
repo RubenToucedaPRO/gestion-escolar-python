@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-md-5">
+<div class="row mt-5">
+    <div class="col-md-5 mx-auto">
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <h5 class="card-title mb-3 text-primary">Alta profesor</h5>
@@ -31,7 +31,7 @@
 
                     <div class="mb-3">
                         <label for="especialidad" class="form-label">Especialidad</label>
-                        <select name="nombre_asignatura" class="form-select form-select-sm" required>
+                        <select name="especialidad" class="form-select form-select-sm" required>
                             <option value="" disabled selected>Selecciona una asignatura...</option>
                             {% for asig in asignaturas_sistema %}
                             <option value="{{ asig }}">{{ asig }}</option>
@@ -46,8 +46,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm me-2">Guardar</button>
-                        <a href="{{ url_for('profesores.listar') }}">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="{{ url_for('profesores.listar') }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

@@ -84,7 +84,7 @@ def crear():
 
     try:
         alumno = sistema.crear_alumno(dni, nombre, email)
-        flash(f"Alumno con dni {dni} creado con éxito")
+        flash(f"Alumno con dni {dni} creado con éxito","success")
         Registrar.registrar_log(
             "Alta alumno", f"Operación exitosa dni: {alumno.get_dni()!r}"
         )

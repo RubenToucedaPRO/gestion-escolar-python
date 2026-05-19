@@ -8,7 +8,7 @@
         <h2>Información Detallada</h2>
     </div>
     <div class="col-6 text-end">
-        <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}" class="btn btn-warning btn-sm">
+        <a href="{{ url_for('profesores.editar', dni=usuario.get_dni()) }}" class="btn btn-warning">
             ✏️ Modificar
         </a>
     </div>
@@ -29,14 +29,14 @@
 
 <div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
     <a href="{{ url_for('profesores.listar', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
-        class="btn btn-secondary btn-sm">
-        Volver al listado
+        class="btn btn-secondary">
+        Volver
     </a>
 
     <form action="{{ url_for('profesores.eliminar', dni=usuario.get_dni()) }}" method="POST"
         onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');" class="m-0">
         <input type="hidden" name="rol" value="profesor">
-        <button type="submit" class="btn btn-outline-danger btn-sm">
+        <button type="submit" class="btn btn-outline-danger">
             🗑️ Eliminar
         </button>
     </form>

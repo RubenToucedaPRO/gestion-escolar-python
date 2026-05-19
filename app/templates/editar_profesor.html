@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<div class="row">
+<div class="row mt-5">
     <div class="col-md-5 mx-auto">
         <div class="card shadow-sm mb-4">
             <div class="card-body">
@@ -49,9 +49,9 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm me-2">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                         <a href="{{ url_for('profesores.detalle', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
-                            class="btn btn-secondary btn-sm">
+                            class="btn btn-secondary">
                             Cancelar
                         </a>
                     </div>

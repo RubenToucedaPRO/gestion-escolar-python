@@ -76,7 +76,7 @@ def crear():
 
     try:
         sistema.crear_profesor(dni, nombre, email, especialidad, salario)
-        flash(f"Profesor con dni {dni} creado con éxito")
+        flash(f"Profesor con dni {dni} creado con éxito", "success")
         Registrar.registrar_log("Alta profesor", f"Operación exitosa dni: {dni!r}")
     except Exception as e:
         flash(f"{e}", "danger")

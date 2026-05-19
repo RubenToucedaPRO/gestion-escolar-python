@@ -8,8 +8,8 @@
         <h2 class="mb-0">Listado de profesores</h2>
     </div>
     <div class="col-sm-6 text-sm-end mt-2 mt-sm-0">
-        <a href="{{ url_for('profesores.formulario') }}" class="btn btn-success btn-sm">
-            ➕ Alta profesor
+        <a href="{{ url_for('profesores.formulario') }}" class="btn btn-success">
+            <i class="bi bi-person-plus"></i> Alta profesor
         </a>
     </div>
 </div>
@@ -58,5 +58,10 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+<div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary">
+        Volver
+    </a>
 </div>
 {% endblock %}

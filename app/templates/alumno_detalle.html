@@ -9,7 +9,7 @@
     </div>
     {% if session.get('role') == 'admin' %}
     <div class="col-6 text-end">
-        <a href="{{ url_for('alumnos.editar', dni=usuario.get_dni()) }}" class="btn btn-warning btn-sm">
+        <a href="{{ url_for('alumnos.editar', dni=usuario.get_dni()) }}" class="btn btn-warning">
             ✏️ Modificar
         </a>
     </div>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar Calificación</button>
+                        <button type="submit" class="btn btn-primary">Guardar Calificación</button>
                     </div>
                 </form>
             </div>
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-success btn-sm">Confirmar Matrícula</button>
+                        <button type="submit" class="btn btn-success">Confirmar Matrícula</button>
                     </div>
                 </form>
             </div>
@@ -137,12 +137,12 @@
 <div class="d-flex justify-content-between align-items-center border-top mt-4 pt-3">
     {% if session.get('role') == 'admin' or session.get('role') == 'profesor' %}
     <a href="{{ url_for('alumnos.listar', dni=usuario.get_dni(), rol=usuario.get_rol()) }}"
-        class="btn btn-secondary btn-sm">
+        class="btn btn-secondary">
         Volver
     </a>
     {% endif %}
     {% if session.get('role') == 'alumno' %}
-    <a href="{{ url_for('main.home') }}" class="btn btn-secondary btn-sm">
+    <a href="{{ url_for('main.home') }}" class="btn btn-secondary">
         Volver
     </a>
     {% endif %}
@@ -150,7 +150,7 @@
     <form action="{{ url_for('alumnos.eliminar', dni=usuario.get_dni()) }}" method="POST"
         onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?');" class="m-0">
         <input type="hidden" name="rol" value="alumno">
-        <button type="submit" class="btn btn-outline-danger btn-sm">
+        <button type="submit" class="btn btn-outline-danger">
             🗑️ Eliminar Alumno
         </button>
     </form>
