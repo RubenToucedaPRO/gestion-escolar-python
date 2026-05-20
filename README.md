@@ -299,7 +299,24 @@ python server.py
 python3 server.py
 ```
 
-### Paso 4: Mantenimiento y Reseteo
+### Paso 4: Usuarios de prueba
+Para comprobar el funcionamiento de los distintos accesos del sistema, se pueden usar las siguientes cuentas en la pantalla de inicio de sesión creadas con el script de la BD:
+
+* **Administrador**
+  * **Usuario (DNI):** `16083440T`
+  * **Contraseña:** `admin`
+
+* **Profesores**
+  * **Profesor 1 (DNI):** `64993018D` | **Contraseña:** `1234`
+  * **Profesor 2 (DNI):** `05732516L` | **Contraseña:** `1234`
+
+* **Alumnos**
+  * **Alumno 1 (DNI):** `33551578Y` | **Contraseña:** `1234`
+  * **Alumno 2 (DNI):** `63789776N` | **Contraseña:** `1234`
+  * **Alumno 3 (DNI):** `17403564Q` | **Contraseña:** `1234`
+  * **Alumno 4 (DNI):** `85029528T` | **Contraseña:** `1234`
+
+### Paso 5: Mantenimiento y Reseteo
 Si desea borrar todos los datos y volver al estado iniciar del script SQL, elimine los volúmenes del contenedor:
 ```bash
 docker compose down -v

@@ -72,7 +72,11 @@ def buscar():
     Registrar.registrar_log(
         "Buscar usuario", f"Operación exitosa dni: {usuario.get_dni()!r}"
     )
-    return render_template("alumno_detalle.html", usuario=usuario,asignaturas_sistema=todas_las_asignaturas)
+    return render_template(
+        "alumno_detalle.html",
+        usuario=usuario,
+        asignaturas_sistema=todas_las_asignaturas,
+    )
 
 
 @alumnos_bp.route("/crear", methods=["POST"])
@@ -85,7 +89,7 @@ def crear():
 
     try:
         alumno = sistema.crear_alumno(dni, nombre, email)
-        flash(f"Alumno con dni {dni} creado con éxito","success")
+        flash(f"Alumno con dni {dni} creado con éxito", "success")
         Registrar.registrar_log(
             "Alta alumno", f"Operación exitosa dni: {alumno.get_dni()!r}"
         )
@@ -154,7 +158,7 @@ def calificar():
         alumno = sistema.obtener_usuario(dni, ROL_ALUMNO)
         asignatura = sistema.calificar_alumno(alumno, nombre_asig, nota)
         flash(
-            f"Calficado con éxito en {asignatura.get_nombre()!r} - nota: {str(asignatura.get_nota())!r} - nota: {str(asignatura.get_nota())!r}",
+            f"Calificado con éxito en {asignatura.get_nombre()!r} - nota: {str(asignatura.get_nota())!r}",
             "success",
         )
         Registrar.registrar_log(

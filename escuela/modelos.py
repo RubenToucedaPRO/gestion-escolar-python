@@ -68,7 +68,13 @@ class Persona(ABC):
         return self._contrasena
 
     def to_dict(self):
-        return {"dni": self._dni, "nombre": self.nombre, "email": self.email}
+        return {
+            "dni": self._dni,
+            "nombre": self.nombre,
+            "email": self.email,
+            "rol": self._rol,
+            "contrasena": self._contrasena,
+        }
 
 
 class Asignatura:
@@ -157,15 +163,6 @@ class Alumno(Persona):
             )
         self._asignaturas.append(asignatura)
 
-    def to_dict(self):
-        return {
-            "dni": self._dni,
-            "nombre": self.nombre,
-            "email": self.email,
-            "rol": self._rol,
-            "contrasena": self._contrasena,
-        }
-
 
 class Profesor(Persona):
     def __init__(
@@ -229,15 +226,9 @@ class Profesor(Persona):
             )
 
     def to_dict(self):
-        return {
-            "dni": self._dni,
-            "nombre": self.nombre,
-            "email": self.email,
-            "especialidad": self.especialidad,
-            "salario": self.salario,
-            "rol": self._rol,
-            "contrasena": self._contrasena,
-        }
+        data = super().to_dict()
+        data.update({"especialidad": self.especialidad, "salario": self.salario})
+        return data
 
 
 class Administrador(Persona):
@@ -254,10 +245,3 @@ class Administrador(Persona):
 
     def __str__(self):
         return f"[ADMIN] {super().__str__()}"
-
-    def to_dict(self):
-        return {
-            "dni": self._dni,
-            "nombre": self.nombre,
-            "email": self.email,
-        }
