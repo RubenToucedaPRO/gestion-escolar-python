@@ -32,10 +32,10 @@
 
                     <div class="mb-3">
                         <label for="especialidad" class="form-label">Especialidad</label>
-                        <select name="nombre_asignatura" class="form-select form-select-sm" required>
+                        <select name="especialidad" class="form-select form-select-sm" required>
                             <option value="" disabled>Selecciona una asignatura...</option>
                             {% for asig in asignaturas_sistema %}
-                            <option value="{{ asig }}" {% if asig==asignatura_actual %}selected{% endif %}>
+                            <option value="{{ asig }}" {% if asig==usuario.get_especialidad() %}selected{% endif %}>
                                 {{ asig }}
                             </option>
                             {% endfor %}
