@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, url_for
 from app.routes import alumnos_bp, profesores_bp, asignaturas_bp, main_bp, auth_bp
 import os
-from escuela import Registrar
+from escuela import Registrar, CLAVE_SECRETA
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,7 +10,7 @@ app = Flask(
     template_folder=os.path.join(base_dir, "app", "templates"),
     static_folder=os.path.join(base_dir, "app", "static"),
 )
-app.secret_key = "clave_super_secreta_para_sesiones"
+app.secret_key = CLAVE_SECRETA
 
 # Registras los Blueprints
 app.register_blueprint(main_bp)

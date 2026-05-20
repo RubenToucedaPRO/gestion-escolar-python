@@ -3,7 +3,7 @@ from .modelos import Persona, Asignatura, Alumno, Profesor
 from .gestion import CentroEducativo
 from .db_manager import DBManager
 from .registrar import Registrar
-from .config import ROL_ALUMNO, ROL_PROFESOR, ROL_ADMIN
+from .config import ROL_ALUMNO, ROL_PROFESOR, ROL_ADMIN, CLAVE_SECRETA
 
 __all__ = [
     "DatoInvalido",
