@@ -41,4 +41,4 @@ def ejecutar_sql_libre():
         return redirect(url_for("main.sql_libre"))
 
     Registrar.registrar_log("Eejcutar SQL libre", f"Operación exitosa: {query!r}")
-    return render_template("sql_libre.html", lista=resultado)
+    return render_template("sql_libre.html", lista=resultado, query=query)

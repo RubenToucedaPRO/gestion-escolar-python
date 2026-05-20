@@ -104,7 +104,7 @@ Subsistema de trazabilidad encargado del registro asíncrono de operaciones, acc
             ├── editar_profesor.html
             ├── estadisticas.html
             ├── index.html        # Dashboard principal post-autenticación
-            ├── layout.html       # Plantilla base contenedora (Estructura global HTML5)
+            ├── layout.html       # Plantilla base contenedora de todas las vistas
             ├── login.html        # Pantalla de acceso al sistema
             ├── nuevo_alumno.html
             ├── nuevo_profesor.html
