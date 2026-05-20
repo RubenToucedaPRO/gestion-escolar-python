@@ -58,12 +58,17 @@ INSERT INTO asignaturas (nombre) VALUES
 -- Jose
 INSERT INTO personas (dni, nombre, email, rol, contrasena) VALUES ('64993018D', 'Jose', 'jose@email.com','profesor','1234');
 INSERT INTO profesores (id_persona, especialidad, salario) 
-VALUES (LAST_INSERT_ID(), 'Bases de datos', 2005.0);
+VALUES (LAST_INSERT_ID(), 'Bases de datos', 2005.05);
 
 -- Arturo
 INSERT INTO personas (dni, nombre, email, rol, contrasena) VALUES ('05732516L', 'Arturo', 'arturo@email.com','profesor','1234');
 INSERT INTO profesores (id_persona, especialidad, salario) 
-VALUES (LAST_INSERT_ID(), 'Python', 1900.0);
+VALUES (LAST_INSERT_ID(), 'Python', 1900.40);
+
+-- Juan
+INSERT INTO personas (dni, nombre, email, rol, contrasena) VALUES ('89055630K', 'Juan', 'juan@email.com','profesor','1234');
+INSERT INTO profesores (id_persona, especialidad, salario) 
+VALUES (LAST_INSERT_ID(), 'Android', 3900.44);
 
 -- 3. INSERTAR ALUMNOS Y SUS MATRICULAS
 -- Jacinto
