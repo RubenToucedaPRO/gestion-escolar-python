@@ -5,22 +5,37 @@ Esta aplicación es un **Sistema de Gestión de un Centro Educativo** desarrolla
 
 ### Funcionalidades
 El sistema destaca por las siguientes funcionalidades implementadas:
-- Gestión de usuarios: Permite la creación y almacenamiento de alumnos y profesores.
-- Gestión de Asignaturas: Los alumnos pueden ser matriculados y es posible asignar o modificar sus calificaciones de forma dinámica.
-- Modelo de Herencia y Polimorfismo: Utiliza una clase base abstracta Persona de la que heredan los distintos roles, permitiendo un tratamiento unificado de los datos pero con comportamientos específicos para cada tipo de usuario (por ejemplo, en su representación de texto __str__).
-- Gestión Académica:
-  * Matriculación: Los alumnos pueden ser matriculados en diferentes asignaturas.
-  * Calificación: El sistema permite asignar notas a los alumnos validando que se encuentre la nota en el rango de 0 a 10 y debe ser realizada por el profesor con la especialidad en esa asignatura.
-- Sistema de Validación Robusto: 
-  * Control estricto de DNIs (formato 8 números + 1 letra).
-  * Validación de rango de calificaciones (0-10).
-  * DNIs únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo dni.
-  * Email únicos: verificacion en la creación/modificación del usuario asi como bloqueo en base de datos asignado como `UNIQUE` el campo email.
-- Gestión de Excepciones: Implementación de errores personalizados (`DatoInvalido`, `Duplicado`,`BaseDatosError`) que permiten al programa continuar su ejecución ante datos corruptos, entradas duplicadas, errores en base de datos informando del error por consola y registrando en el log tales errores.
-- Persistencia de Datos: Los datos de alumnos, profesores y asignaturas se almacenan en una base de datos mysql alojada en un contenedor docker, permitiendo que la información se mantenga entre distintas ejecuciones del programa.
-- Operaciones CRUD Completas: Se ha implementado la capacidad de Crear, Leer, Actualizar y Borrar tanto para el personal docente como para el alumnado.
-- Sistema de Logging: Registro automático de cada operación (altas, bajas, errores) en el archivo escuela.log, incluyendo marca de tiempo y estado de la tarea así como los errores que se producen durante la ejecución.
-- Suite de pruebas para verificación de la lógica de negocio.
+
+- **Autenticación y Control de Acceso Basado en Roles:**
+  * **Sistema de Login y Sesiones:** Mecanismo de autenticación seguro mediante cookies de sesión en Flask que almacena la identidad (`dni`, `nombre`) y el rol del usuario para persistir el estado de la aplicación.
+  * **Cierre de Sesión Seguro:** Destrucción completa del diccionario de sesión (`session.clear()`) para prevenir secuestros de sesión y accesos no autorizados tras el logout.
+  * **Protección de Vistas mediante Decorador:** Implementación del decorador personalizado `@login_required(role=[...])` que restringe el acceso a endpoints específicos.
+
+- **Gestión de Usuarios y Operaciones CRUD Completas:**
+  * Capacidad de Crear, Leer, Actualizar y Borrar (CRUD) tanto para el personal docente como para el alumnado.
+  * Tratamiento diferenciado de vistas e interfaces según los privilegios del rol autenticado (Administrador, Profesor, Alumno).
+
+- **Gestión de Asignaturas:** Permite la declaración, registro y administración de las asignaturas impartidas por el centro docente por parte del administrador. Los profesores, alumnos y sin login podrán simplemente visualizar las asignaturas que imparte el centro.
+
+- **Gestión de Matrículas y Calificaciones:**
+  * **Matriculación Dinámica:** Capacidad de matricularse los alumnos en las diferentes asignaturas de las que dispone el centro evitando que el alumno pueda insertar manualmente el nombre de la asignatura.
+  * **Calificación Académica:** El sistema permite asignar y modificar notas, validando que se encuentren estrictamente en el rango de 0 a 10 y que existe un profesor cuya especialidad es dicha asignatura.
+
+- **Modelo de Herencia y Polimorfismo:** Utiliza una clase base abstracta `Persona` de la que heredan los distintos roles, permitiendo un tratamiento unificado de los datos en la lógica del sistema pero con comportamientos específicos para cada tipo de usuario (por ejemplo, en su representación de texto `__str__`).
+
+- **Sistema de Validación Robusto:** 
+  
+  * Control estricto de formato de DNIs (8 números y 1 letra) mediante expresiones regulares y calculo de la letra de control oficial usando el módulo 23.
+  * Validación estricta en el rango de calificaciones (0-10).
+  * **Garantía de Unicidad:** Verificación dual (a nivel de aplicación durante la creación/modificación y a nivel de infraestructura mediante restricciones `UNIQUE` en la base de datos) para los campos `dni` y `email`.
+
+- **Gestión de Excepciones:** Implementación de errores personalizados (`DatoInvalido`, `Duplicado`, `BaseDatosError`) que desacoplan el flujo principal de los fallos de infraestructura, permitiendo al programa continuar su ejecución ante datos corruptos, entradas duplicadas o caídas del motor de base de datos.
+
+- **Persistencia de Datos:** Arquitectura de datos basada en un motor MySQL alojado en un contenedor Docker, garantizando la consistencia, integridad y persistencia de la información entre las distintas ejecuciones del servidor de aplicaciones.
+
+- **Sistema de Logging y Trazabilidad:** Registro automático y centralizado de eventos críticos (altas, bajas, inicios de sesión, cierres de sesión y excepciones internas) en el archivo `escuela.log`, incluyendo marcas de tiempo y el estado contextualizado de cada tarea para auditoría y depuración.
+
+- **Suite de Pruebas Automatizadas (Testing):** Cobertura de código mediante pruebas unitarias y de integración utilizando `unittest` y `mock.patch` para verificar de forma aislada e independiente tanto la lógica de negocio como el comportamiento de los endpoints HTTP frente a flujos de éxito y denegación de accesos.
 
 ## Arquitectura y Modelo de Clases (UML)
 El diseño del software se basa en una **arquitectura modular organizada en capas**, siguiendo principios de alta cohesión y bajo acoplamiento. Esta estructura permite separar la lógica de presentación de la lógica de negocio y la persistencia, facilitando el mantenimiento evolutivo del sistema.
@@ -36,33 +51,33 @@ El diseño del software se basa en una **arquitectura modular organizada en capa
 
 ### Diagramas de Clase
 
-#### 1. Interfaz de Usuario
-Gestor de la lógica visual y navegación de menús mediante la interacción por consola.
+#### 1. Enrutamiento y Capa Web (Flask Blueprints)
+Gestor de la lógica visual, renderizado de plantillas Jinja2 y control de acceso basado en roles (RBAC). Reemplaza la antigua interfaz de terminal por un sistema de enrutamiento web modularizado mediante Blueprints (`auth`, `alumnos`, `profesores`, `asignaturas`, `main`).
 
-![Diagrama interfaz consola](images/interfazConsola.png)
+![Diagrama interfaz web](images/interfazConsola.png)
 
 #### 2. Centro Educativo (Lógica de Negocio)
-Orquestador principal que centraliza las operaciones de gestión de alumnos, profesores y procesos de matriculación.
+Orquestador principal del paquete `escuela` (`gestion.py`). Centraliza las operaciones del sistema y es consumido directamente por los Blueprints de la capa web para procesar las altas, bajas y listados de la comunidad educativa.
 
 ![Diagrama centro educativo](images/centroEducativo.png)
 
-#### 3. DB Manager (Persistencia)
-Implementación del patrón DAO (*Data Access Object*) para la gestión de transacciones SQL y conectividad con MySQL.
+#### 3. DB Manager (Persistencia de Datos)
+Implementación encargada de la conectividad con el contenedor Docker de MySQL (`db_manager.py`). Administra la ejecución de sentencias SQL, el mapeo de registros y el ciclo de vida de las conexiones del servidor.
 
 ![Diagrama db manager](images/dbManager.png)
 
-#### 4. Modelos de Datos
-Representa la jerarquía de entidades. Se destaca el uso de **herencia** a partir de la clase base `Persona` y la composición con la clase `Asignatura`.
+#### 4. Modelos de Entidades
+Representa la jerarquía de objetos de negocio (`modelos.py`). Se destaca el uso de **herencia** a partir de la clase base abstracta `Persona` (de la que heredan `Alumno` y `Profesor`) y la composición con la entidad `Asignatura`.
 
 ![Diagrama modelos](images/modelos.png)
 
-#### 5. Utilidades y Excepciones (Common)
-Define el sistema de errores personalizados para el control de la lógica de negocio y métodos de validación comunes.
+#### 5. Utilidades y Validación (Common)
+Módulo centralizado de herramientas de soporte (`common.py`). Define los métodos globales de validación estricta (formatos de DNI, restricciones de emails y excepciones personalizadas) compartidos por todo el sistema.
 
 ![Diagrama common](images/common.png)
 
-#### 6. Registro de Logs
-Subsistema encargado de la trazabilidad de operaciones y registro de errores en tiempo de ejecución.
+#### 6. Sistema de Logs y Auditoría
+Subsistema de trazabilidad encargado del registro asíncrono de operaciones, accesos y excepciones en tiempo de ejecución (`registrar.py`), persistiendo los eventos directamente en el archivo `escuela.log`.
 
 ![Diagrama registro de logs](images/registrar.png)
 
@@ -70,19 +85,47 @@ Subsistema encargado de la trazabilidad de operaciones y registro de errores en 
 ## Estructura del proyecto
 ```
 └── 📁gestion-escolar-python
-    └── 📁app
-        ├── __init__.py           # Facilita las importaciones del paquete
-        ├── interfaz_usuario.py   # Gestor logica visual y conexion a centro educativo
-    └── 📁escuela
-        └── 📁tests
-            ├── test_centro.py    # Suite de pruebas automatizadas
-        ├── __init__.py           # Paquete principal de lógica de negocio
-        ├── common.py             # Utilidades, excepciones personalizadas y validaciones
-        ├── db_manager.py         # Gestor base de datos: capa de persistencia (MySQL Connector)
-        ├── gestion.py            # Orquestador (Clase CentroEducativo)
-        ├── modelos.py            # Entidades (Persona, Alumno, Profesor, Asignatura)
-        ├── registrar.py          # Configuración de logging
-    └── 📁images                  # Recursos visuales para documentación
+    └── 📁app                     # Paquete principal de la aplicación web (Flask)
+        └── 📁routes              # Capa de control distribuida mediante Flask Blueprints
+            ├── __init__.py       # Inicialización del paquete de rutas
+            ├── alumnos.py        # Endpoints y gestión de negocio del alumnado
+            ├── asignaturas.py    # Endpoints y administración de asignaturas
+            ├── auth.py           # Sistema de autenticación, logout y decorador de roles
+            ├── main.py           # Rutas genéricas e índice de la aplicación
+            ├── profesores.py     # Endpoints y gestión del personal docente
+        └── 📁static              # Archivos estáticos servidos por el servidor web
+            └── 📁css              # Estilos de la interfaz de usuario
+                └── 📁fonts       # Fuentes tipográficas del sistema
+                ├── style.css     # Estilos personalizados de la plataforma
+            └── 📁js              # Componentes de comportamiento interactivo front-end
+            ├── favicon.png       # Icono de pestaña del navegador
+        └── 📁templates           # Vistas html renderizadas mediante el motor Jinja2
+            ├── _footer.html      # Fragmento reutilizable de pie de página
+            ├── _navbar.html      # Barra de navegación dinámica según el rol de sesión
+            ├── alumno_detalle.html
+            ├── alumnos.html
+            ├── asignaturas.html
+            ├── editar_alumno.html
+            ├── editar_profesor.html
+            ├── estadisticas.html
+            ├── index.html        # Dashboard principal post-autenticación
+            ├── layout.html       # Plantilla base contenedora (Estructura global HTML5)
+            ├── login.html        # Pantalla de acceso al sistema
+            ├── nuevo_alumno.html
+            ├── nuevo_profesor.html
+            ├── profesor_detalle.html
+            ├── profesores.html
+            ├── sql_libre.html    # Panel de ejecución de consultas directas
+        ├── extensions.py         # Instanciación y puente global del objeto de negocio (sistema)
+    └── 📁escuela                 # Paquete principal de lógica de negocio (Core)
+        ├── __init__.py           # Facilita las importaciones del subpaquete
+        ├── common.py             # Herramientas de validación de datos comunes (DNI, email, excepciones)
+        ├── config.py             # Configuración del entorno de la aplicación
+        ├── db_manager.py         # Capa de persistencia (Transacciones nativas SQL con MySQL)
+        ├── gestion.py            # Implementación de la clase controladora CentroEducativo
+        ├── modelos.py            # Jerarquía de clases (Persona, Alumno, Profesor, Asignatura)
+        ├── registrar.py          # Infraestructura de logging y trazabilidad
+    └── 📁images                  # Gráficos y diagramas para la documentación del repositorio
     └── 📁scripts
         ├── init_db.sql           # Script de creación de tablas y datos iniciales
     ├── .gitignore                # Archivos excluidos de control de versiones
@@ -95,11 +138,19 @@ Subsistema encargado de la trazabilidad de operaciones y registro de errores en 
 
 ## Tecnologías y conceptos aplicados
 
+* **Desarrollo Web y Arquitectura de Software**:
+    * **Flask y Blueprints**: Implementación de una arquitectura web modular mediante el uso de Flask Blueprints, distribuyendo de forma limpia las responsabilidades del enrutamiento por componentes de negocio (`auth`, `alumnos`, `profesores`, `asignaturas`).
+    * **Patrón MVC / Capas**: Clara separación de responsabilidades dividida entre la capa de presentación (vistas HTML estructuradas con herencia de plantillas en Jinja2), la capa de control (endpoints y decoradores en las rutas) y el núcleo de lógica de negocio y persistencia en el paquete `escuela`.
+    * **Manejo de Sesiones HTTP**: Gestión del estado de la aplicación e identidad del usuario mediante el ciclo de vida de sesiones basadas en cookies firmadas criptográficamente por Flask.
+* **Seguridad y Control de Acceso**:
+    * **Control de acceso**: Sistema de control de accesos basado en roles (Administrador, Profesor, Alumno).
+    * **Inyección de Dependencias en Flujos (Decoradores)**: Diseño del decorador personalizado de funciones `@login_required(role=[...])` para interceptar peticiones HTTP en tiempo de ejecución, encapsulando la lógica de autorización y protegiendo las vistas de accesos no autorizados.
 * **Programación Orientada a Objetos (POO) Avanzada**:
     * **Herencia y Polimorfismo**: Implementación de una jerarquía de clases con `Persona` como base y especialización en `Alumno` y `Profesor`, permitiendo un tratamiento uniforme de las entidades.
     * **Encapsulamiento**: Protección del estado interno de los objetos mediante atributos privados y acceso controlado a través de métodos *getter* y *setter*.
 * **Capa de Persistencia y Bases de Datos**:
     * **MySQL Relacional**: Diseño de un esquema de base de datos con relaciones de clave foránea (Foreign Keys) para gestionar alumnos, profesores, asignaturas y matrículas.
+    * **Patrón de Conectividad Estricto**: Gestión nativa de transacciones SQL, cursores y control de excepciones operacionales de base de datos.
 * **Arquitectura de Software**:
     * **Patrón de Capas**: Separación clara entre la interfaz de usuario (presentación), la lógica de negocio (CentroEducativo) y la gestión de datos (DBManager).
 * **Robustez y Mantenibilidad**:
@@ -107,7 +158,8 @@ Subsistema encargado de la trazabilidad de operaciones y registro de errores en 
     * **Logging**: Registro sistemático de eventos y errores mediante el módulo `logging` de Python para facilitar la trazabilidad.
 * **Infraestructura y Calidad**:
     * **Contenerización con Docker**: Despliegue de la infraestructura de base de datos mediante `docker-compose`, garantizando un entorno de desarrollo reproducible.
-    * **Testing e Integración**: Suite de pruebas automatizadas con `unittest` y análisis de cobertura de código con la herramienta `coverage`.
+    * **Testing e Integración**: Suite de pruebas automatizadas con `unittest` para probar la lógica contra la base de datos real con datos ficticios que se eliminan al final de cada test.
+    * **Análisis de Cobertura (Coverage)**: Control e inspección métrica del alcance de las pruebas utilizando `coverage`, evaluando activamente las sentencias ejecutadas y detectando líneas de código no cubiertas (*Miss*).
 
 ## Gestión de Persistencia
 
@@ -211,7 +263,7 @@ git clone https://github.com/RubenToucedaPRO/gestion-escolar-python
 ```
 Situese en la rama correspondiente:
 ```bash
-git checkout rama-tarefa3
+git checkout rama-tarefa4
 ```
 Abra en su ide el proyecto y proceda con los siguientes pasos de creación y activacion del entorno virtual:
 * Si su sistema operativo es windows:
@@ -239,17 +291,17 @@ docker compose up -d
 
 ### Paso 3: Ejecución
 Inicie la aplicación:
-* Opcion 1: Ejecutar el fichero **main.py** en VsCode
-* Opcion 2: Ejecutar desde la terminal
+* Opcion 1: Ejecutar el fichero **server.py** en VsCode.
+* Opcion 2: Abra la terminal, situese en la raiz del proyecto y ejecute el siguiente comando: 
   - Si su sistema operativo es windows:
 ```bash
 # Ejecución vía terminal
-python main.py
+python server.py
 ```
   - Si su sistema operativo es Linux/MacOS
 ```bash
 # Ejecución vía terminal
-python3 main.py
+python3 server.py
 ```
 
 ### Paso 4: Mantenimiento y Reseteo
