@@ -30,5 +30,4 @@ def manejador_global_errores(error):
 
 
 if __name__ == "__main__":
-    # Lanzamos el servidor en modo debug para ver errores en tiempo real
-    app.run(debug=True, port=5000)
+    app.run(port=5000)

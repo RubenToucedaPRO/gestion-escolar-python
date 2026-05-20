@@ -258,6 +258,7 @@ class CentroEducativo:
         existe_asignatura = self.db.existe_asignatura(asignatura.get_nombre())
         if not existe_asignatura:
             self.db.crear_asignatura(asignatura.get_nombre())
+            return asignatura
         else:
             raise Duplicado(
                 f"Asignatura {asignatura.get_nombre()!r} ya existe en el centro"

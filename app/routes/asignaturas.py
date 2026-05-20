@@ -22,9 +22,10 @@ def crear():
 
     try:
         asignatura = sistema.crear_asignatura(nombre)
-        flash(f"Asignatura {asignatura} creada con éxito", "success")
+        flash(f"Asignatura {asignatura.get_nombre()} creada con éxito", "success")
         Registrar.registrar_log(
-            "Alta asignatura", f"Operación exitosa asignatura: {asignatura!r}"
+            "Alta asignatura",
+            f"Operación exitosa asignatura: {asignatura.get_nombre()!r}",
         )
     except Exception as e:
         flash(f"{e}", "danger")

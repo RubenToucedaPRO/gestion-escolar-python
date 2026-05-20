@@ -33,6 +33,11 @@ body {
 	margin: 0;
 }
 
+main {
+	flex: 1;
+	padding-bottom: 100px;
+}
+
 /* Input fields */
 .form-control {
 	border-radius: 5px;
