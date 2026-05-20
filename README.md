@@ -51,32 +51,27 @@ El diseño del software se basa en una **arquitectura modular organizada en capa
 
 ### Diagramas de Clase
 
-#### 1. Enrutamiento y Capa Web (Flask Blueprints)
-Gestor de la lógica visual, renderizado de plantillas Jinja2 y control de acceso basado en roles (RBAC). Reemplaza la antigua interfaz de terminal por un sistema de enrutamiento web modularizado mediante Blueprints (`auth`, `alumnos`, `profesores`, `asignaturas`, `main`).
-
-![Diagrama interfaz web](images/interfazConsola.png)
-
-#### 2. Centro Educativo (Lógica de Negocio)
+#### 1. Centro Educativo (Lógica de Negocio)
 Orquestador principal del paquete `escuela` (`gestion.py`). Centraliza las operaciones del sistema y es consumido directamente por los Blueprints de la capa web para procesar las altas, bajas y listados de la comunidad educativa.
 
 ![Diagrama centro educativo](images/centroEducativo.png)
 
-#### 3. DB Manager (Persistencia de Datos)
+#### 2. DB Manager (Persistencia de Datos)
 Implementación encargada de la conectividad con el contenedor Docker de MySQL (`db_manager.py`). Administra la ejecución de sentencias SQL, el mapeo de registros y el ciclo de vida de las conexiones del servidor.
 
 ![Diagrama db manager](images/dbManager.png)
 
-#### 4. Modelos de Entidades
-Representa la jerarquía de objetos de negocio (`modelos.py`). Se destaca el uso de **herencia** a partir de la clase base abstracta `Persona` (de la que heredan `Alumno` y `Profesor`) y la composición con la entidad `Asignatura`.
+#### 3. Modelos de Entidades
+Representa la jerarquía de objetos de negocio (`modelos.py`). Se destaca el uso de **herencia** a partir de la clase base abstracta `Persona` (de la que heredan `Alumno`, `Profesor` y `Administrador`) y la composición con la entidad `Asignatura`.
 
 ![Diagrama modelos](images/modelos.png)
 
-#### 5. Utilidades y Validación (Common)
+#### 4. Utilidades y Validación (Common)
 Módulo centralizado de herramientas de soporte (`common.py`). Define los métodos globales de validación estricta (formatos de DNI, restricciones de emails y excepciones personalizadas) compartidos por todo el sistema.
 
 ![Diagrama common](images/common.png)
 
-#### 6. Sistema de Logs y Auditoría
+#### 5. Sistema de Logs y Auditoría
 Subsistema de trazabilidad encargado del registro asíncrono de operaciones, accesos y excepciones en tiempo de ejecución (`registrar.py`), persistiendo los eventos directamente en el archivo `escuela.log`.
 
 ![Diagrama registro de logs](images/registrar.png)
