@@ -34,6 +34,13 @@ class Validator:
             raise DatoInvalido(
                 f"DNI {texto!r} invalido - El ultimo caracter debe ser una letra -> se omite usuario"
             )
+        letras_validas = "TRWAGMYFPDXBNJZSQVHLCKE"
+        letra_correcta = letras_validas[int(numero) % 23]
+
+        if letra != letra_correcta:
+            raise DatoInvalido(
+                f"DNI {texto!r} invalido - La letra no es correcta para {numero} -> se omite usuario"
+            )
         return texto
 
     @staticmethod

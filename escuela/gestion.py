@@ -260,7 +260,7 @@ class CentroEducativo:
             self.db.crear_asignatura(asignatura.get_nombre())
         else:
             raise Duplicado(
-                f"Asignatura {asignatura.get_nombre() | r} ya existe en el centro"
+                f"Asignatura {asignatura.get_nombre()!r} ya existe en el centro"
             )
 
     def eliminar_asignatura(self, nombre: str):

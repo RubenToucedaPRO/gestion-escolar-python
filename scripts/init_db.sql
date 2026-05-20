@@ -100,4 +100,4 @@ INSERT INTO alumnos (id_persona) VALUES (LAST_INSERT_ID());
 
 -- 4. INSERTAR ADMINISTRADOR
 INSERT INTO personas (dni, nombre, email, rol, contrasena) 
-VALUES ('00000000X', 'Admin', 'admin@escuela.com', 'admin', 'admin123');
+VALUES ('16083440T', 'Admin', 'admin@escuela.com', 'admin', 'admin');
