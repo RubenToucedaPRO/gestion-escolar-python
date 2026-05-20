@@ -13,6 +13,7 @@ El sistema destaca por las siguientes funcionalidades implementadas:
 
 - **Gestión de Usuarios y Operaciones CRUD Completas:**
   * Capacidad de Crear, Leer, Actualizar y Borrar (CRUD) tanto para el personal docente como para el alumnado.
+  * Todos los usuarios tanto alumnos como profesores son creados con una contraseña por defecto que es `1234`
   * Tratamiento diferenciado de vistas e interfaces según los privilegios del rol autenticado (Administrador, Profesor, Alumno).
 
 - **Gestión de Asignaturas:** Permite la declaración, registro y administración de las asignaturas impartidas por el centro docente por parte del administrador. Los profesores, alumnos y sin login podrán simplemente visualizar las asignaturas que imparte el centro.
