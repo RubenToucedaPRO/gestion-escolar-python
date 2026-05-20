@@ -25,11 +25,11 @@ class TestAuthBlueprint(unittest.TestCase):
         # Simula el envío del formulario de login por POST
         respuesta = self.client.post(
             "/login",
-            data={"dni": "00000000X", "contrasena": "admin123"},
+            data={"dni": "16083440T", "contrasena": "admin"},
             follow_redirects=True,
         )
 
         # Verifica que tras loguearse con éxito te lleve al panel (index)
         self.assertEqual(respuesta.status_code, 200)
-        # Puedes verificar si un texto específico sale en el dashboard
+        # Verifica si un texto específico sale en el dashboard
         self.assertIn(b"Bienvenido a CentroEdu", respuesta.data)

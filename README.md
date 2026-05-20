@@ -149,9 +149,13 @@ Se han desarrollado **tests de integración** que interactúan directamente con 
 
 ### Ejecución de los Tests
 Para lanzar la suite de pruebas completa, sitúese en la terminal dentro de la raíz del proyecto y ejecute el siguiente comando:
-
+* Si su sistema operativo es windows:
 ```bash
-python3 -m unittest escuela.tests.test_centro
+python -m unittest discover -s tests
+```
+* Si su sistema operativo es Linux/MacOS
+```bash
+python3 -m unittest discover -s tests
 ```
 
 ### Análisis de Cobertura
@@ -159,10 +163,19 @@ El proyecto integra la herramienta **Coverage** para medir con precisión qué p
 
 #### **Reporte rápido en terminal:**
 1. **Generar datos de cobertura:** el siguiente comando generará un fichero `.coverage`el cual luego con el comando del paso 2 podremos visualizar.
+* Si su sistema operativo es windows:
 ```bash
-python3 -m coverage run -m unittest escuela.tests.test_centro
+python -m coverage run -m unittest discover -s tests
 ```
-2. **Visualización reporte:**
+1. **Visualización reporte:**
+```bash
+python -m coverage report
+```
+* Si su sistema operativo es Linux/MacOS:
+```bash
+python3 -m coverage run -m unittest discover -s tests
+```
+1. **Visualización reporte:**
 ```bash
 python3 -m coverage report
 ```
