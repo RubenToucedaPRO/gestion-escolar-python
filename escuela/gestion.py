@@ -242,6 +242,8 @@ class CentroEducativo:
         # Limipamos la consulta y la pasamos a minusculas para que reconozca las entidades
         # dado que estas están en minusculas
         query = query.strip().lower()
+        if not query.startswith("select"):
+            raise DatoInvalido("Error: Solo se permite consultas SELECT")
         if query.count(";") > 1:
             raise DatoInvalido("Error: Solo se permite una sentencia SQL de cada vez")
         return self.db.ejecutar_consulta(query)

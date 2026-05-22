@@ -38,7 +38,7 @@ def ejecutar_sql_libre():
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Ejecutar SQL libre", f"{e}")
-        return redirect(url_for("main.sql_libre"))
+        return render_template("sql_libre.html", lista=[], query=query)
 
     Registrar.registrar_log("Eejcutar SQL libre", f"Operación exitosa: {query!r}")
     return render_template("sql_libre.html", lista=resultado, query=query)

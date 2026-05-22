@@ -265,9 +265,7 @@ class DBManager:
         if cursor.description:
             columnas = [desc[0] for desc in cursor.description]
             return columnas, cursor.fetchall()
-        else:
-            self.con.commit()
-            return [("Nº operaciones",), ((cursor.rowcount,),)]
+        return None, None
 
     def validar_credenciales(self, dni, contrasena):
         cursor = self.con.cursor(dictionary=True, buffered=True)
