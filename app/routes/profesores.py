@@ -31,9 +31,6 @@ def formulario():
 def detalle(dni, rol):
     usuario = sistema.obtener_usuario(dni, rol)
 
-    if not usuario:
-        flash("Usuario no encontrado", "danger")
-        return redirect(url_for("profesores.listar"))
     todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
 
     return render_template(
@@ -113,10 +110,13 @@ def actualizar():
         Registrar.registrar_log(
             "Actualizar profesor", f"Operación exitosa dni: {usuario.get_dni()!r}"
         )
+        return redirect(url_for("profesores.detalle", dni=dni, rol=ROL_PROFESOR))
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Actualizar profesor", f"{e}")
-    return redirect(url_for("profesores.detalle", dni=dni, rol=ROL_PROFESOR))
+        return redirect(
+            url_for("profesores.detalle", dni=usuario.get_dni(), rol=ROL_PROFESOR)
+        )
 
 
 @profesores_bp.route("/eliminar/<dni>", methods=["POST"])

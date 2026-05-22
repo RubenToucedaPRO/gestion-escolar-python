@@ -40,10 +40,6 @@ def detalle(dni, rol):
     if session.get("role") == "alumno" and session.get("dni") != dni:
         abort(403)
     usuario = sistema.obtener_usuario(dni, rol)
-
-    if not usuario:
-        flash("Usuario no encontrado", "danger")
-        return redirect(url_for("alumnos.listar"))
     todas_las_asignaturas = sistema.obtener_todas_las_asignaturas()
 
     return render_template(
@@ -121,10 +117,13 @@ def actualizar():
         Registrar.registrar_log(
             "Actualizar alumno", f"Operación exitosa dni: {usuario.get_dni()!r}"
         )
+        return redirect(url_for("alumnos.detalle", dni=dni, rol=ROL_ALUMNO))
     except Exception as e:
         flash(f"{e}", "danger")
         Registrar.registrar_log("Actualizar alumno", f"{e}")
-    return redirect(url_for("alumnos.detalle", dni=dni, rol=ROL_ALUMNO))
+        return redirect(
+            url_for("alumnos.detalle", dni=usuario.get_dni(), rol=ROL_ALUMNO)
+        )
 
 
 @alumnos_bp.route("/matricular", methods=["POST"])
