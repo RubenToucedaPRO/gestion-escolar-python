@@ -4,14 +4,15 @@ from .common import BaseDatosError
 
 
 class DBManager:
-    def __init__(self, host, user, password, nombre_bd):
+    def __init__(self, host, port, user, password, nombre_bd):
         self.con = None
-        self._conectar(host, user, password, nombre_bd)
+        self._conectar(host, port, user, password, nombre_bd)
 
-    def _conectar(self, host: str, user: str, password: str, nombre_bd: str):
+    def _conectar(self, host: str, port: int, user: str, password: str, nombre_bd: str):
         try:
             self.con = mysql.connector.connect(
                 host=host,
+                port=port,
                 user=user,
                 password=password,
                 database=nombre_bd,

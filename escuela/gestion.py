@@ -6,6 +6,7 @@ from .config import (
     ROL_PROFESOR,
     ROL_ADMIN,
     DB_HOST,
+    DB_PORT,
     DB_USER,
     DB_PASSWORD,
     DB_NAME,
@@ -16,7 +17,7 @@ from .db_manager import DBManager
 
 class CentroEducativo:
     def __init__(self):
-        self.db = DBManager(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
+        self.db = DBManager(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
 
     def validar_login(self, dni, contrasena):
         datos_usuario = self.db.validar_credenciales(dni, contrasena)
